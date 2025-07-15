@@ -2,6 +2,8 @@ package com.example.demo.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UnitsRepository extends JpaRepository<UnitsRepository, Integer> {
+import com.example.demo.Entity.Unit;
+
+public interface UnitsRepository extends JpaRepository<Unit, Integer> {
 
 }
