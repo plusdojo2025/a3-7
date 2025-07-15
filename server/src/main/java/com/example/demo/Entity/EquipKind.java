@@ -1,5 +1,5 @@
 package com.example.demo.Entity;
 
-public class ProjectTags {
+public class EquipKind {
 
 }

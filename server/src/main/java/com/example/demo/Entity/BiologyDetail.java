@@ -1,5 +1,5 @@
 package com.example.demo.Entity;
 
-public class Units {
+public class BiologyDetail {
 
 }

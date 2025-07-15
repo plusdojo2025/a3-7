@@ -1,5 +1,5 @@
 package com.example.demo.Entity;
 
-public class Reports {
+public class Member {
 
 }
