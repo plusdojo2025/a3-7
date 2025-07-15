@@ -1,5 +1,5 @@
 package com.example.demo.Entity;
 
-public class BiologyDetails {
+public class ReflectTag {
 
 }
