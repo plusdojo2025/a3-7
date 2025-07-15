@@ -1,5 +1,7 @@
 package com.example.demo.Repository;
 
-public class BiologyDetailsRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BiologyDetailsRepository extends JpaRepository<T, ID> {
 
 }
