@@ -1,36 +1,40 @@
 import React from "react";
 import axios from "axios";
+import "./css/MyPageEdit.css";
 
 export default class MyPageEdit extends React.Component {
   render() {
     return (
-        <div className="mypage-edit">
-            <h2>アカウント情報</h2>
-            <form>
-                <div>
-                    <label>氏名：</label>
+        <div className="edit-container">
+            <form className="edit-form">
+            <h2 className="form-title">アカウント情報</h2>
+
+                <div className="form-group">
+                    <label>氏名</label>
                     <input type="text" defaultValue="鬼瓦 権左衛門" />
                 </div>
-                <div>
-                    <label>メール：</label>
-                    <input type="email" defaultValue="gonzaemon@example.com" readOnly />
+                <div className="form-group">
+                    <label>メール</label>
+                    <input type="email" Value="gonzaemon@example.com" disabled className="disabled-input"/>
                 </div>
-                <div>
-                    <label>パスワード：</label>
+                <div className="form-group">
+                    <label>パスワード</label>
                     <input type="password" />
                 </div>
-                <div>
-                    <label>新規パスワード：</label>
+                <div className="form-group">
+                    <label>新規パスワード</label>
                     <input type="password" />
                 </div>
-                <div>
-                    <label>新規パスワード再入力：</label>
+                <div className="form-group">
+                    <label>新規パスワード確認</label>
                     <input type="password" />
                 </div>
-                    <div style={{ marginTop: "10px" }}>
-                    <button type="button">戻る</button>
-                    <button type="submit" style={{ marginLeft: "10px" }}>更新</button>
+                
+                <div className="edit-buttons">
+                    <button type="button" className="back-button">戻る</button>
+                    <button type="submit" className="update-button">更新</button>
                 </div>
+                
             </form>
         </div>
     );

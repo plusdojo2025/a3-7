@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.Entity.User;
 import com.example.demo.Repository.UserRepository;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 public class UsersController {
 	// SpringがUserRepositoryを自動で注入
@@ -25,12 +27,14 @@ public class UsersController {
     
     //ログイン処理
     @PostMapping("/login/")
-    public Boolean login(@RequestBody User user) {
+    public Boolean login(@RequestBody User user, HttpSession session) {
     	boolean result = false;
     	User searchResult = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
     	
     	if(searchResult != null) {
     		System.out.println("検索成功: " + searchResult);
+    		//ログイン状態の管理
+    		session.setAttribute("user", searchResult);
     		result = true;
     	}
     	
@@ -52,5 +56,19 @@ public class UsersController {
     	}
     	
     	return result;
+    }
+    
+    //ログイン状態の確認
+    @GetMapping("/checkLogin/")
+    public Boolean checkLogin(HttpSession session) {
+    	 Object user = session.getAttribute("user");    	 
+    	 return (user != null);
+    }
+    
+    //ログアウト処理
+    @PostMapping("/logout/")
+    public void logout(HttpSession session) {
+    	 session.invalidate();
+    	 return;
     }
 }
