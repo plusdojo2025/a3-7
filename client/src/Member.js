@@ -1,6 +1,25 @@
 import React from "react";
-export default class Member extends React.Component{
-    render(){
-        return <div>ここはメンバー管理用画面です</div>
+import './css/Common.css';
+import { Link } from "react-router-dom";
+
+export default class Member extends React.Component {
+    render() {
+        return (
+            <header id="nav">
+                <div>
+                    <Link to="/home">
+                        <img src="/img/Labchain.png" className="logo-gazou" alt="Labchain"/>
+                    </Link>
+                </div>
+
+                <ul className="nav-links" id="nav-links">
+                    <li><Link to="/home">ホーム</Link></li>
+                    <li><Link to="/mypage">マイページ</Link></li>
+                    <li><Link to="/search">プロジェクト検索</Link></li>
+                    <li><Link to="/login">ログアウト</Link></li>
+                </ul>
+            </header>
+
+        )
     };
 } 
