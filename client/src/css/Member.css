@@ -1,0 +1,22 @@
+.input-wrapper {
+  margin: 20px;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+}
+
+.result {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.user-name-display {
+  margin: 0;
+  padding-bottom: 5px;
+}
+
+.underline {
+  border-bottom: 2px solid #aaa;
+  margin-top: 5px;
+}

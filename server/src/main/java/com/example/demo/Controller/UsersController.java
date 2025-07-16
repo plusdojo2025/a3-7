@@ -66,4 +66,14 @@ public class UsersController {
     	 
     	 return (user != null);
     }
+ // メールアドレスでユーザー情報を取得
+    @GetMapping("/getUserNameByEmail")
+    public String getUserNameByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            return user.getName(); // 名前だけ返す
+        } else {
+            return "該当するユーザーが見つかりません";
+        }
+    }
 }
