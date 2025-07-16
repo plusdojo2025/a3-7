@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import './css/BioRegist.css';
 
 export default function BioRegist() {
   const [form, setForm] = useState({
@@ -53,7 +53,8 @@ export default function BioRegist() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }}>
+    <div style={{ maxWidth: 400, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }} 
+    className='bioRegist-card'>
       <h2>生物の登録</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         {/* 画像アップロード欄 */}

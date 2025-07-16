@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './css/EquipmentRegist.css';
+
 
 const unitOptions = ['個', '箱', 'kg', 'g', 'mg', 'L', 'ml'];
 const alertTimingOptions = ['50%', '40%', '30%', '20%', '10%'];
@@ -56,7 +58,8 @@ export default function EquipmentRegist() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }}>
+    <div style={{ maxWidth: 400, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }} 
+    className='equipmentRegist-card'>
       <h2>備品の登録</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         {/* 画像アップロード欄 */}
