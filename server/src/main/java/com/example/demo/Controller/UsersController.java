@@ -61,14 +61,19 @@ public class UsersController {
     //ログイン状態の確認
     @GetMapping("/checkLogin/")
     public Boolean checkLogin(HttpSession session) {
-    	 Object user = session.getAttribute("user");    	 
+    	 Object user = session.getAttribute("user");
+    	 System.out.println(user != null);
+    	 
     	 return (user != null);
     }
-    
-    //ログアウト処理
-    @PostMapping("/logout/")
-    public void logout(HttpSession session) {
-    	 session.invalidate();
-    	 return;
+ // メールアドレスでユーザー情報を取得
+    @GetMapping("/getUserNameByEmail")
+    public String getUserNameByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            return user.getName(); // 名前だけ返す
+        } else {
+            return "該当するユーザーが見つかりません";
+        }
     }
 }

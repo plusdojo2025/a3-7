@@ -6,7 +6,8 @@ export default class Login extends React.Component{
 
     state = {
             email: "",
-            password: ""
+            password: "",
+            error:""
             }
 
     componentDidMount() {
@@ -24,6 +25,25 @@ export default class Login extends React.Component{
         e.preventDefault();
 
         const {email, password} = this.state;
+        // 入力バリデーション
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !password) {
+            this.setState({ error: "メールアドレスとパスワードは必須です。" });
+            return;
+        }
+        if (!emailRegex.test(email)) {
+            this.setState({ error: "メールアドレスの形式が正しくありません。" });
+            return;
+        }
+        if (password.length < 8) {
+            this.setState({ error: "パスワードは8文字以上で入力してください。" });
+            return;
+        }
+        if (password.length > 20) {
+            this.setState({ error: "パスワードは20文字以内で入力してください。" });
+            return;
+        }
+
         const data = {email:email, password:password};
 
         axios.post("/login/", data).then(response => {
@@ -53,11 +73,12 @@ export default class Login extends React.Component{
     }
 
     render(){
-        const { email, password } = this.state;
+        const { email, password, error } = this.state;
         return( 
             <div className="LoginForm">
                 <form onSubmit={this.handleLogin}>
-                    <div>ここはログイン画面です</div>
+                    <h1>ログイン</h1>
+                    <p>{error}</p>
                     <p>メールアドレス</p>
                     <input type="text" name="email" onChange={this.onInput} value={email}/><br />
                     <p>パスワード</p>
