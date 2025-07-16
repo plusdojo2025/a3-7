@@ -26,4 +26,5 @@ class Report extends React.Component{
   
    }
 }
-export default Report;
+export default Report;import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
+import Login from './Login';
