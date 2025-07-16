@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import Login from './Login';
 import Home from './Home';
 import Mypage from './Mypage';
+import MyPageEdit from './MyPageEdit';
+import Mail from './Mail';
 import Search from './Search';
 import EquipmentRegist from './EquipmentRegist';
 import BioRegist from './BioRegist';
@@ -27,6 +29,8 @@ function App() {
         <Route path="/process" element={<Process />} />
         <Route path="/member" element={<Member />} />
         <Route path="/mypage" element={<Mypage />} />
+        <Route path="/mypageedit" element={<MyPageEdit />} />
+        <Route path="mail" element={<Mail />} />
         <Route path="/search" element={<Search />} />
        <Route path="/equipmentRegist" element={<EquipmentRegist />} />
         <Route path="/bioRegist" element={<BioRegist />} />
