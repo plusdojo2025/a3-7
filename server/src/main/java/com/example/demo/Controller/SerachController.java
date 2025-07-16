@@ -3,7 +3,6 @@ package com.example.demo.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,21 +25,18 @@ public class SerachController {
 	@Autowired
 	private ProjectTagsRepository projectTagRepository;
 	
-	//検索画面の表示（タグのリストを渡す）
-	@GetMapping("/projects/search")
-	public String showSearchPage(Model model) {
-		
-		List<ProjectTag> tags = projectTagRepository.findAll();
-		model.addAttribute("tags", tags);
-		return "";
-	}
+	// タグ一覧API
+    @GetMapping("/project-tags")
+    public List<ProjectTag> getAllTags() {
+        return projectTagRepository.findAll();
+    }
 	
 	//検索処理
-	@GetMapping("/projects")
-	public String searchProjects(
+	@GetMapping("/projects/search")
+	public List<Project> searchProject (
 			@RequestParam(value ="title", required = false) String title,
-			@RequestParam(value ="tagId", required = false) Integer tagId,
-			Model model) {
+			@RequestParam(value ="tagId", required = false) Integer tagId
+		) {
 		
 		List<Project> projects;
 		
@@ -64,10 +60,7 @@ public class SerachController {
 	        // 検索条件がない場合は空リスト（初期表示なし）
 	        projects = List.of();
 	    }
-		model.addAttribute("projects", projects);
-		model.addAttribute("searchTitle", title);
-        model.addAttribute("searchTagName", tagId);
 
-        return ""; 
+        return projects; 
 	}
 }

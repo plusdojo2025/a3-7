@@ -36,8 +36,11 @@ export default class Search extends React.Component {
 
         const params = {
             title: title,
-            tagId: tagId
         };
+
+        if (tagId !== "") {
+            params.tagId = tagId;
+        }
 
     axios.get("/api/projects/search", { params })
       .then(res => {
@@ -54,7 +57,7 @@ export default class Search extends React.Component {
         return (
             <div className="searchMain">
                 <h2>プロジェクト検索</h2>
-                <div classname="searchForm">
+                <div className="searchForm">
                     プロジェクト名：
                     <input type="text" name="title" value={title} onChange={this.onInput} /><br />
                     タグ：
@@ -74,8 +77,9 @@ export default class Search extends React.Component {
                    {projects.length === 0 && <li>検索結果がありません</li>}
                    {projects.map(project => (
                     <li key={project.projectId}>
-                        <a href={`/project/${project.projectId}`}></a>
-                        {" "} - {project.projectTag.projectTagName}
+                        <a href={`/project/${project.projectId}`}>
+                            {project.projectName}
+                        </a>
                     </li> 
                    ))}
                 </ul>
