@@ -17,13 +17,13 @@ public class UsersController {
 	@Autowired
     private UserRepository userRepository;
 
-	// 全ユーザーを取得する
+	// 全ユーザーを取得する(Test用)
     @GetMapping("/users/")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
     
-    //
+    //ログイン処理
     @PostMapping("/login/")
     public Boolean login(@RequestBody User user) {
     	boolean result = false;
@@ -36,13 +36,21 @@ public class UsersController {
     	
     	return result;
     }
-    
-    
 
     // 新規ユーザーを作成する
-    @PostMapping("/users/")
-    public User createUser(@RequestBody User user) {
-    	// 受け取ったユーザー情報を保存して返す
-        return userRepository.save(user);
+    @PostMapping("/signup/")
+    public Boolean createUser(@RequestBody User user) {
+    	boolean result = false;
+    	
+    	//重複確認
+    	User duplication = userRepository.findByEmail(user.getEmail());
+    	if(duplication == null) {
+    		//追加成功
+    		User addUser = userRepository.save(user);
+    		System.out.println("登録成功: " + addUser);
+    		result = true;
+    	}
+    	
+    	return result;
     }
 }
