@@ -18,13 +18,14 @@ public class UsersController {
     private UserRepository userRepository;
 
 	// 全ユーザーを取得する
-    @GetMapping("/users")
+    @GetMapping("/users/")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+    
 
     // 新規ユーザーを作成する
-    @PostMapping("/users")
+    @PostMapping("/users/")
     public User createUser(@RequestBody User user) {
     	// 受け取ったユーザー情報を保存して返す
         return userRepository.save(user);
