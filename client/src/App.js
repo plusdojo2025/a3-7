@@ -14,6 +14,7 @@ import Member from './Member';
 
 
 
+import Report from './Report';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/bioRegist" element={<BioRegist />} />
         <Route path="/equipmentEdit" element={<EquipmentEdit />} />
         <Route path="/bioEdit" element={<BioEdit />} />
+        <Route path="/report" element={<Report />} />
       </Routes>
     </BrowserRouter>
   );
