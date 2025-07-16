@@ -25,6 +25,15 @@ export default class Common extends React.Component {
         });
     }
 
+    handleLogout = () => {
+      axios.post("/logout/").then(() => {
+          window.location.href = "/login";
+        })
+        .catch(error => {
+          alert("ログアウト処理に失敗しました");
+        });
+    };
+
     render() {
         const { isLoggedIn } = this.state;
 
@@ -47,7 +56,7 @@ export default class Common extends React.Component {
             <li><Link to="/home">ホーム</Link></li>
             <li><Link to="/mypage">マイページ</Link></li>
             <li><Link to="/search">プロジェクト検索</Link></li>
-            <li><Link to="/login">ログアウト</Link></li>
+            <li><button onClick={this.handleLogout} className="logout-button">ログアウト</button></li>
           </ul>
         </header>
         <main>

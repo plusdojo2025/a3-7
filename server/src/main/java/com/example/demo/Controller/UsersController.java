@@ -61,9 +61,14 @@ public class UsersController {
     //ログイン状態の確認
     @GetMapping("/checkLogin/")
     public Boolean checkLogin(HttpSession session) {
-    	 Object user = session.getAttribute("user");
-    	 System.out.println(user != null);
-    	 
+    	 Object user = session.getAttribute("user");    	 
     	 return (user != null);
+    }
+    
+    //ログアウト処理
+    @PostMapping("/logout/")
+    public void logout(HttpSession session) {
+    	 session.invalidate();
+    	 return;
     }
 }
