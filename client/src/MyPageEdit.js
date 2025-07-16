@@ -1,19 +1,20 @@
 import React from "react";
 import axios from "axios";
+import "./css/MyPageEdit.css";
 
 export default class MyPageEdit extends React.Component {
   render() {
     return (
-        <div className="mypage-edit">
+        <div className="edit-container">
             <h2>アカウント情報</h2>
-            <form>
+            <form className="edit-form">
                 <div>
                     <label>氏名：</label>
                     <input type="text" defaultValue="鬼瓦 権左衛門" />
                 </div>
                 <div>
                     <label>メール：</label>
-                    <input type="email" defaultValue="gonzaemon@example.com" readOnly />
+                    <input type="email" Value="gonzaemon@example.com" disabled className="disabled-input"/>
                 </div>
                 <div>
                     <label>パスワード：</label>
@@ -24,12 +25,13 @@ export default class MyPageEdit extends React.Component {
                     <input type="password" />
                 </div>
                 <div>
-                    <label>新規パスワード再入力：</label>
+                    <label>確認パスワード入力：</label>
                     <input type="password" />
                 </div>
-                    <div style={{ marginTop: "10px" }}>
-                    <button type="button">戻る</button>
-                    <button type="submit" style={{ marginLeft: "10px" }}>更新</button>
+                
+                <div className="edit-buttons">
+                    <button type="button" className="back-button">戻る</button>
+                    <button type="submit" className="update-button">更新</button>
                 </div>
             </form>
         </div>

@@ -1,0 +1,54 @@
+/* マイページ全体の余白設定 */
+.mypage-container {
+    padding: 30px;
+}
+
+/* アカウント情報表示ボックス */
+.account-info {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    width: 60%;
+    margin-bottom: 20px;
+}
+
+/* タイトルのスタイル */
+.account-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* アカウント情報の各項目 */
+.account-info p {
+    font-size: 16px;
+    margin: 8px 0;
+}
+
+/* 編集・メールボックスボタンの配置 */
+.mypage-buttons {
+    display: flex;
+    /* justify-content: center; */
+    gap: 20px;
+    /* margin-top: 20px; */
+}
+
+/* ボタンの共通スタイル */
+.mypage-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    background-color: #e0e0e0;
+    border: 1px solid #999;
+    cursor: pointer;
+}
+
+/* アカウント情報の値に下線を引く */
+.account-info span {
+    display: inline-block;
+    border-bottom: 1px solid #999;
+     /* 下線の長さを一旦設定 */
+    min-width: 200px;
+    padding-bottom: 2px;
+}
