@@ -21,6 +21,6 @@ public class User {
 	
     private String email;
     private String password;
-    private Integer company_code;
+    private Integer companyCode;
     private String name;
 }

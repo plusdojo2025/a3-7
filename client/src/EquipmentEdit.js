@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './css/EquipmentEdit.css';
 
 const alertTimingOptions = ['50%', '40%', '30%', '20%', '10%'];
 
@@ -93,7 +94,8 @@ export default function EquipmentEdit({ equipmentId }) {
   };
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }}>
+    <div style={{ maxWidth: 800, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }} 
+     className='equipmentEdit-card'>
       <h2>備品の詳細</h2>
       <form onSubmit={handleUpdate} encType="multipart/form-data" style={{ display: 'flex', gap: 20 }}>
         {/* 左側 画像表示エリア */}
