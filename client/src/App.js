@@ -14,31 +14,41 @@ import BioEdit from './BioEdit';
 import Project from './Project';
 import Process from './Process';
 import Member from './Member';
-
-
-
+import Common from "./Common";
 import Report from './Report';
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        {/* デフォルトパス /homeへリダイレクト */}
+        <Route path="/" element={<Navigate to="/home" />} />
+
+        {/* 認証不要ページ */}
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />}/>
-        <Route path="/home" element={<Home />} />
-        <Route path="/project" element={<Project />} />
-        <Route path="/process" element={<Process />} />
-        <Route path="/member" element={<Member />} />
-        <Route path="/mypage" element={<Mypage />} />
-        <Route path="/mypageedit" element={<MyPageEdit />} />
-        <Route path="/mail" element={<Mail />} />
-        <Route path="/search" element={<Search />} />
-       <Route path="/equipmentRegist" element={<EquipmentRegist />} />
-        <Route path="/bioRegist" element={<BioRegist />} />
-        <Route path="/equipmentEdit" element={<EquipmentEdit />} />
-        <Route path="/bioEdit" element={<BioEdit />} />
-        <Route path="/report" element={<Report />} />
+        <Route path="/signup" element={<SignUp />} />
+
+        {/* ログインが必要なページ */}
+        <Route path="/*" element={
+          <Common>
+            <Routes>
+              <Route path="home" element={<Home />} />
+              <Route path="project" element={<Project />} />
+              <Route path="process" element={<Process />} />
+              <Route path="member" element={<Member />} />
+              <Route path="mypage" element={<Mypage />} />
+              <Route path="mypageedit" element={<MyPageEdit />} />
+              <Route path="mail" element={<Mail />} />
+              <Route path="search" element={<Search />} />
+              <Route path="equipmentRegist" element={<EquipmentRegist />} />
+              <Route path="bioRegist" element={<BioRegist />} />
+              <Route path="equipmentEdit" element={<EquipmentEdit />} />
+              <Route path="bioEdit" element={<BioEdit />} />
+              <Route path="report" element={<Report />} />
+            </Routes>
+          </Common>
+        } />
       </Routes>
     </BrowserRouter>
   );
