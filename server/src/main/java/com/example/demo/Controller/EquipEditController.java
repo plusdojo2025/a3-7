@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.Entity.EquipDetail;
+import com.example.demo.Entity.Equipment;
 import com.example.demo.Repository.EquipDetailsRepository;
+import com.example.demo.Repository.EquipmentsRepository;
 
 @RestController
 @RequestMapping("/api/equipment")
@@ -23,70 +26,160 @@ public class EquipEditController {
     @Autowired
     private EquipDetailsRepository equipDetailsRepository;
 
-    /**
-     * 1. GET 詳細取得
-     */
-    @GetMapping("/{id}")
-    public EquipDetail getEquipment(@PathVariable Integer id) {
-        Optional<EquipDetail> equipOpt = equipDetailsRepository.findById(id);
-        return equipOpt.orElse(null);
-    }
+    @Autowired
+    private EquipmentsRepository equipmentsRepository;
 
-    /**
-     * 2. PUT 更新
-     */
-    @PutMapping("/{id}")
-    public String updateEquipment(
-            @PathVariable Integer id,
-            @RequestParam(value = "image", required = false) MultipartFile image,
+    /** 登録 */
+    @PostMapping
+    public String createEquipment(
+            @RequestParam("itemName") String itemName,
             @RequestParam("quantity") String quantity,
             @RequestParam("unit") String unit,
             @RequestParam("expiryDate") String expiryDate,
             @RequestParam("location") String location,
             @RequestParam("alertTiming") String alertTiming,
-            @RequestParam("note") String note
+            @RequestParam("note") String note,
+            @RequestParam(value = "image", required = false) MultipartFile image
     ) {
         try {
-            Optional<EquipDetail> equipOpt = equipDetailsRepository.findById(id);
-            if (!equipOpt.isPresent()) {
-                return "指定IDのデータが存在しません";
-            }
-
-            EquipDetail equip = equipOpt.get();
-
-            // React → Entityフィールド変換
-            equip.setRemaining(Double.parseDouble(quantity));
-            equip.setUnit(Integer.parseInt(unit));
-            equip.setLimited(Date.valueOf(expiryDate));
-            equip.setStorage(location);
-            equip.setJudge(Double.parseDouble(alertTiming.replace("%", "")));
-            equip.setRemarks(note);
-
+            // EquipDetailエンティティを作成
+            EquipDetail detail = new EquipDetail();
+            detail.setRemaining(Double.parseDouble(quantity));
+            detail.setUnit(Integer.parseInt(unit));
+            detail.setLimited(Date.valueOf(expiryDate));
+            detail.setStorage(location);
+            detail.setJudge(Double.parseDouble(alertTiming));
+            detail.setRemarks(note);
             if (image != null && !image.isEmpty()) {
-                equip.setPicture(image.getBytes());
+                detail.setPicture(image.getBytes());
             }
+            equipDetailsRepository.save(detail);
 
-            equipDetailsRepository.save(equip);
+            // Equipmentエンティティを作成
+            Equipment equipment = new Equipment();
+            equipment.setEquip_name(itemName);
+            equipment.setEquip_detail_id(detail.getEquip_ditail_id());
+            equipmentsRepository.save(equipment);
+
+            return "登録成功";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "登録失敗";
+        }
+    }
+
+    /** 取得 */
+    @GetMapping("/{id}")
+    public EquipmentDetailResponse getEquipment(@PathVariable Integer id) {
+        Optional<Equipment> eqOpt = equipmentsRepository.findById(id);
+        if (!eqOpt.isPresent()) {
+            throw new RuntimeException("Equipment not found");
+        }
+        Equipment equipment = eqOpt.get();
+
+        Optional<EquipDetail> detailOpt = equipDetailsRepository.findById(equipment.getEquip_detail_id());
+        if (!detailOpt.isPresent()) {
+            throw new RuntimeException("EquipDetail not found");
+        }
+        EquipDetail detail = detailOpt.get();
+
+        // 画像はURLなどで配信する運用を想定
+        return new EquipmentDetailResponse(
+                equipment.getEquip_id(),
+                equipment.getEquip_name(),
+                detail.getRemaining(),
+                detail.getUnit(),
+                detail.getLimited().toString(),
+                detail.getStorage(),
+                detail.getJudge(),
+                detail.getRemarks(),
+                null // 画像URLは別途設計
+        );
+    }
+
+    /** 更新 */
+    @PutMapping("/{id}")
+    public String updateEquipment(
+            @PathVariable Integer id,
+            @RequestParam("itemName") String itemName,
+            @RequestParam("quantity") String quantity,
+            @RequestParam("unit") String unit,
+            @RequestParam("expiryDate") String expiryDate,
+            @RequestParam("location") String location,
+            @RequestParam("alertTiming") String alertTiming,
+            @RequestParam("note") String note,
+            @RequestParam(value = "image", required = false) MultipartFile image
+    ) {
+        try {
+            Optional<Equipment> eqOpt = equipmentsRepository.findById(id);
+            if (!eqOpt.isPresent()) return "更新失敗：Equipmentなし";
+            Equipment equipment = eqOpt.get();
+            equipment.setEquip_name(itemName);
+            equipmentsRepository.save(equipment);
+
+            Optional<EquipDetail> detailOpt = equipDetailsRepository.findById(equipment.getEquip_detail_id());
+            if (!detailOpt.isPresent()) return "更新失敗：Detailなし";
+            EquipDetail detail = detailOpt.get();
+            detail.setRemaining(Double.parseDouble(quantity));
+            detail.setUnit(Integer.parseInt(unit));
+            detail.setLimited(Date.valueOf(expiryDate));
+            detail.setStorage(location);
+            detail.setJudge(Double.parseDouble(alertTiming));
+            detail.setRemarks(note);
+            if (image != null && !image.isEmpty()) {
+                detail.setPicture(image.getBytes());
+            }
+            equipDetailsRepository.save(detail);
 
             return "更新成功";
-
         } catch (Exception e) {
             e.printStackTrace();
             return "更新失敗";
         }
     }
 
-    /**
-     * 3. DELETE 削除
-     */
+    /** 削除 */
     @DeleteMapping("/{id}")
     public String deleteEquipment(@PathVariable Integer id) {
         try {
-            equipDetailsRepository.deleteById(id);
+            Optional<Equipment> eqOpt = equipmentsRepository.findById(id);
+            if (!eqOpt.isPresent()) return "削除失敗：Equipmentなし";
+            Equipment equipment = eqOpt.get();
+
+            // detailも一緒に削除
+            equipmentsRepository.deleteById(id);
+            equipDetailsRepository.deleteById(equipment.getEquip_detail_id());
+
             return "削除成功";
         } catch (Exception e) {
             e.printStackTrace();
             return "削除失敗";
+        }
+    }
+
+    /** レスポンスDTOクラス */
+    public static class EquipmentDetailResponse {
+        public Integer id;
+        public String itemName;
+        public double quantity;
+        public int unit;
+        public String expiryDate;
+        public String location;
+        public double alertTiming;
+        public String note;
+        public String imageUrl;
+
+        public EquipmentDetailResponse(Integer id, String itemName, double quantity, int unit, String expiryDate,
+                                       String location, double alertTiming, String note, String imageUrl) {
+            this.id = id;
+            this.itemName = itemName;
+            this.quantity = quantity;
+            this.unit = unit;
+            this.expiryDate = expiryDate;
+            this.location = location;
+            this.alertTiming = alertTiming;
+            this.note = note;
+            this.imageUrl = imageUrl;
         }
     }
 }
