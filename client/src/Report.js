@@ -3,6 +3,17 @@ import React from "react";
 
 class Report extends React.Component{
     
+   constructor(props){
+        super(props)
+          this.state = {
+             createdAt: "",
+             processId: "",
+             projectId: "",
+             comment: "",
+             showModal: false,
+        }
+  
+}
     render(){
          return(
             <div>
@@ -27,8 +38,7 @@ class Report extends React.Component{
                  </div>
             </div>
     )
-  
-   }
+}
 }
 export default Report;
 
