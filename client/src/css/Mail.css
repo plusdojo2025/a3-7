@@ -1,0 +1,44 @@
+/* メール画面全体の余白設定 */
+.mail-container {
+    padding: 30px;
+}
+
+/* メール一覧タイトル */
+.mail-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* メール一覧の表示ボックス */
+.mail-list {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    height: 300px;
+     /* 縦スクロール表示 */
+    overflow-y: auto;
+    background-color: #f5f5f5;
+}
+
+/* 各メール行のスタイル */
+.mail-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 最後の行の下線を非表示 */
+.mail-item:last-child {
+    border-bottom: none;
+}
+
+/* 戻るボタンのスタイル */
+.back-button {
+    margin-top: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    background-color: #e0e0e0;
+    border: 1px solid #999;
+    cursor: pointer;
+}

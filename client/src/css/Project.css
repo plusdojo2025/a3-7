@@ -1,0 +1,77 @@
+/* 画面全体のパディング設定 */
+.project-container {
+    padding: 30px;
+}
+
+/* タイトルのスタイル */
+.project-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* プロジェクト一覧のテーブルスタイル */
+.project-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+/* テーブルヘッダーの背景と文字装飾 */
+.project-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* テーブルのデータ行のスタイル */
+.project-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* プロジェクトの状態 */
+.project-status {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #e0ffe0;
+    color: #006600;
+}
+
+/* 編集ボタンのスタイル */
+.project-edit-btn {
+    padding: 8px 16px;
+    border: 1px solid #999;
+    border-radius: 6px;
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+
+/* ===== レスポンシブ設定 ===== */
+@media screen and (max-width: 768px) {
+.project-container {
+    padding: 15px;
+}
+
+.project-title {
+    font-size: 20px;
+    text-align: center;
+}
+
+.project-table {
+    font-size: 14px;
+}
+
+.project-table th, .project-table td {
+    padding: 8px;
+}
+
+.project-edit-btn {
+    width: 100%;
+    margin-top: 5px;
+}
+}

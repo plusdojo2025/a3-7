@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import "./css/MyPage.css";
 
 export default class Mypage extends React.Component {
   render() {
@@ -12,21 +13,23 @@ export default class Mypage extends React.Component {
     };
 
     return (
-      <div>
-        <h2>マイページ</h2>
-        <p><strong>名前：</strong>{user.name}</p>
-        <p><strong>メールアドレス：</strong>{user.email}</p>
-        <p><strong>会社コード：</strong>{user.company_code}</p>
+      <div className="mypage-container">
+        <div className="account-info">
+          <h2 className="account-title">アカウント情報</h2>
 
-        {/* 編集画面へのリンク */}
-        <Link to="/mypage/edit">
-          <button>編集</button>
-        </Link>
+            <p><strong>氏名：</strong><span>鬼瓦 権左衛門</span></p>
+            <p><strong>会社コード：</strong><span>1234</span></p>
+            <p><strong>メールアドレス：</strong><span>gonzaemon@example.com</span></p>
+        </div>
 
-        {/* メール画面へのリンク */}
-        <Link to="/mypage/mail">
-          <button>メールボックス</button>
-        </Link>
+        <div className="mypage-buttons">
+          <Link to="/mypage/edit">
+            <button>編集</button>
+          </Link>
+          <Link to="/mypage/mail">
+            <button>メールボックス</button>
+          </Link>
+        </div>
       </div>
     );
   }

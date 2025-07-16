@@ -1,0 +1,78 @@
+/* 編集画面全体の余白 */
+.edit-container {
+    padding: 30px;
+}
+
+/* フォーム全体のデザイン */
+.edit-form {
+    border: 2px solid #aaa;
+    border-radius: 12px;
+    background-color: #f9f9f9;
+    padding: 25px;
+    width: 360px;
+    margin: 0 auto;
+}
+
+/* 各項目ラベル */
+.edit-form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/* 入力欄のデザイン */
+.edit-form input[type="text"],
+.edit-form input[type="email"],
+.edit-form input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+}
+
+/* 編集不可な見た目 */
+.disabled-input {
+    background-color: #e0e0e0;
+    color: #666;
+    border: 1px solid #ccc;
+    cursor: not-allowed;
+}
+
+
+/* ボタンの配置 */
+.edit-buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* ボタン共通のサイズ・フォント設定 */
+.edit-buttons button {
+    width: 120px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    display: flex;              /* 中央揃え用 */
+    align-items: center;        /* 垂直中央揃え */
+    justify-content: center;    /* 水平中央揃え */
+    font-family: "sans-serif";   /* 推奨フォント */
+    line-height: 1;              /* 文字高さを制御 */
+}
+
+/* 戻るボタンのデザイン */
+.back-button {
+    background-color: #ccc;
+    color: #333;
+    border: 1px solid #999;
+}
+
+/* 更新ボタンのデザイン */
+.update-button {
+    background-color: red;
+    color: white;
+}

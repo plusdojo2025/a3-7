@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import "./css/Mail.css";
 
 export default class Mail extends React.Component {
   render() {
