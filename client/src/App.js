@@ -16,6 +16,7 @@ import Process from './Process';
 import Member from './Member';
 import Common from "./Common";
 import Report from './Report';
+import ViewProject from './ViewProject';
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
               <Route path="mypageedit" element={<MyPageEdit />} />
               <Route path="mail" element={<Mail />} />
               <Route path="search" element={<Search />} />
+              <Route path="project/:projectId" element={<ViewProject />} />
               <Route path="equipmentRegist" element={<EquipmentRegist />} />
               <Route path="bioRegist" element={<BioRegist />} />
               <Route path="equipmentEdit" element={<EquipmentEdit />} />

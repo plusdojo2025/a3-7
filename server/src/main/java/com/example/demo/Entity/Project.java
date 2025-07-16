@@ -25,7 +25,7 @@ public class Project {
 	private String  projectName;
 	private Integer privacy;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_tag_id")
 	private ProjectTag tag;
 
