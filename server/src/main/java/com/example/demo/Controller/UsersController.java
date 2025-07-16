@@ -23,6 +23,21 @@ public class UsersController {
         return userRepository.findAll();
     }
     
+    //
+    @PostMapping("/login/")
+    public Boolean login(@RequestBody User user) {
+    	boolean result = false;
+    	User searchResult = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
+    	
+    	if(searchResult != null) {
+    		System.out.println("検索成功: " + searchResult);
+    		result = true;
+    	}
+    	
+    	return result;
+    }
+    
+    
 
     // 新規ユーザーを作成する
     @PostMapping("/users/")
