@@ -4,18 +4,34 @@ body{
 
 header{
     background-color: #A3CCBE;
-}
-
-.nav-links{
-    list-style-type: none;
-    display: flex;
-    padding: 0;
-    margin: 0;
-    gap: 20px;
+    padding: 20px 0;
 }
 
 .logo-gazou {
   width: 250px;
   height: 80px;
   object-fit: contain; /* または scale-down や cover にすると見栄え調整可能 */
+}
+
+.nav-links{
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    font-size: 1.2em;
+}
+
+.logout-button {
+  color: white !important;
+  background-color: red;
+  border: 2px solid red;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 1.2em;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
 }
