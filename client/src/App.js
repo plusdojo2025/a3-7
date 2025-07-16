@@ -3,6 +3,11 @@ import Login from './Login';
 import Home from './Home';
 import Mypage from './Mypage';
 import Search from './Search';
+import EquipmentRegist from './EquipmentRegist';
+import BioRegist from './BioRegist';
+import EquipmentEdit from './EquipmentEdit';
+import BioEdit from './BioEdit';
+
 
 function App() {
   return (
@@ -13,6 +18,10 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/search" element={<Search />} />
+       <Route path="/equipmentRegist" element={<EquipmentRegist />} />
+        <Route path="/bioRegist" element={<BioRegist />} />
+        <Route path="/equipmentEdit" element={<EquipmentEdit />} />
+        <Route path="/bioEdit" element={<BioEdit />} />
       </Routes>
     </BrowserRouter>
   );
