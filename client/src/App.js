@@ -18,10 +18,10 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/EquipmentRegist" element={<EquipmentRegist />} />
-        <Route path="/EquipmentRegist" element={<BioRegist />} />
-        <Route path="/EquipmentRegist" element={<EquipmentEdit />} />
-        <Route path="/EquipmentRegist" element={<BioEdit />} />
+       <Route path="/equipmentRegist" element={<EquipmentRegist />} />
+        <Route path="/bioRegist" element={<BioRegist />} />
+        <Route path="/equipmentEdit" element={<EquipmentEdit />} />
+        <Route path="/bioEdit" element={<BioEdit />} />
       </Routes>
     </BrowserRouter>
   );
