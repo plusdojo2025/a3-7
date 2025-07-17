@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import axios from 'axios';
 import './css/BioRegist.css';
 
@@ -25,32 +25,63 @@ export default function BioRegist() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!form.kind || !form.name || !form.gender || !form.age || !form.projectProcess) {  
-      setError('入力されていない項目があります');
-      return;
-    }
+  if (!form.kind || !form.name || !form.gender || !form.age || !form.projectProcess) {
+    setError('入力されていない項目があります');
+    return;
+  }
 
-    setError('');
+  // 数値に変換
+  const genderNum = Number(form.gender);
+  const ageNum = Number(form.age);
+  const projectProcessNum = Number(form.projectProcess);
 
-    try {
-      const formData = new FormData();
-      formData.append('image', image); // ← 画像を追加
-      Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, value); // ← 他の項目も追加
-      });
+  if ([genderNum, ageNum, projectProcessNum].some(n => isNaN(n))) {
+    setError('性別、年齢、実験工程は数値で入力してください');
+    return;
+  }
 
-      await axios.post('/api/biology/', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+  setError('');
 
-      alert('登録完了！');
-    } catch (err) {
-      console.error(err);
-      setError('登録に失敗しました');
-    }
-  };
+  try {
+    const formData = new FormData();
+    if (image) formData.append('image', image);
+    formData.append('kind', form.kind);
+    formData.append('name', form.name);
+    formData.append('gender', genderNum);
+    formData.append('age', ageNum);
+    formData.append('projectProcess', projectProcessNum);
+    formData.append('note', form.note);
+
+    await axios.post('/api/biology/', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+await axios.post('/api/biology/', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
+
+
+// フォームの内容をリセットする
+setForm({
+  kind: '',
+  name: '',
+  gender: '',
+  age: '',
+  projectProcess: '',
+  note: '',
+});
+setImage(null);
+
+
+    alert('登録完了！');
+  } catch (err) {
+    console.error(err);
+    setError('登録に失敗しました');
+  }
+};
+
 
   return (
     <div style={{ maxWidth: 400, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }} 
@@ -81,7 +112,7 @@ export default function BioRegist() {
 
         <div style={{ marginTop: 10 }}>
           <label>年齢</label><br/>
-          <input type="text" name="age" value={form.age} onChange={handleChange} />
+          <input type="number" name="age" value={form.age} onChange={handleChange} />
         </div>
 
         <div style={{ marginTop: 10 }}>

@@ -1,8 +1,10 @@
 package com.example.demo.Controller;
 
-import java.util.Optional;
+import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.Entity.BiologyDetail;
-import com.example.demo.Entity.EquipKind;
 import com.example.demo.Repository.BiologyDetailsRepository;
-import com.example.demo.Repository.EquipKindsRepository;
 
 @RestController
 @RequestMapping("/api/biology/")
@@ -21,52 +21,37 @@ public class BioRegistController {
     @Autowired
     private BiologyDetailsRepository biologyDetailsRepository;
 
-    @Autowired
-    private EquipKindsRepository equipKindsRepository;
-
-    /** 登録 */
-    @PostMapping
-    public String registerBiology(
+    @PostMapping("/")
+    public ResponseEntity<?> registerBiology(
             @RequestParam("kind") String kind,
             @RequestParam("name") String name,
-            @RequestParam("gender") String gender,
-            @RequestParam("age") String age,
-            @RequestParam("projectProcess") String projectProcess,
+            @RequestParam("gender") Integer gender,
+            @RequestParam("age") Integer age,
+            @RequestParam("projectProcess") Integer projectProcess,
             @RequestParam("note") String note,
             @RequestParam(value = "image", required = false) MultipartFile image
     ) {
         try {
-            // Reactのname（種別名）→DBのequip_kind_id
-            Optional<EquipKind> kindOpt = equipKindsRepository.findAll()
-                    .stream()
-                    .filter(k -> k.getEquipKindName().equals(name))
-                    .findFirst();
-
-            if (!kindOpt.isPresent()) {
-                return "登録失敗：指定された名前（種別）がマスタに存在しません";
-            }
-
-            int equipKindId = kindOpt.get().getEquipKindId();
-
-            BiologyDetail biology = new BiologyDetail();
-            biology.setKind(kind);
-            biology.setGender(Integer.parseInt(gender));
-            biology.setAge(Integer.parseInt(age));
-            biology.setProcessId(Integer.parseInt(projectProcess));
-            biology.setRemarks(note);
+            BiologyDetail bio = new BiologyDetail();
+            bio.setKind(kind);
+            bio.setName(name);
+            bio.setGender(gender);
+            bio.setAge(age);
+            bio.setProcessId(projectProcess); 
+            bio.setRemarks(note);
+            bio.setEquipId(1);
 
             if (image != null && !image.isEmpty()) {
-                biology.setPicture(image.getBytes());
+                bio.setPicture(image.getBytes());
             }
 
-            // 保存
-            biologyDetailsRepository.save(biology);
-
-            return "登録成功";
-
+            biologyDetailsRepository.save(bio);
+            return ResponseEntity.ok("登録完了！");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("画像の読み込みに失敗しました");
         } catch (Exception e) {
-            e.printStackTrace();
-            return "登録失敗";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("登録に失敗しました");
         }
     }
+    
 }

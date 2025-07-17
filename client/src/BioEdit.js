@@ -128,7 +128,7 @@ export default function BioEdit({ equipmentId }) {
 
           <div style={{ marginTop: 10 }}>
             <label>名前</label><br/>
-            <input type="number" name="name" value={form.name} onChange={handleChange} />
+            <input type="text" name="name" value={form.name} onChange={handleChange} />
           </div>
 
           <div style={{ marginTop: 10 }}>
