@@ -38,21 +38,6 @@ export default class Member extends React.Component {
     render() {
         return (
             <>
-        <header id="nav">
-          <div>
-            <Link to="/home">
-              <img src="/img/Labchain.png" className="logo-gazou" alt="Labchain" />
-            </Link>
-          </div>
-
-          <ul className="nav-links" id="nav-links">
-            <li><Link to="/home">ホーム</Link></li>
-            <li><Link to="/mypage">マイページ</Link></li>
-            <li><Link to="/search">プロジェクト検索</Link></li>
-            <li><Link to="/login" className="logout-button">ログアウト</Link></li>
-          </ul>
-        </header>
-
         <h1>プロジェクトメンバー編集</h1>
 
         <div className="input-wrapper">
