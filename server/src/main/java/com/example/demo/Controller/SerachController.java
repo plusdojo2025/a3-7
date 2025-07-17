@@ -32,38 +32,21 @@ public class SerachController {
     }
 	
 	//検索処理
-	@GetMapping("/projects/search")
-	public List<Project> searchProject (
-			@RequestParam(value ="title", required = false) String title,
-			@RequestParam(value ="tagId", required = false) Integer tagId
-		) {
-		
-		List<Project> projects;
-		
-		// タグが選ばれていればタグIDからタグを取得
-	    ProjectTag tag = null;
-	    if (tagId != null) {
-	        tag = projectTagRepository.findById(tagId).orElse(null);
-	    }
+    @GetMapping("/projects/search")
+    public List<Project> searchProjects(
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "tagId", required = false) Integer tagId) {
 
-	    // 条件に応じて検索パターンを分ける
-	    if (tag != null && title != null && !title.isEmpty()) {
-	        // タイトルとタグの両方で検索
-	        projects = projectsRepository.findByProjectNameContainingIgnoreCaseAndTag(title, tag);
-	    } else if (tag != null) {
-	        // タグだけで検索
-	        projects = projectsRepository.findByTag(tag);
-	    } else if (title != null && !title.isEmpty()) {
-	        // タイトルだけで検索
-	        projects = projectsRepository.findByProjectNameContainingIgnoreCase(title);
-	    } else {
-	        // 検索条件がない場合は空リスト（初期表示なし）
-	        projects = List.of();
-	    }
-
-        return projects; 
-	}
-	
+        if (title != null && !title.isEmpty() && tagId != null) {
+            return projectsRepository.findByProjectNameContainingIgnoreCaseAndProjectTagId(title, tagId);
+        } else if (tagId != null) {
+            return projectsRepository.findByProjectTagId(tagId);
+        } else if (title != null && !title.isEmpty()) {
+            return projectsRepository.findByProjectNameContainingIgnoreCase(title);
+        } else {
+            return List.of(); // 条件がないときは空リスト
+        }
+    }
 	
 	//プロジェクト詳細取得
 

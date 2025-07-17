@@ -20,8 +20,8 @@ public class ProjectTag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "project_tag_id", nullable = false)
-	private Integer ProjectTagId;
+	private Integer projectTagId;
 	
 	@Column(name = "project_tag_name", nullable = false, length = 50)
-	private String ProjectTagName;
+	private String projectTagName;
 }
