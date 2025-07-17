@@ -12,5 +12,7 @@ public interface ProjectsRepository extends JpaRepository<Project, Integer>{
 	List<Project> findByProjectNameContainingIgnoreCase(String name);
 	List<Project> findByProjectNameContainingIgnoreCaseAndTag(String name, ProjectTag tag);
 	List<Project> findByTag(ProjectTag tag);
+	
+	Project findByProject_id(Integer project_id);
 
 }
