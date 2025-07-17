@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 
 export default class Search extends React.Component {
     constructor(props) {
@@ -77,9 +77,9 @@ export default class Search extends React.Component {
                    {projects.length === 0 && <li>検索結果がありません</li>}
                    {projects.map(project => (
                     <li key={project.projectId}>
-                        <a href={`/project/${project.projectId}`}>
+                        <Link to={`/project/${project.projectId}`}>
                             {project.projectName}
-                        </a>
+                        </Link>
                     </li> 
                    ))}
                 </ul>
