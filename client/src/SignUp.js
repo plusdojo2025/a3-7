@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default class SignUp extends React.Component{
 
@@ -8,20 +9,39 @@ export default class SignUp extends React.Component{
         password: "",
         companyCode:"",
         name:"",
-        check:""
+        check:"",
+        error:""
     }
 
     handleSignUp = (e) => {
         e.preventDefault();
 
         const { email, name, companyCode, password, check } = this.state;
-        const data = {email: email, name: name, companyCode: companyCode, password: password};
-
-        // パスワード確認
-        if (password !== check) {
-            alert("パスワードと確認用パスワードが一致しません");
+        //入力チェック
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !password) {
+            this.setState({ error: "メールアドレスとパスワードは必須です。" });
             return;
         }
+        if (!emailRegex.test(email)) {
+            this.setState({ error: "メールアドレスの形式が正しくありません。" });
+            return;
+        }
+        if (password.length < 8) {
+            this.setState({ error: "パスワードは8文字以上で入力してください。" });
+            return;
+        }
+        if (password.length > 20) {
+            this.setState({ error: "パスワードは20文字以内で入力してください。" });
+            return;
+        }
+        if(password !== check){
+            this.setState({ error: "パスワードと確認用パスワードが一致しません。" });
+            return;
+        }
+
+
+        const data = {email: email, name: name, companyCode: companyCode, password: password};
 
         axios.post("/signup/", data).then(response => {
         const result = response.data; 
@@ -48,11 +68,15 @@ export default class SignUp extends React.Component{
     }
 
     render(){
-        const {email, password, companyCode, name, check} = this.state
+        const {email, password, companyCode, name, check, error} = this.state
         return( 
             <div className="SignUpForm">
+                <Link to="/login">
+                    <img src="/img/Labchain.png" className="logo" alt="Labchain" />
+                </Link>
                 <form onSubmit={this.handleSignUp}>
                     <div>ここは新規登録画面です</div>
+                    <p>{error}</p>
                     <p>メールアドレス</p>
                     <input type="text" name="email" onChange={this.onInput} value={email}/><br />
                     <p>氏名</p>
