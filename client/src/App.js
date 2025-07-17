@@ -40,7 +40,7 @@ function App() {
               <Route path="process" element={<Process />} />
               <Route path="member" element={<Member />} />
               <Route path="mypage" element={<Mypage />} />
-              <Route path="mypageedit" element={<MyPageEdit />} />
+              <Route path="mypage/edit" element={<MyPageEdit />} />
               <Route path="mail" element={<Mail />} />
               <Route path="search" element={<Search />} />
               <Route path="project/:projectId" element={<ViewProject />} />
