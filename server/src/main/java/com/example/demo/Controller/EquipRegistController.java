@@ -41,13 +41,13 @@ public class EquipRegistController {
             // itemName -> EquipKindのID取得
             Optional<EquipKind> kindOpt = equipKindsRepository.findAll()
                     .stream()
-                    .filter(k -> k.getEquip_kind_name().equals(itemName))
+                    .filter(k -> k.getEquipKindName().equals(itemName))
                     .findFirst();
 
             if (!kindOpt.isPresent()) {
                 return "登録失敗：指定された備品名が種別マスタに存在しません";
             }
-            int equipKindId = kindOpt.get().getEquip_kind_id();
+            int equipKindId = kindOpt.get().getEquipKindId();
 
             EquipDetail equip = new EquipDetail();
 

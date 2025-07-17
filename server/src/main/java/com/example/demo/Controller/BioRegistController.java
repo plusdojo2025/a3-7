@@ -39,20 +39,20 @@ public class BioRegistController {
             // Reactのname（種別名）→DBのequip_kind_id
             Optional<EquipKind> kindOpt = equipKindsRepository.findAll()
                     .stream()
-                    .filter(k -> k.getEquip_kind_name().equals(name))
+                    .filter(k -> k.getEquipKindName().equals(name))
                     .findFirst();
 
             if (!kindOpt.isPresent()) {
                 return "登録失敗：指定された名前（種別）がマスタに存在しません";
             }
 
-            int equipKindId = kindOpt.get().getEquip_kind_id();
+            int equipKindId = kindOpt.get().getEquipKindId();
 
             BiologyDetail biology = new BiologyDetail();
             biology.setKind(kind);
             biology.setGender(Integer.parseInt(gender));
             biology.setAge(Integer.parseInt(age));
-            biology.setProcess_id(Integer.parseInt(projectProcess));
+            biology.setProcessId(Integer.parseInt(projectProcess));
             biology.setRemarks(note);
 
             if (image != null && !image.isEmpty()) {

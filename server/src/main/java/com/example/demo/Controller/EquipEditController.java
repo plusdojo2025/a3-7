@@ -57,8 +57,8 @@ public class EquipEditController {
 
             // Equipmentエンティティを作成
             Equipment equipment = new Equipment();
-            equipment.setEquip_name(itemName);
-            equipment.setEquip_detail_id(detail.getEquip_ditail_id());
+            equipment.setEquipName(itemName);
+            equipment.setEquipDetailId(detail.getEquipDitailId());
             equipmentsRepository.save(equipment);
 
             return "登録成功";
@@ -77,7 +77,7 @@ public class EquipEditController {
         }
         Equipment equipment = eqOpt.get();
 
-        Optional<EquipDetail> detailOpt = equipDetailsRepository.findById(equipment.getEquip_detail_id());
+        Optional<EquipDetail> detailOpt = equipDetailsRepository.findById(equipment.getEquipDetailId());
         if (!detailOpt.isPresent()) {
             throw new RuntimeException("EquipDetail not found");
         }
@@ -85,8 +85,8 @@ public class EquipEditController {
 
         // 画像はURLなどで配信する運用を想定
         return new EquipmentDetailResponse(
-                equipment.getEquip_id(),
-                equipment.getEquip_name(),
+                equipment.getEquipId(),
+                equipment.getEquipName(),
                 detail.getRemaining(),
                 detail.getUnit(),
                 detail.getLimited().toString(),
@@ -114,10 +114,10 @@ public class EquipEditController {
             Optional<Equipment> eqOpt = equipmentsRepository.findById(id);
             if (!eqOpt.isPresent()) return "更新失敗：Equipmentなし";
             Equipment equipment = eqOpt.get();
-            equipment.setEquip_name(itemName);
+            equipment.setEquipName(itemName);
             equipmentsRepository.save(equipment);
 
-            Optional<EquipDetail> detailOpt = equipDetailsRepository.findById(equipment.getEquip_detail_id());
+            Optional<EquipDetail> detailOpt = equipDetailsRepository.findById(equipment.getEquipDetailId());
             if (!detailOpt.isPresent()) return "更新失敗：Detailなし";
             EquipDetail detail = detailOpt.get();
             detail.setRemaining(Double.parseDouble(quantity));
@@ -148,7 +148,7 @@ public class EquipEditController {
 
             // detailも一緒に削除
             equipmentsRepository.deleteById(id);
-            equipDetailsRepository.deleteById(equipment.getEquip_detail_id());
+            equipDetailsRepository.deleteById(equipment.getEquipDetailId());
 
             return "削除成功";
         } catch (Exception e) {
