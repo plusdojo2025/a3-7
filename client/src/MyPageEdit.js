@@ -123,7 +123,7 @@ export default class MyPageEdit extends React.Component {
                     />
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                     <label>
                     <input
                         type="checkbox"
@@ -134,7 +134,7 @@ export default class MyPageEdit extends React.Component {
                     />
                     パスワードを表示
                     </label>
-                </div>
+                </div> */}
                 
                 <div className="edit-buttons">
                     <button
