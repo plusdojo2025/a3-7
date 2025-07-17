@@ -35,7 +35,7 @@ export default function Report() {
              processId: "",
              projectId: "",
              comment: "",
-             title: "",
+             projectName: "",
              equipName: "",
              usageAmount: ""
         });
@@ -49,9 +49,9 @@ export default function Report() {
     <div className="report-register">
       <h2 className="title">日報登録</h2>
         <form onSubmit={handleAdd}>
-             <div>日付:<input type="datetime-local" name="createdAt"value=  {form.createdAt} onChange={handleChange}required/>
+             <div>日付:<input type="date" name="createdAt"value={form.createdAt} onChange={handleChange}required/>
              </div>
-             <div> 研修タイトル:<input type="text" name="title" value={form.title}  onChange={handleChange}/>
+             <div> 研修タイトル:<input type="text" name="projectName" value={form.projectName}  onChange={handleChange}/>
              </div>
              <div> 備品名:
                 <select name="equipName" value={form.equipName} onChange={handleChange}>
