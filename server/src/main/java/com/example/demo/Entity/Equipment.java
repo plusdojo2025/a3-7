@@ -1,5 +1,6 @@
 package com.example.demo.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,11 +19,16 @@ public class Equipment {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer equip_id;
-	private String  equip_name;
-	private Integer equip_kind_id;
-	private Integer equip_detail_id;
-	private Integer project_id;
+	@Column(name = "equip_id")
+	private Integer equipId;
+	@Column(name = "equip_name")
+	private String  equipName;
+	@Column(name = "equip_kind_id")
+	private Integer equipKindId;
+	@Column(name = "equip_detail_id")
+	private Integer equipDetailId;
+	@Column(name = "project_id")
+	private Integer projectId;
 	
 
 }
