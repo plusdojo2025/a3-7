@@ -18,7 +18,7 @@ import com.example.demo.Entity.BiologyDetail;
 import com.example.demo.Repository.BiologyDetailsRepository;
 
 @RestController
-@RequestMapping("/api/biology/")
+@RequestMapping("/api/biology/edit")
 @CrossOrigin // 必要なら
 public class BioEditController {
 
