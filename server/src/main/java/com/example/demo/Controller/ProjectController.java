@@ -12,15 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Entity.Member;
 import com.example.demo.Entity.Project;
-import com.example.demo.Entity.Reflect;
-import com.example.demo.Entity.ReflectTag;
-import com.example.demo.Entity.Report;
 import com.example.demo.Entity.User;
 import com.example.demo.Repository.MembersRepository;
 import com.example.demo.Repository.ProjectsRepository;
-import com.example.demo.Repository.ReflectTagsRepository;
-import com.example.demo.Repository.ReflectsRepository;
-import com.example.demo.Repository.ReportsRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -45,33 +39,6 @@ public class ProjectController {
 
 		return myProjects;
 
-	}
-
-	// report
-	@Autowired
-	private ReportsRepository reportRepository;
-
-	@PostMapping("/report")
-	public Report saveReport(@RequestBody Report report) {
-		return reportRepository.save(report);
-	}
-
-	// reflect
-	@Autowired
-	private ReflectsRepository reflectRepository;
-
-	@PostMapping("/reflect")
-	public Reflect addReflect(@RequestBody Reflect reflect) {
-		return reflectRepository.save(reflect);
-	}
-
-	// reflect tag
-	@Autowired
-	private ReflectTagsRepository reflectTagRepository;
-
-	@GetMapping
-	public List<ReflectTag> getAllReflectTag() {
-		return reflectTagRepository.findAll();
 	}
 
 	// メンバー招待（承認待ちで保存）
