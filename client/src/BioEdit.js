@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './css/BioEdit.css';
 
-const alertTimingOptions = ['50%', '40%', '30%', '20%', '10%'];
 
-export default function EquipmentEdit({ equipmentId }) {
+
+export default function BioEdit({ equipmentId }) {
   const [form, setForm] = useState({
     kind: '',
     name: '',
@@ -20,7 +20,7 @@ export default function EquipmentEdit({ equipmentId }) {
 
   // 画面初期表示で既存データを取得
   useEffect(() => {
-    axios.get(`/api/equipment/${equipmentId}`)
+    axios.get(`/api/biology/edit/${equipmentId}`)
       .then((res) => {
         const data = res.data;
         setForm({
@@ -67,7 +67,7 @@ export default function EquipmentEdit({ equipmentId }) {
         formData.append(key, value);
       });
 
-      await axios.put(`/api/equipment/${equipmentId}`, formData, {
+      await axios.put(`/api/biology/edit/${equipmentId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
@@ -82,7 +82,7 @@ export default function EquipmentEdit({ equipmentId }) {
   const handleDelete = async () => {
     if (!window.confirm('本当に削除しますか？')) return;
     try {
-      await axios.delete(`/api/equipment/${equipmentId}`);
+      await axios.delete(`/api/biology/edit/${equipmentId}`);
       alert('削除完了！');
       window.history.back();
     } catch (err) {
@@ -123,27 +123,27 @@ export default function EquipmentEdit({ equipmentId }) {
         <div style={{ flex: 1 }}>
           <div>
             <label>種類</label><br/>
-            <input type="text" name="kind" value={form.itemName} onChange={handleChange} />
+            <input type="text" name="kind" value={form.kind} onChange={handleChange} />
           </div>
 
           <div style={{ marginTop: 10 }}>
             <label>名前</label><br/>
-            <input type="number" name="name" value={form.quantity} onChange={handleChange} />
+            <input type="number" name="name" value={form.name} onChange={handleChange} />
           </div>
 
           <div style={{ marginTop: 10 }}>
             <label>性別</label><br/>
-            <input type="text" name="gender" value={form.unit} onChange={handleChange} />
+            <input type="text" name="gender" value={form.gender} onChange={handleChange} />
           </div>
 
           <div style={{ marginTop: 10 }}>
             <label>年齢</label><br/>
-            <input type="text" name="age" value={form.expiryDate} onChange={handleChange} />
+            <input type="text" name="age" value={form.age} onChange={handleChange} />
           </div>
 
           <div style={{ marginTop: 10 }}>
             <label>対象の実験工程</label><br/>
-            <input type="text" name="projectProcess" value={form.location} onChange={handleChange} />
+            <input type="text" name="projectProcess" value={form.projectProcess} onChange={handleChange} />
           </div>
 
           <div style={{ marginTop: 10 }}>

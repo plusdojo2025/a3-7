@@ -15,7 +15,7 @@ import com.example.demo.Repository.BiologyDetailsRepository;
 import com.example.demo.Repository.EquipKindsRepository;
 
 @RestController
-@RequestMapping("/api/biology")
+@RequestMapping("/api/biology/")
 public class BioRegistController {
 
     @Autowired

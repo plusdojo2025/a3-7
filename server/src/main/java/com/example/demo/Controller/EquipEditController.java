@@ -20,7 +20,7 @@ import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipmentsRepository;
 
 @RestController
-@RequestMapping("/equipment/details/bio")
+@RequestMapping("/equipment/details/equip/")
 public class EquipEditController {
 
     @Autowired

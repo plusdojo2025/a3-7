@@ -46,7 +46,7 @@ export default function EquipmentRegist() {
         formData.append(key, value); // ← 他の項目も追加
       });
 
-      await axios.post('/api/equipment', formData, {
+      await axios.post('/api/equipment/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 

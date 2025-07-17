@@ -16,7 +16,7 @@ import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipKindsRepository;
 
 @RestController
-@RequestMapping("/api/equipment")
+@RequestMapping("/api/equipment/")
 public class EquipRegistController {
 
     @Autowired

@@ -21,7 +21,7 @@ export default function EquipmentEdit({ equipmentId }) {
 
   // 画面初期表示で既存データを取得
   useEffect(() => {
-    axios.get(`/api/equipment/${equipmentId}`)
+    axios.get(`/equipment/details/equip/${equipmentId}`)
       .then((res) => {
         const data = res.data;
         setForm({
@@ -69,7 +69,7 @@ export default function EquipmentEdit({ equipmentId }) {
         formData.append(key, value);
       });
 
-      await axios.put(`/api/equipment/${equipmentId}`, formData, {
+      await axios.put(`/equipment/details/equip/${equipmentId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
@@ -84,7 +84,7 @@ export default function EquipmentEdit({ equipmentId }) {
   const handleDelete = async () => {
     if (!window.confirm('本当に削除しますか？')) return;
     try {
-      await axios.delete(`/api/equipment/${equipmentId}`);
+      await axios.delete(`/equipment/details/equip/${equipmentId}`);
       alert('削除完了！');
       window.history.back();
     } catch (err) {
