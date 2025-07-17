@@ -25,7 +25,7 @@ export default class Member extends React.Component {
       return;
     }
 
-    axios.get(`http://localhost:8080/api/user?email=${encodeURIComponent(email)}`)
+    axios.get(`http://localhost:8080/getUserNameByEmail?email=${encodeURIComponent(email)}`)
       .then((res) => {
         this.setState({ name: res.data.name });
       })
