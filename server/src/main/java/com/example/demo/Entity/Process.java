@@ -26,4 +26,7 @@ public class Process {
 	@Column(name = "project_id")
 	private Integer projectId;
 	private Integer complete;
+	
+
+	
 }

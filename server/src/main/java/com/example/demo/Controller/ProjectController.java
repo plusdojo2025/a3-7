@@ -117,30 +117,30 @@ public class ProjectController {
         return reflectTagRepository.findAll();
     }
     
- // メンバー招待（承認待ちで保存）
- 	@PostMapping("/members/invite")
- 	public Member inviteMember(@RequestBody Member member) {
- 		member.setAttend(0); // 承認待ち
- 		return membersRepository.save(member);
- 	}
+	// メンバー招待（承認待ちで保存）
+	@PostMapping("/members/invite")
+	public Member inviteMember(@RequestBody Member member) {
+		member.setAttend(0); // 承認待ち
+		return membersRepository.save(member);
+	}
 
- 	// メンバー承認
- 	@PostMapping("/members/approve")
- 	public String approveMember(@RequestBody Member member) {
- 		Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
- 		if (m != null) {
- 			m.setAttend(1); // 承認済み
- 			membersRepository.save(m);
- 			return "参加承認しました";
- 		} else {
- 			return "該当メンバーが見つかりません";
- 		}
- 	}
-
- 	// プロジェクトに承認済みのメンバーだけを取得
- 	@GetMapping("/members/approved")
- 	public List<Member> getApprovedMembers(Integer projectId) {
- 		return membersRepository.findByProjectIdAndAttend(projectId, 1);
- 	}
+	// メンバー承認
+	@PostMapping("/members/approve")
+	public String approveMember(@RequestBody Member member) {
+		Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
+		if (m != null) {
+			m.setAttend(1); // 承認済み
+			membersRepository.save(m);
+			return "参加承認しました";
+		} else {
+			return "該当メンバーが見つかりません";
+		}
+	}
+	
+	// プロジェクトに承認済みのメンバーだけを取得
+	@GetMapping("/members/approved")
+	public List<Member> getApprovedMembers(Integer projectId) {
+		return membersRepository.findByProjectIdAndAttend(projectId, 1);
+	}
 
 }
