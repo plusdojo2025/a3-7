@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './css/EquipmentRegist.css';
 
-
 const unitOptions = ['個', '箱', 'kg', 'g', 'mg', 'L', 'ml'];
 const alertTimingOptions = ['50%', '40%', '30%', '20%', '10%'];
 
@@ -17,7 +16,7 @@ export default function EquipmentRegist() {
     note: ''
   });
 
-  const [image, setImage] = useState(null); // ← 画像用state追加
+  const [image, setImage] = useState(null);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
@@ -26,7 +25,7 @@ export default function EquipmentRegist() {
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // 画像1枚だけ
+    setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -41,28 +40,43 @@ export default function EquipmentRegist() {
 
     try {
       const formData = new FormData();
-      formData.append('image', image); // ← 画像を追加
-      Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, value); // ← 他の項目も追加
+      if (image) {
+        formData.append('image', image);
+      }
+
+      // アラートタイミングから "%" を除去して送信（Spring側でreplace不要）
+      const cleanedForm = {
+        ...form,
+        alertTiming: form.alertTiming.replace('%', '')
+      };
+
+      Object.entries(cleanedForm).forEach(([key, value]) => {
+        formData.append(key, value);
       });
 
-      await axios.post('/api/equipment/', formData, {
+      // デバッグ用に送信データを確認
+      console.log('FormData送信内容:');
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}: ${pair[1]}`);
+      }
+
+      await axios.post('http://localhost:8080/api/equipment', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
       alert('登録完了！');
+      window.history.back();
     } catch (err) {
-      console.error(err);
+      console.error('AxiosError:', err);
       setError('登録に失敗しました');
     }
   };
 
   return (
     <div style={{ maxWidth: 400, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }} 
-    className='equipmentRegist-card'>
+         className='equipmentRegist-card'>
       <h2>備品の登録</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        {/* 画像アップロード欄 */}
         <div>
           <label>画像</label><br/>
           <input type="file" accept="image/*" onChange={handleImageChange} />
