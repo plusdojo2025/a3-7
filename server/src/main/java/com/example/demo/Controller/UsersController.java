@@ -73,6 +73,8 @@ public class UsersController {
     	 
     	 return (user != null);
     }
+    
+    
  // メールアドレスでユーザー情報を取得
     @GetMapping("/getUserNameByEmail")
     public NameResponse getUserNameByEmail(String email) {
