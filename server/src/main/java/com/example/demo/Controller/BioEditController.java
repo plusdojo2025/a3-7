@@ -18,7 +18,7 @@ import com.example.demo.Entity.BiologyDetail;
 import com.example.demo.Repository.BiologyDetailsRepository;
 
 @RestController
-@RequestMapping("/api/biology/edit")
+@RequestMapping("/api/biology/edit/")
 @CrossOrigin // 必要なら
 public class BioEditController {
 
@@ -40,7 +40,7 @@ public class BioEditController {
             detail.setKind(kind);
             detail.setGender(Integer.parseInt(gender));
             detail.setAge(Integer.parseInt(age));
-            detail.setProcess_id(Integer.parseInt(projectProcess));
+            detail.setProcessId(Integer.parseInt(projectProcess));
             detail.setRemarks(note);
             if (image != null && !image.isEmpty()) {
                 detail.setPicture(image.getBytes());
@@ -63,11 +63,11 @@ public class BioEditController {
         }
         BiologyDetail detail = opt.get();
         return new BiologyDetailResponse(
-                detail.getBiology_detail_id(),
+        		detail.getBiologyDetailId(),
                 detail.getKind(),
                 detail.getGender(),
                 detail.getAge(),
-                detail.getProcess_id(),
+                detail.getProcessId(),
                 detail.getRemarks(),
                 null // 画像のURLやBase64は別設計
         );
@@ -94,7 +94,7 @@ public class BioEditController {
             detail.setKind(kind);
             detail.setGender(Integer.parseInt(gender));
             detail.setAge(Integer.parseInt(age));
-            detail.setProcess_id(Integer.parseInt(projectProcess));
+            detail.setProcessId(Integer.parseInt(projectProcess));
             detail.setRemarks(note);
             if (image != null && !image.isEmpty()) {
                 detail.setPicture(image.getBytes());

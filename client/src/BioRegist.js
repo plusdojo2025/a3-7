@@ -27,7 +27,7 @@ export default function BioRegist() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.kind || !form.name || !form.gender || !form.age || !form.projectprocess) {
+    if (!form.kind || !form.name || !form.gender || !form.age || !form.projectProcess) {  
       setError('入力されていない項目があります');
       return;
     }
@@ -41,7 +41,7 @@ export default function BioRegist() {
         formData.append(key, value); // ← 他の項目も追加
       });
 
-      await axios.post('/api/equipment', formData, {
+      await axios.post('/api/biology/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
