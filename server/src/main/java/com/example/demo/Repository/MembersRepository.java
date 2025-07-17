@@ -8,5 +8,5 @@ import com.example.demo.Entity.Member;
 
 public interface MembersRepository extends JpaRepository<Member, Integer> {
 	
-	List<Member> findByUser_id(Integer integer);
+	List<Member> findByUserId(Integer userId);
 }

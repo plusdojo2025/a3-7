@@ -19,17 +19,17 @@ import jakarta.servlet.http.HttpSession;
 public class ProjectController {
 	
 	@Autowired
-    private ProjectsRepository projectRepository;
+    private ProjectsRepository projectsRepository;
 	private MembersRepository membersRepository;
 	
     @GetMapping("/project/")
     public List<Project> getMyPloject(HttpSession session) {
     	User user = (User)session.getAttribute("User");
-        List<Member> members = membersRepository.findByUser_id(user.getUser_id());
+        List<Member> members = membersRepository.findByUserId(user.getUser_id());
     
         List<Project> myProjects = new ArrayList<>();
         for(Member m: members) {
-        	Project myProject = projectRepository.findByProject_id(m.getProject_id());
+        	Project myProject = projectsRepository.findByProjectId(m.getProjectId());
         	myProjects.add(myProject);
         }
         

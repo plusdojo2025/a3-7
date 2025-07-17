@@ -13,6 +13,6 @@ public interface ProjectsRepository extends JpaRepository<Project, Integer>{
 	List<Project> findByProjectNameContainingIgnoreCaseAndTag(String name, ProjectTag tag);
 	List<Project> findByTag(ProjectTag tag);
 	
-	Project findByProject_id(Integer project_id);
+	Project findByProjectId(Integer projectId);
 
 }
