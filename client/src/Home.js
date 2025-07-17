@@ -8,7 +8,8 @@ export default class Home extends React.Component{
                ProjectTags:[],
                addName:"",
                addProjectTagId:0,
-               showModal:false
+               showModal:false,
+               error:""
             }
 
     componentDidMount() {
@@ -42,6 +43,17 @@ export default class Home extends React.Component{
     //プロジェクトを新規登録する処理
     saveProject(){
         const {addName, addProjectTagId} = this.state;
+
+        //入力チェック
+        if (!addName) {
+            this.setState({ error: "プロジェクト名を設定してください" });
+            return;
+        }
+
+        if(addProjectTagId === 0){
+            this.setState({ error: "プロジェクトIDを設定してください" });
+            return;
+        }
         const data = {projectId:null, projectName:addName, privacy:0, projectTagId:Number(addProjectTagId)};
         console.log(data);
         axios.post("/api/projects/add/", data)
@@ -70,10 +82,11 @@ export default class Home extends React.Component{
     }
 
     render(){
-        const {projects, showModal} = this.state;
+        const {projects, showModal, error} = this.state;
         return( 
             <div className="Home">
                 <h1>プロジェクト選択</h1>
+                <p>{error}</p>
                 <table>
                     <tbody>
                     {projects.map((project, index) =>

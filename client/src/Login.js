@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import './css/Login.css';
 import { Link } from "react-router-dom";
 
 export default class Login extends React.Component{
@@ -75,7 +76,11 @@ export default class Login extends React.Component{
     render(){
         const { email, password, error } = this.state;
         return( 
+           
             <div className="LoginForm">
+                <Link to="/login">
+                    <img src="/img/Labchain.png" className="logo" alt="Labchain" />
+                </Link>
                 <form onSubmit={this.handleLogin}>
                     <h1>ログイン</h1>
                     <p>{error}</p>
