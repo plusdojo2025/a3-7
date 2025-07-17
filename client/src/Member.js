@@ -43,6 +43,23 @@ export default class Member extends React.Component {
     this.setState({ isOpen: false });
   };
 
+  inviteUser = () =>{
+    const { email } = this.state;
+
+    axios.post("http://localhost:8080/api/invite",{
+      email: email,
+      projectId: 1
+    })
+    .then(() =>{
+      alert("招待を送信しました");
+      this.setState({ isOpen: false});
+    })
+    .catch((err)=>{
+      console.error("招待の送信に失敗",err);
+      alert("招待に失敗しました。");
+    });
+  };
+
   render() {
     return (
       <>
@@ -79,6 +96,7 @@ export default class Member extends React.Component {
                       type="button"
                       name="submit"
                       value="はい"
+                      onClick={this.inviteUser}
                     />
                   </div>
                 </div>

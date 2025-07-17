@@ -30,6 +30,7 @@ public class ProjectController {
 
 	@Autowired
 	private ProjectsRepository projectsRepository;
+	@Autowired
 	private MembersRepository membersRepository;
 
 	@GetMapping("/project/")
