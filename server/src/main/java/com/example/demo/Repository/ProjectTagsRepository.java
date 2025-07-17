@@ -5,5 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.Entity.ProjectTag;
 
 public interface ProjectTagsRepository extends JpaRepository<ProjectTag, Integer> {
-
 }

@@ -30,7 +30,6 @@ public class SerachController {
     public List<ProjectTag> getAllTags() {
         return projectTagRepository.findAll();
     }
-	
 	//検索処理
 	@GetMapping("/projects/search")
 	public List<Project> searchProject (
@@ -52,7 +51,7 @@ public class SerachController {
 	        projects = projectsRepository.findByProjectNameContainingIgnoreCaseAndTag(title, tag);
 	    } else if (tag != null) {
 	        // タグだけで検索
-	        projects = projectsRepository.findByTag(tag);
+	        projects = projectsRepository.findByProjectTagId(1);
 	    } else if (title != null && !title.isEmpty()) {
 	        // タイトルだけで検索
 	        projects = projectsRepository.findByProjectNameContainingIgnoreCase(title);
