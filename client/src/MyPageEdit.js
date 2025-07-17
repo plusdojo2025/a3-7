@@ -38,7 +38,7 @@ export default class MyPageEdit extends React.Component {
     const { name, password, newPassword, confirmNewPassword } = this.state;
 
     if (newPassword !== confirmNewPassword) {
-      alert("新しいパスワードが一致しません。");
+      alert("新規パスワードが一致しません。");
       return;
     }
 
@@ -49,6 +49,12 @@ export default class MyPageEdit extends React.Component {
         }, { withCredentials: true })
         .then((res) => {
         if (res.data === true) {
+            // パスワード欄を初期化
+            this.setState({
+                password: "",
+                newPassword: "",
+                confirmNewPassword: "",
+            });
             alert("更新に成功しました。");
         } else {
             alert("現在のパスワードが正しくありません。");
@@ -123,7 +129,7 @@ export default class MyPageEdit extends React.Component {
                     />
                 </div>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                     <label>
                     <input
                         type="checkbox"
@@ -134,7 +140,7 @@ export default class MyPageEdit extends React.Component {
                     />
                     パスワードを表示
                     </label>
-                </div>
+                </div> */}
                 
                 <div className="edit-buttons">
                     <button

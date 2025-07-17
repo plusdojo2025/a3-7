@@ -1,15 +1,15 @@
 import React from "react";
 import './css/Common.css';
 import './css/Member.css';
-import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default class Member extends React.Component {
-    constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       email: '',
       name: '',
+      isOpen: false,
     };
   }
 
@@ -35,9 +35,17 @@ export default class Member extends React.Component {
       });
   };
 
-    render() {
-        return (
-            <>
+  openModal = () => {
+    this.setState({ isOpen: true });
+  };
+
+  closeModal = () => {
+    this.setState({ isOpen: false });
+  };
+
+  render() {
+    return (
+      <>
         <h1>プロジェクトメンバー編集</h1>
 
         <div className="input-wrapper">
@@ -57,14 +65,27 @@ export default class Member extends React.Component {
             onClick={this.handleSearch}
           />
 
-          {this.state.name && (
-            <>
-              <div className="result">
-                <p className="user-name-display">名前：{this.state.name}</p>
-              </div>
-              <div className="underline"></div>
-            </>
-          )}
+          <div className="welcome-container">
+            <div className="result">
+              <p className="user-name-display">一致した名前：{this.state.name}</p>
+              <button onClick={this.openModal}>招待メール送信</button>
+              {this.state.isOpen && (
+                <div className="modal-overlay" >
+                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <h2>この方をプロジェクトに招待しますか？</h2>
+                    <button onClick={this.closeModal}>いいえ</button>
+                    <input
+                      className="sub_botun"
+                      type="button"
+                      name="submit"
+                      value="はい"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="underline"></div>
+          </div>
         </div>
       </>
     );

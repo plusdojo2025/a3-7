@@ -41,23 +41,30 @@ public class MypageController {
 	
 	@PostMapping("/mypage/update/")
 	public boolean updateUser(@RequestBody Map<String, String> payload, HttpSession session) {
-	    User loginUser = (User) session.getAttribute("user");
-	    if (loginUser == null) return false;
-
-	    String name = payload.get("name");
-	    String password = payload.get("password");
-	    String newPassword = payload.get("newPassword");
-
-	    if (!loginUser.getPassword().equals(password)) {
-	        return false; // パスワード不一致
-	    }
-
-	    // 更新処理
-	    loginUser.setName(name);
-	    loginUser.setPassword(newPassword);
-	    // 保存処理
-	    userRepository.save(loginUser);
-	    return true;
+		User loginUser = (User) session.getAttribute("user");
+		if (loginUser == null) return false;
+		
+		String name = payload.get("name");
+		String password = payload.get("password");
+		String newPassword = payload.get("newPassword");
+		
+		// 現在のパスワードの確認
+		if (!loginUser.getPassword().equals(password)) {
+			// パスワード不一致
+			return false;
+		}
+		
+		// 氏名更新
+		loginUser.setName(name);
+		
+		// 新しいパスワードが入力されていれば変更
+		if (newPassword != null && !newPassword.isEmpty()) {
+		    loginUser.setPassword(newPassword);
+		}
+		
+		// 保存処理
+		userRepository.save(loginUser);
+		return true;
 	}
 
 }
