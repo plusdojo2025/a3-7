@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default function Report() {
    const [equipmentList, setEquipmentList] = useState([]);
-   
+   const [projectList,setProjectList] = useState([]);
      
 
      const [form, setForm] = useState({
@@ -21,7 +21,7 @@ export default function Report() {
   
      fetch("/api/report")
        .then(res => res.json())
-     
+       .then(data => setProjectList(data))
        .then(data => {setEquipmentList(data)
         })
        .catch(err => {
@@ -60,7 +60,7 @@ export default function Report() {
         <form onSubmit={handleAdd}>
              <div>日付:<input type="date" name="createdAt"value={form.createdAt} onChange={handleChange}required/>
              </div>
-             <div> 研修タイトル:<input type="text" name="projectName" value={form.projectName}  onChange={handleChange}/> 
+             <div> 研修タイトル:<input type="text" name="projectName" value={form.projectId}  onChange={handleChange}/>
              </div>
              <div> 備品名:
                 <select name="equipId" value={form.equipId} onChange={handleChange}>
