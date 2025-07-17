@@ -100,5 +100,22 @@ public class ProjectController {
 	public List<Member> getApprovedMembers(Integer projectId) {
 		return membersRepository.findByProjectIdAndAttend(projectId, 1);
 	}
+	// 承認待ちメンバーを取得（管理画面などで使用）
+	@GetMapping("/members/pending")
+	public List<Member> getPendingMembers(Integer projectId) {
+	    return membersRepository.findByProjectIdAndAttend(projectId, 0);
+	}
 
+	// 招待キャンセルなども必要なら
+	@PostMapping("/members/cancel")
+	public String cancelInvitation(@RequestBody Member member) {
+	    Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
+	    if (m != null) {
+	    	m.setAttend(2);	        
+	    	membersRepository.save(m);
+	        return "招待をキャンセルしました";
+	    } else {
+	        return "該当メンバーが見つかりません";
+	    }
+	}
 }
