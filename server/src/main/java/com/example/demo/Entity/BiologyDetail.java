@@ -1,5 +1,6 @@
 package com.example.demo.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,11 +18,13 @@ import lombok.NoArgsConstructor;
 public class BiologyDetail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int biology_detail_id;
+	@Column(name = "biology_detail_id")
+	private int biologyDetailId;
 	private String kind;
 	private int gender;
 	private int age;
-	private int process_id;
+	@Column(name = "process_id")
+	private int processId;
 	private String remarks;
 	private byte[] picture; 
 }
