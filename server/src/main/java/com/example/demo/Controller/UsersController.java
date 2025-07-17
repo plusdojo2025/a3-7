@@ -3,7 +3,6 @@ package com.example.demo.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +13,6 @@ import com.example.demo.Repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UsersController {
 	// SpringがUserRepositoryを自動で注入
@@ -42,6 +40,13 @@ public class UsersController {
     	
     	return result;
     }
+    
+    //ログアウト処理
+    @PostMapping("/logout/")
+    public void logout(HttpSession session) {
+    	 session.invalidate();
+    	 return;
+    }
 
     // 新規ユーザーを作成する
     @PostMapping("/signup/")
@@ -68,6 +73,8 @@ public class UsersController {
     	 
     	 return (user != null);
     }
+    
+    
  // メールアドレスでユーザー情報を取得
     @GetMapping("/getUserNameByEmail")
     public NameResponse getUserNameByEmail(String email) {

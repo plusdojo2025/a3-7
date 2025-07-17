@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import './css/Common.css';
 import './css/Member.css';
 import axios from "axios";
@@ -27,7 +27,10 @@ export default class Member extends React.Component {
 
     axios.get(`http://localhost:8080/getUserNameByEmail?email=${encodeURIComponent(email)}`)
       .then((res) => {
-        this.setState({ name: res.data.name });
+        this.setState({ 
+          name: res.data.name,
+          userId: res.data.userId
+         });
       })
       .catch((err) => {
         console.error("名前の取得に失敗:", err);
@@ -46,8 +49,8 @@ export default class Member extends React.Component {
   inviteUser = () =>{
     const { email } = this.state;
 
-    axios.post("http://localhost:8080/api/invite",{
-      email: email,
+    axios.post("http://localhost:8080/members/invite",{
+      userId: this.state.userId,
       projectId: 1
     })
     .then(() =>{
