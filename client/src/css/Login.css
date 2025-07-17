@@ -3,3 +3,37 @@
   height: 80px;
   text-align: center;
 }
+
+.LoginPage {
+  display: flex;
+  justify-content: center;   /* 横方向に中央 */
+  background-color: #f0f0f0; /* 任意の背景色 */
+  flex-direction: column;
+  align-items: center;
+}
+
+.LoginForm h2 {
+  margin-top: 10px;     /* 上の余白をなくす */
+  margin-bottom: 10px; /* 必要に応じて調整 */
+}
+.LoginForm p {
+  margin-top: 10px;     /* 上の余白をなくす */
+  margin-bottom: 10px; /* 必要に応じて調整 */
+}
+
+
+.LoginForm {
+  background-color: #A3CCBE;
+  border-radius: 20px;
+  padding: 10px 80px;
+  width: 200px;
+  height: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;       /* ← 入力欄も中央寄せ */
+  text-align: left;          /* ラベルやプレースホルダ用に必要なら left に */
+}
+
+
