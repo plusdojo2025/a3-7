@@ -1,5 +1,6 @@
 package com.example.demo.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,8 +19,11 @@ import lombok.NoArgsConstructor;
 public class Report {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "report_id")
 	private Integer reportId;
+	@Column(name = "process_id")
 	private Integer processId;
+	@Column(name = "project_id")
 	private Integer projectId;
 	private String createdAt;
 	private String comment;

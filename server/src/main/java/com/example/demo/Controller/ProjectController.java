@@ -25,7 +25,7 @@ public class ProjectController {
     @GetMapping("/project/")
     public List<Project> getMyPloject(HttpSession session) {
     	User user = (User)session.getAttribute("User");
-        List<Member> members = membersRepository.findByUserId(user.getUser_id());
+        List<Member> members = membersRepository.findByUserId(user.getUserId());
     
         List<Project> myProjects = new ArrayList<>();
         for(Member m: members) {

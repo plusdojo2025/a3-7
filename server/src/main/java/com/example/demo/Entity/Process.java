@@ -1,5 +1,6 @@
 package com.example.demo.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,8 +19,11 @@ public class Process {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer process_id;
-	private String  process_mame;
-	private Integer project_id;
+	@Column(name = "process_id")
+	private Integer processId;
+	@Column(name = "process_name")
+	private String  processName;
+	@Column(name = "project_id")
+	private Integer projectId;
 	private Integer complete;
 }

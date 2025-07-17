@@ -2,6 +2,7 @@ package com.example.demo.Entity;
 
 import java.sql.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +20,8 @@ import lombok.NoArgsConstructor;
 public class EquipDetail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer equip_ditail_id;
+	@Column(name = "equip_ditail_id")
+	private Integer equipDitailId;
 	private double remaining;
 	private Date limited;
 	private double judge;
