@@ -20,12 +20,21 @@ public class ProjectController {
 	
 	@Autowired
     private ProjectsRepository projectsRepository;
+	@Autowired
 	private MembersRepository membersRepository;
 	
-    @GetMapping("/project/")
+    @GetMapping("/projects/")
     public List<Project> getMyPloject(HttpSession session) {
-    	User user = (User)session.getAttribute("User");
-        List<Member> members = membersRepository.findByUserId(user.getUserId());
+ 
+    	Object obj =session.getAttribute("user");
+    	Integer userId = 0;
+    	
+    	if (obj instanceof User) {
+    	    User user = (User) obj;
+    	    userId = user.getUserId();
+    	    System.out.println("userId = " + userId);
+    	}
+        List<Member> members = membersRepository.findAllByUserId(userId);
     
         List<Project> myProjects = new ArrayList<>();
         for(Member m: members) {
