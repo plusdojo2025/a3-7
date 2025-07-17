@@ -21,8 +21,8 @@ public class Report {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "report_id")
 	private Integer reportId;
-	@Column(name = "process_id")
-	private Integer processId;
+	@Column(name = "equip_id")
+	private Integer equipId;
 	@Column(name = "project_id")
 	private Integer projectId;
 	private String createdAt;

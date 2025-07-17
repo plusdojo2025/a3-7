@@ -25,6 +25,14 @@ public class ReportController {
     public Report saveReport(@RequestBody Report report) {
         return reportRepository.save(report);
     }
+    //reflect tag
+    @Autowired
+    private ReflectTagsRepository reflectTagRepository;
+    @GetMapping("/reflect")
+    public List<ReflectTag> getAllReflectTag() {
+        return reflectTagRepository.findAll();
+    }
+    
     //reflect
     @Autowired
     private ReflectsRepository reflectRepository;
@@ -32,14 +40,7 @@ public class ReportController {
     public Reflect addReflect(@RequestBody Reflect reflect) {
         return reflectRepository.save(reflect);
     }
-    //reflect tag
-    @Autowired
-    private ReflectTagsRepository reflectTagRepository;
-    @GetMapping
-    public List<ReflectTag> getAllReflectTag() {
-        return reflectTagRepository.findAll();
-    }
-    
+   
     @Autowired
     private EquipmentsRepository equipmentsRepository;
     

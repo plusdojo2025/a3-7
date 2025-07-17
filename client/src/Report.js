@@ -2,23 +2,32 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Report() {
-     const [items, setItems] = useState([]);
+   const [equipmentList, setEquipmentList] = useState([]);
+   
+     
+
      const [form, setForm] = useState({
          createdAt: "",
          processId: "",
          projectId: "",
          comment: "",
-         title: "",
-         equipName: "",
+         projectName: "",
+         equipId: "",
          usageAmount: ""
      });
+     
 
-     useEffect(() => {
-    
+    useEffect(() => {
+  
      fetch("/api/report")
-         .then(res => res.json())
-         .then(data => setItems(data));
-    }, []);
+       .then(res => res.json())
+     
+       .then(data => {setEquipmentList(data)
+        })
+       .catch(err => {
+        console.error("Failed to fetch equipment", err);
+    });
+}, []);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -36,7 +45,7 @@ export default function Report() {
              projectId: "",
              comment: "",
              projectName: "",
-             equipName: "",
+             equipId: "",
              usageAmount: ""
         });
       })
@@ -51,14 +60,16 @@ export default function Report() {
         <form onSubmit={handleAdd}>
              <div>日付:<input type="date" name="createdAt"value={form.createdAt} onChange={handleChange}required/>
              </div>
-             <div> 研修タイトル:<input type="text" name="projectName" value={form.projectName}  onChange={handleChange}/>
+             <div> 研修タイトル:<input type="text" name="projectName" value={form.projectName}  onChange={handleChange}/> 
              </div>
              <div> 備品名:
-                <select name="equipName" value={form.equipName} onChange={handleChange}>
-                     <option value="">選択してください</option>
-                     <option value="試薬A">試薬A</option>
-                     <option value="器具B">器具B</option>
-                     <option value="機材C">機材C</option>
+                <select name="equipId" value={form.equipId} onChange={handleChange}>
+                      <option value="">選択してください</option>
+                         {(equipmentList||[]).map(equip => (
+                         <option key={equip.equipId} value={equip.equipId}>
+                          {equip.equipName}
+                      </option>
+                      ))}
                 </select>
              </div>
              <div> 使用量:
