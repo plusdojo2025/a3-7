@@ -63,4 +63,8 @@ public class SerachController {
 
         return projects; 
 	}
+	
+	
+	//プロジェクト詳細取得
+
 }
