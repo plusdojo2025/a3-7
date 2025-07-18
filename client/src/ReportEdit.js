@@ -7,7 +7,7 @@ export default class ReportEdit extends React.Component {
     this.state = {
       equipmentList: [],
      form: {
-  reportId: "",
+  id: "",
   createdAt: "",
   projectId: "",       
   processId: "",      
@@ -27,9 +27,9 @@ export default class ReportEdit extends React.Component {
         this.setState({ error: "備品リストの取得に失敗しました" });
       });
 
-    const { reportId } = this.props;
-    if (reportId) {
-      axios.get(`/api/report/${reportId}`)
+    const { id } = this.props;
+    if (id) {
+      axios.get(`/api/report/${id}`)
         .then(json => {
           this.setState({ form: json.data });
         })
@@ -51,11 +51,11 @@ export default class ReportEdit extends React.Component {
 handleSubmit = (e) => {
   e.preventDefault();
   const { form } = this.state;
-  const { reportId } = this.props;
+  const { id } = this.props;
 
 
 
-  axios.put(`/api/report/${reportId}`, form)
+  axios.put(`/api/report/${id}`, form)
     .then(() => alert("更新成功！"))
     .catch((err) => {
       console.error("エラー", err.response);
