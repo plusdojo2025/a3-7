@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +20,7 @@ import com.example.demo.Repository.EquipmentsRepository;
 
 @RestController
 @RequestMapping("/api/equipment")
+@CrossOrigin(origins = "http://localhost:3000")
 public class EquipRegistController {
 
     private final EquipmentsRepository equipmentRepository;
@@ -29,33 +32,33 @@ public class EquipRegistController {
         this.equipmentDetailRepository = equipmentDetailRepository;
     }
 
-    @PostMapping("/regist")
+    @PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> registerEquipment(
-            @RequestPart("equipName") String equipName,
-            @RequestPart("judge") Double judge,
-            @RequestPart(value = "limited", required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate limited,
-            @RequestPart("remaining") Double remaining,
-            @RequestPart("unit") Integer unit,
-            @RequestPart(value = "remarks", required = false) String remarks,
-            @RequestPart(value = "storage", required = false) String storage,
-            @RequestPart(value = "picture", required = false) MultipartFile picture
+        @RequestParam("equipName") String equipName,
+        @RequestParam("limited") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate limited,
+        @RequestParam("remaining") String remainingStr,
+        @RequestParam("unit") String unitStr,
+        @RequestParam("storage") String storage,
+        @RequestParam(value = "remarks", required = false) String remarks,
+        @RequestParam(value = "picture", required = false) MultipartFile picture
     ) throws IOException {
 
-        // ① equipments に登録
+        double remaining = Double.parseDouble(remainingStr);
+        int unit = Integer.parseInt(unitStr);
+
+        // 1. 備品を登録
         Equipment equipment = new Equipment();
         equipment.setEquipName(equipName);
-        Equipment savedEquip = equipmentRepository.save(equipment);
+        Equipment savedEquipment = equipmentRepository.save(equipment);
 
-        // ② equip_details に登録
+        // 2. 詳細を登録
         EquipDetail detail = new EquipDetail();
-        detail.setEquipDitailId(savedEquip.getEquipId());
-        detail.setJudge(judge);
-        detail.setLimited(limited != null ? java.sql.Date.valueOf(limited) : null);
+        detail.setLimited(java.sql.Date.valueOf(limited));
         detail.setRemaining(remaining);
         detail.setUnit(unit);
-        detail.setRemarks(remarks);
         detail.setStorage(storage);
+        detail.setRemarks(remarks);
+        detail.setEquipment(savedEquipment); // 外部キーでつなぐ
 
         if (picture != null && !picture.isEmpty()) {
             detail.setPicture(picture.getBytes());
