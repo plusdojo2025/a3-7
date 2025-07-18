@@ -25,6 +25,8 @@ public class Report {
 	private Integer equipId;
 	@Column(name = "project_id")
 	private Integer projectId;
+	@Column(name = "process_id")
+	private Integer processId;
 	private String createdAt;
 	private String comment;
 }

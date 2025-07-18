@@ -7,14 +7,15 @@ export default class Mypage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null, // ユーザー情報初期状態
+      // ユーザー情報初期状態
+      user: null,
     };
   }
 
   componentDidMount() {
     // セッションからログインユーザー情報を取得
     axios
-      .get("http://localhost:8080/getLoginUser", { withCredentials: true })
+      .get("/getLoginUser", { withCredentials: true })
       .then((response) => {
         this.setState({ user: response.data });
       })
@@ -24,39 +25,40 @@ export default class Mypage extends React.Component {
   }
 
   render() {
-    // 仮のユーザー情報
-    // const user = {
-    //   name: "鬼瓦 権左衛門",
-    //   email: "gonzaemon@example.com",
-    //   company_code: 1234,
-    // };
-
     const { user } = this.state;
     // データ取得前のローディング表示
     if (!user) {
-      return <div>読み込み中...</div>;
+      return <div className="loading">読み込み中...</div>;
     }
 
     return (
       <div className="mypage-container">
-        <div className="account-info">
-          <h2 className="account-title">アカウント情報</h2>
-
-            {/* <p><strong>氏名：</strong><span>鬼瓦 権左衛門</span></p>
-            <p><strong>会社コード：</strong><span>1234</span></p>
-            <p><strong>メールアドレス：</strong><span>gonzaemon@example.com</span></p> */}
-
-            <p><strong>氏名：</strong><span>{user.name}</span></p>
-            <p><strong>会社コード：</strong><span>{user.company_code}</span></p>
-            <p><strong>メールアドレス：</strong><span>{user.email}</span></p>
+        <div className="account-info card">
+          {/* <h2 className="account-title">アカウント情報</h2> */}
+          <h2>アカウント情報</h2>
+          <div className="info-row">
+            {/* <p><strong>　　　　　氏名：</strong></p> */}
+            <span className="label">氏名：</span>
+            <span className="value">{user.name}</span>
+          </div>
+          <div className="info-row">
+            {/* <p><strong>　　会社コード：</strong></p> */}
+            <span className="label">会社コード：</span>
+            <span className="value">{user?.company_code}</span>
+          </div>
+          <div className="info-row">
+            {/* <p><strong>メールアドレス：</strong></p> */}
+            <span className="label">メールアドレス：</span>
+            <span className="value">{user.email}</span>
+          </div>
         </div>
 
-        <div className="mypage-buttons">
+        <div className="button-group">
           <Link to="/mypage/edit">
-            <button>編集</button>
+            <button className="btn">✏️ 編集</button>
           </Link>
           <Link to="/mypage/mail">
-            <button>メールボックス</button>
+            <button className="btn">📬 メールボックス</button>
           </Link>
         </div>
       </div>
