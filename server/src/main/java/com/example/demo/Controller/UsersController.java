@@ -14,6 +14,7 @@ import com.example.demo.Repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UsersController {
 	// SpringがUserRepositoryを自動で注入
@@ -77,7 +78,6 @@ public class UsersController {
     
     
  // メールアドレスでユーザー情報を取得
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getUserNameByEmail")
     public UserResponse getUserNameByEmail(String email) {
     	 System.out.println("【デバッグ】受信メールアドレス：" + "[" + email + "]"); // 空白確認のため [] で囲む！
