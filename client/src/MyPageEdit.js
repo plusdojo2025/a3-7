@@ -22,7 +22,8 @@ export default class MyPageEdit extends React.Component {
         .then((res) => {
             if (res.data) {
                 const fullName = res.data.name || "";
-                const [lastName, firstName] = fullName.split(" ");
+                // const [lastName, firstName] = fullName.split(" ");
+                const [lastName, firstName] = fullName.split(/\s+/);
                 this.setState({
                     lastName: lastName || "",
                     firstName: firstName || "",
@@ -51,10 +52,15 @@ export default class MyPageEdit extends React.Component {
             alert("新規パスワードが一致しません。");
             return;
         }
+
+        if (newPassword && newPassword.length < 8) {
+        alert("新規パスワードは8文字以上入力してください。");
+        return;
+        }
     
     const fullName = `${lastName} ${firstName}`;
 
-    axios.post("http://localhost:8080/mypage/update/", {
+    axios.post("/mypage/update/", {
         name: fullName,
         password,
         newPassword,
@@ -139,6 +145,7 @@ export default class MyPageEdit extends React.Component {
                         type={showPassword ? "text" : "password"}
                         value={newPassword}
                         onChange={(e) => this.setState({ newPassword: e.target.value })}
+                        // minLength={8}
                     />
                 </div>
 
@@ -150,6 +157,7 @@ export default class MyPageEdit extends React.Component {
                         onChange={(e) =>
                         this.setState({ confirmNewPassword: e.target.value })
                         }
+                        // minLength={8}
                     />
                 </div>
 
