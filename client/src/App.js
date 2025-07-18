@@ -19,6 +19,8 @@ import Report from './Report';
 import ReportEdit from './ReportEdit';
 import Reflect from './Reflect';
 import ViewProject from './ViewProject';
+import ViewProcess from './ViewProcess';
+import ViewText from './ViewText';
 
 
 function App() {
@@ -45,6 +47,8 @@ function App() {
               <Route path="mypage/mail" element={<Mail />} />
               <Route path="search" element={<Search />} />
               <Route path="project/:projectId" element={<ViewProject />} />
+              <Route path="project/:projectId/processes" element={<ViewProcess />} />
+               <Route path="view-text/:resourceId" element={<ViewText />} />
               <Route path="equipmentRegist" element={<EquipmentRegist />} />
               <Route path="bioRegist" element={<BioRegist />} />
               <Route path="equipmentEdit" element={<EquipmentEdit />} />

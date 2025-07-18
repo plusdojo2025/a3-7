@@ -34,7 +34,7 @@
 
 /* 戻るボタンのスタイル */
 .back-button {
-    margin-top: 20px;
+    /* margin-top: 20px; */
     padding: 8px 16px;
     font-size: 14px;
     border-radius: 6px;

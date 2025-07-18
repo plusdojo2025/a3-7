@@ -1,66 +1,98 @@
 import React from "react";
 import axios from "axios";
+import { Link, useLocation } from "react-router-dom"; 
 
-export default class ViewProject extends React.Component {
+
+function ViewProjectWrapper() {
+    const location = useLocation();
+    return <ViewProjectComponent location={location} />; 
+}
+
+class ViewProjectComponent extends React.Component { 
     constructor(props) {
         super(props);
         this.state = {
-            project: null
+            projects: [],
+            loading: true,
+            error: null,
+            searchPerformed: false,
         };
     }
 
-    //プロジェクト詳細取得
     componentDidMount() {
-        const projectId = window.location.pathname.split("/").pop();
 
-        axios.get(`/api/projects/${projectId}`)
-      .then(res => {
-        this.setState({ project: res.data });
-      })
-      .catch(err => {
-        console.error("プロジェクト詳細の取得に失敗しました", err);
-      });
-  }
-
-  // 検索画面に戻る処理
-  goBack = () => {
-    window.location.href = "/search"; // シンプルに戻す
-  };
-
-  render() {
-    const { project } = this.state;
-
-    // データ取得前はローディング表示
-    if (!project) {
-      return <div>読み込み中...</div>;
+        this.fetchProjectsBasedOnQueryParams(this.props.location.search);
     }
 
-    return (
-      <div>
-        <h2>プロジェクト詳細</h2>
-        <h3>{project.projectName}</h3>
+    componentDidUpdate(prevProps) {
 
-        <h4>工程一覧</h4>
-        <ul>
-          {project.steps.map(step => (
-            <li key={step.stepId}>
-              <a href={`/steps/${step.stepId}`}>{step.stepName}</a>
-            </li>
-          ))}
-        </ul>
+        if (this.props.location.search !== prevProps.location.search) {
+            this.fetchProjectsBasedOnQueryParams(this.props.location.search);
+        }
+    }
 
-        <h4>報告書一覧</h4>
-        <ul>
-          {project.reports.map(report => (
-            <li key={report.reportId}>
-              <a href={`/reports/${report.reportId}`}>{report.reportTitle}</a>
-            </li>
-          ))}
-        </ul>
+    fetchProjectsBasedOnQueryParams = async (searchQuery) => {
+        this.setState({ loading: true, error: null, searchPerformed: true });
+        const params = new URLSearchParams(searchQuery);
+        const title = params.get("title") || "";
+        const tagId = params.get("tagId") || "";
 
-        {/* 戻るボタン */}
-        <button onClick={this.goBack}>検索画面に戻る</button>
-      </div>
-    );
-  }
+        const apiParams = { title: title };
+        if (tagId) {
+            apiParams.tagId = tagId;
+        }
+
+        try {
+            const res = await axios.get("/api/projects/search", { params: apiParams });
+            this.setState({ projects: res.data, loading: false });
+        } catch (err) {
+            console.error("プロジェクトの検索に失敗しました", err);
+            this.setState({ error: "プロジェクトの検索に失敗しました。", loading: false, projects: [] });
+        }
+    }
+
+    render() {
+        const { projects, loading, error, searchPerformed } = this.state;
+
+        if (loading && searchPerformed) {
+            return <p>プロジェクトを検索中...</p>;
+        }
+
+        if (error) {
+            return <p className="error-message">{error}</p>;
+        }
+        
+        if (!searchPerformed) {
+            return <p>検索条件を入力してプロジェクトを検索してください。</p>;
+        }
+
+        return (
+            <div className="viewProjectMain">
+                <h2>プロジェクト一覧</h2>
+                
+                {projects.length === 0 ? (
+                    <p>検索結果がありません。</p>
+                ) : (
+                    <ul className="project-list">
+                        {projects.map(project => (
+                            <li key={project.projectId} className="project-item">
+                                <span className="project-name">
+                                    {project.projectName}
+                                </span>
+                                <Link to={`/project/${project.projectId}/processes`} className="project-link">
+                                    工程を見る
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+                <hr/>
+                <Link to="/" className="back-link">
+                    検索ページに戻る
+                </Link>
+            </div>
+        );
+    }
 }
+
+export default ViewProjectWrapper; 
