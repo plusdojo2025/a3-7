@@ -13,8 +13,13 @@ export default function SearchPage() {
       const response = await axios.get(`http://localhost:8080/api/equip/search?keyword=${keyword}`);
       setItems(response.data);
     } catch (error) {
-      console.error('検索エラー:', error);
-    }
+  if (error.response) {
+    console.error('エラー内容:', error.response.data);
+    console.error('ステータスコード:', error.response.status);
+  } else {
+    console.error('No response:', error.message);
+  }
+}
   };
 
   useEffect(() => {
@@ -48,7 +53,7 @@ export default function SearchPage() {
       </div>
 
       <div className="button-area">
-        <button onClick={() => navigate('/equipregist')}>備品登録</button>
+        <button onClick={() => navigate('/equipmentregist')}>備品登録</button>
         <button onClick={() => navigate('/bioregist')}>生体登録</button>
       </div>
     </div>
