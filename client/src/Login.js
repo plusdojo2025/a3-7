@@ -77,15 +77,15 @@ export default class Login extends React.Component{
         const { email, password, error } = this.state;
         return( 
            
-            <div className="LoginForm">
+            <div className="LoginPage">
                 <Link to="/login">
                     <img src="/img/Labchain.png" className="logo" alt="Labchain" />
                 </Link>
-                <form onSubmit={this.handleLogin}>
-                    <h1>ログイン</h1>
+                <form onSubmit={this.handleLogin} className="LoginForm">
+                    <h2>ログイン</h2>
                     <p>{error}</p>
                     <p>メールアドレス</p>
-                    <input type="text" name="email" onChange={this.onInput} value={email}/><br />
+                    <input type="text" name="email" onChange={this.onInput} value={email}/>
                     <p>パスワード</p>
                     <input type="password" name="password" onChange={this.onInput} value={password} /><br />
                     <button type="submit">ログイン</button>

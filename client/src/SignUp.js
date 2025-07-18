@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import './css/SignUp.css';
 import { Link } from "react-router-dom";
 
 export default class SignUp extends React.Component{
@@ -70,21 +71,21 @@ export default class SignUp extends React.Component{
     render(){
         const {email, password, companyCode, name, check, error} = this.state
         return( 
-            <div className="SignUpForm">
+            <div className="SignUpPage">
                 <Link to="/login">
                     <img src="/img/Labchain.png" className="logo" alt="Labchain" />
                 </Link>
-                <form onSubmit={this.handleSignUp}>
-                    <div>ここは新規登録画面です</div>
+                <form onSubmit={this.handleSignUp} className="SignUpForm">
+                    <h2>新規登録</h2>
                     <p>{error}</p>
                     <p>メールアドレス</p>
-                    <input type="text" name="email" onChange={this.onInput} value={email}/><br />
+                    <input type="text" name="email" onChange={this.onInput} value={email}/>
                     <p>氏名</p>
-                    <input type="text" name="name" onChange={this.onInput} value={name}/><br />
+                    <input type="text" name="name" onChange={this.onInput} value={name}/>
                     <p>会社コード</p>
-                    <input type="text" name="companyCode" onChange={this.onInput} value={companyCode}/><br />
+                    <input type="text" name="companyCode" onChange={this.onInput} value={companyCode}/>
                     <p>パスワード</p>
-                    <input type="password" name="password" onChange={this.onInput} value={password}/><br />
+                    <input type="password" name="password" onChange={this.onInput} value={password}/>
                     <p>確認用パスワード</p>
                     <input type="password" name="check" onChange={this.onInput} value={check}/><br />
                     <button type="submit">登録</button>

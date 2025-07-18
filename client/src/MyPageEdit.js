@@ -6,7 +6,8 @@ export default class MyPageEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "",
+            lastName: "",
+            firstName: "",
             email: "",
             password: "",
             newPassword: "",
@@ -17,76 +18,99 @@ export default class MyPageEdit extends React.Component {
 
     // ユーザー情報をマウント時に取得
     componentDidMount() {
-        axios.get("http://localhost:8080/getLoginUser", { withCredentials: true })
+        axios.get("/getLoginUser", { withCredentials: true })
         .then((res) => {
-        if (res.data) {
-            this.setState({
-            name: res.data.name,
-            email: res.data.email,
-            });
-        }
-        })
+            if (res.data) {
+                const fullName = res.data.name || "";
+                const [lastName, firstName] = fullName.split(" ");
+                this.setState({
+                    lastName: lastName || "",
+                    firstName: firstName || "",
+                    email: res.data.email,
+                });
+            }
+            })
         .catch((err) => {
-        console.error("ユーザー情報の取得に失敗しました", err);
+            console.error("ユーザー情報の取得に失敗しました", err);
         });
     }
 
     // 更新ボタン押下時の処理
     handleUpdate = (e) => {
-    // フォームのデフォルト送信防止
-    e.preventDefault();
-    const { name, password, newPassword, confirmNewPassword } = this.state;
+        // フォームのデフォルト送信防止
+        e.preventDefault();
+        const { 
+            lastName,
+            firstName, 
+            password, 
+            newPassword, 
+            confirmNewPassword 
+        } = this.state;
 
-    if (newPassword !== confirmNewPassword) {
-      alert("新規パスワードが一致しません。");
-      return;
-    }
+        if (newPassword !== confirmNewPassword) {
+            alert("新規パスワードが一致しません。");
+            return;
+        }
+    
+    const fullName = `${lastName} ${firstName}`;
 
     axios.post("http://localhost:8080/mypage/update/", {
-        name,
+        name: fullName,
         password,
         newPassword,
         }, { withCredentials: true })
         .then((res) => {
-        if (res.data === true) {
-            // パスワード欄を初期化
-            this.setState({
-                password: "",
-                newPassword: "",
-                confirmNewPassword: "",
-            });
-            alert("更新に成功しました。");
-        } else {
-            alert("現在のパスワードが正しくありません。");
-        }
+            if (res.data === true) {
+                // パスワード欄を初期化
+                this.setState({
+                    password: "",
+                    newPassword: "",
+                    confirmNewPassword: "",
+                });
+                alert("更新に成功しました。");
+            } else {
+                alert("パスワードが正しくありません。");
+            }
         })
         .catch((err) => {
-        console.error("更新エラー", err);
-        alert("更新に失敗しました。");
+            console.error("更新エラー", err);
+            alert("更新に失敗しました。");
         });
     };
 
     render() {
-    const {
-        name,
-        email,
-        password,
-        newPassword,
-        confirmNewPassword,
-        showPassword,
-    } = this.state;
+        const {
+            lastName,
+            firstName,
+            email,
+            password,
+            newPassword,
+            confirmNewPassword,
+            showPassword,
+        } = this.state;
 
     return (
         <div className="edit-container">
             <form className="edit-form" onSubmit={this.handleUpdate}>
-            <h2 className="form-title">アカウント情報</h2>
+                <h2 className="form-title">アカウント情報</h2>
 
                 <div className="form-group">
-                    <label>氏名</label>
+                    <label>姓</label>
                     <input
                         type="text"
-                        value={name}
-                        onChange={(e) => this.setState({ name: e.target.value })}
+                        value={lastName}
+                        onChange={(e) => this.setState({ lastName: e.target.value })}
+                        required
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label>名</label>
+                    <input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => this.setState({ firstName: e.target.value })}
+                        required
                     />
                 </div>
 
