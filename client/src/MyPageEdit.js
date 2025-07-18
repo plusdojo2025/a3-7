@@ -18,7 +18,7 @@ export default class MyPageEdit extends React.Component {
 
     // ユーザー情報をマウント時に取得
     componentDidMount() {
-        axios.get("http://localhost:8080/getLoginUser", { withCredentials: true })
+        axios.get("/getLoginUser", { withCredentials: true })
         .then((res) => {
             if (res.data) {
                 const fullName = res.data.name || "";
