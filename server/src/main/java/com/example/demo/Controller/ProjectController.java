@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Entity.Member;
@@ -146,10 +147,12 @@ public class ProjectController {
 	}
 	// 承認待ちメンバーを取得（管理画面などで使用）
 	@GetMapping("/members/pending")
-	public List<Member> getPendingMembers(Integer projectId) {
-	    return membersRepository.findByProjectIdAndAttend(projectId, 0);
+	public List<Member> getPendingMembers(@RequestParam("userId") Integer userId) {
+	    System.out.println("🧪 getPendingMembers called with userId=" + userId);
+	    List<Member> list = membersRepository.findAllByUserIdAndAttend(userId, 0);
+	    System.out.println("🧪 Found " + list.size() + " pending invites");
+	    return list;
 	}
-
 	// 招待キャンセルなども必要なら
 	@PostMapping("/members/cancel")
 	public String cancelInvitation(@RequestBody Member member) {
