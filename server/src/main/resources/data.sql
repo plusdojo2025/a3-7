@@ -13,3 +13,20 @@ INSERT INTO members (project_id, user_id, authority, attend) VALUES(2, 1, 2, 1);
 
 
 INSERT INTO units (unit) VALUES('個'),('箱'),('kg'),('g'),('mg'),('L'),('ml');
+
+
+INSERT INTO equipments (
+  equip_id,
+  equip_name,
+  equip_kind_id,
+  equip_detail_id,
+  project_id
+) VALUES (
+  101,
+  'ノートパソコン',
+  1,
+  10,
+  5
+);
+INSERT INTO reports (equip_id, project_id, process_id, created_at, comment)
+VALUES (1, 2, 3, '2025-07-18', 'Sample comment here');

@@ -68,15 +68,15 @@ public class ReportController {
  
 
     @GetMapping("/report/{id}")
-    public Report getReport(@PathVariable Integer id) {
-        return reportRepository.findById(id)
+    public Report getReport(@PathVariable Integer reportId) {
+        return reportRepository.findById(reportId)
                 .orElseThrow(() -> new RuntimeException("Reportが見つかりません"));
     }
 
    
     @PutMapping("/report/{id}")
-    public Report updateReport(@PathVariable Integer id, @RequestBody Report updatedReport) {
-        Report report = reportRepository.findById(id)
+    public Report updateReport(@PathVariable Integer reportId, @RequestBody Report updatedReport) {
+        Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new RuntimeException("Reportが見つかりません"));
 
         report.setEquipId(updatedReport.getEquipId());
