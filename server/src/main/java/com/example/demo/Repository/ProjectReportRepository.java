@@ -8,6 +8,5 @@ import com.example.demo.Entity.ProjectReport;
 
 public interface ProjectReportRepository extends JpaRepository<ProjectReport, Integer> {
 	
-	List<ProjectReport> findByProject_ProjectId(Integer projectId);
-
+	List<ProjectReport> findByProjectId(Integer projectId);
 }
