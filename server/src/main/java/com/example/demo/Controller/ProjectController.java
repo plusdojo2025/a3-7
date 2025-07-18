@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.Entity.Member;
 import com.example.demo.Entity.Project;
 import com.example.demo.Entity.ProjectTag;
-import com.example.demo.Entity.Reflect;
-import com.example.demo.Entity.ReflectTag;
-import com.example.demo.Entity.Report;
 import com.example.demo.Entity.User;
 import com.example.demo.Repository.MembersRepository;
 import com.example.demo.Repository.ProjectTagsRepository;
@@ -104,21 +101,7 @@ public class ProjectController {
     	return projectTagsRepository.findAll();
     }
     
-    //report
-    @PostMapping("/report")
-    public Report saveReport(@RequestBody Report report) {
-        return reportRepository.save(report);
-    }
-    //reflect
-    @PostMapping("/reflect")
-    public Reflect addReflect(@RequestBody Reflect reflect) {
-        return reflectRepository.save(reflect);
-    }
-    //reflect tag
-    @GetMapping
-    public List<ReflectTag> getAllReflectTag() {
-        return reflectTagRepository.findAll();
-    }
+
     
 	// メンバー招待（承認待ちで保存）
 	@PostMapping("/members/invite")
