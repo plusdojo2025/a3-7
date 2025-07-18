@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -76,26 +77,37 @@ public class UsersController {
     
     
  // メールアドレスでユーザー情報を取得
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getUserNameByEmail")
-    public NameResponse getUserNameByEmail(String email) {
+    public UserResponse getUserNameByEmail(String email) {
+    	 System.out.println("【デバッグ】受信メールアドレス：" + "[" + email + "]"); // 空白確認のため [] で囲む！
+    	
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            return new NameResponse(user.getName()); // {"name": "ユーザー名"} を返す
+        	 System.out.println("【成功】見つかったユーザー: " + user.getName() + ", ID: " + user.getUserId());
+            return new UserResponse(user.getName(), user.getUserId()); // {"name": "ユーザー名"} を返す
         } else {
-            return new NameResponse("該当するユーザーが見つかりません");
+        	System.out.println("【失敗】該当するユーザーが見つかりません");
+            return null;
         }
     }
 
     // 内部クラスでJSON形式のレスポンスを表現
-    static class NameResponse {
+    static class UserResponse {
         private String name;
+        private Integer userId;
 
-        public NameResponse(String name) {
+        public UserResponse(String name,Integer userId) {
             this.name = name;
+            this.userId = userId;
         }
 
         public String getName() {
             return name;
+        }
+        
+        public Integer getUserId() {
+        	return userId;
         }
     }
 }

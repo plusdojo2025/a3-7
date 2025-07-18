@@ -14,7 +14,7 @@ export default class Mypage extends React.Component {
   componentDidMount() {
     // セッションからログインユーザー情報を取得
     axios
-      .get("http://localhost:8080/getLoginUser", { withCredentials: true })
+      .get("/getLoginUser", { withCredentials: true })
       .then((response) => {
         this.setState({ user: response.data });
       })
@@ -46,8 +46,8 @@ export default class Mypage extends React.Component {
             <p><strong>会社コード：</strong><span>1234</span></p>
             <p><strong>メールアドレス：</strong><span>gonzaemon@example.com</span></p> */}
 
-            <p><strong>氏名：</strong><span>{user.name}</span></p>
-            <p><strong>会社コード：</strong><span>{user.company_code}</span></p>
+            <p><strong>　　　　　氏名：</strong><span>{user.name}</span></p>
+            <p><strong>　　会社コード：</strong><span>{user.company_code}</span></p>
             <p><strong>メールアドレス：</strong><span>{user.email}</span></p>
         </div>
 
