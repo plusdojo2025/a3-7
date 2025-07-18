@@ -22,6 +22,7 @@ import com.example.demo.Repository.ReflectsRepository;
 import com.example.demo.Repository.ReportsRepository;
 @RestController
 @RequestMapping("/api") 
+
 @CrossOrigin(origins = "http://localhost:3001")
 public class ReportController {
     //report
@@ -72,23 +73,21 @@ public class ReportController {
                 .orElseThrow(() -> new RuntimeException("Reportが見つかりません"));
     }
 
-    // レポート更新（PUT）
+   
     @PutMapping("/report/{id}")
-    public Report updateReport(
-            @PathVariable Integer id,
-            @RequestBody Report updatedReport) {
-
+    public Report updateReport(@PathVariable Integer id, @RequestBody Report updatedReport) {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reportが見つかりません"));
 
-        // 更新処理：日付は変更不可の場合は除外
         report.setEquipId(updatedReport.getEquipId());
-        report.setProjectId(updatedReport.getProjectId()); // もし使うなら
+        report.setProjectId(updatedReport.getProjectId());
+        report.setProcessId(updatedReport.getProcessId());
+        report.setCreatedAt(updatedReport.getCreatedAt());
         report.setComment(updatedReport.getComment());
-        // createdAt は編集不可なら変更しない
 
         return reportRepository.save(report);
     }
+    }
 
   
-}
+
