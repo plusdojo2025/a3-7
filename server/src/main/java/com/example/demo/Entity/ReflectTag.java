@@ -22,7 +22,7 @@ public class ReflectTag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "reflect_id", nullable = false)
-	private Integer reflectId;
+	private Integer reflectTagId;
 	
 	@Column(name = "reflect_name", nullable = false, length = 50)
 	private String reflectName;

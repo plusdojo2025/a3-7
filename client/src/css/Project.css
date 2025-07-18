@@ -51,27 +51,83 @@
     cursor: pointer;
 }
 
-/* ===== レスポンシブ設定 ===== */
-@media screen and (max-width: 768px) {
-.project-container {
-    padding: 15px;
+/* 背景全体を中央寄せ＆余白ありに */
+.project-invite-container {
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.project-title {
-    font-size: 20px;
+/* 招待ボックス全体 */
+.project-invite-box {
+    background-color: #ffffff;
+    border: 1px solid #aaa;
+    border-radius: 16px;
+    padding: 24px 32px;
     text-align: center;
-}
-
-.project-table {
-    font-size: 14px;
-}
-
-.project-table th, .project-table td {
-    padding: 8px;
-}
-
-.project-edit-btn {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
     width: 100%;
-    margin-top: 5px;
 }
+
+/* 確認の部分 */
+.project-question {
+    font-weight: bold;
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+/* ボタンのグループ配置 */
+.invite-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+/* 「いいえ」ボタンのデザイン */
+.reject-button {
+    background-color: #ccc;
+    border: 1px solid #555;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* 「はい」ボタンのデザイン */
+.accept-button {
+    background-color: #e0f5e0;
+    border: 1px solid #3a5;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #2a4;
+}
+
+.reject-button:hover,
+.accept-button:hover {
+    opacity: 0.85;
+}
+
+@media screen and (max-width: 480px) {
+    .project-invite-box {
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    .invite-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .accept-button,
+    .reject-button {
+        width: 100%;
+    }
 }
