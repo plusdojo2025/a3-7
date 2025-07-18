@@ -17,22 +17,22 @@ public class EquipDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int equipDitailId;
+    private Integer equipDitailId;
 
     private Date limited;
 
-    private double remaining;
+    private Double remaining;
 
-    private int unit;
+    private Integer unit;
 
     private String remarks;
 
     private String storage;
     
-    private double judge;
+    private Double judge;
 
     @Lob
-    private byte[] picture;
+    private Byte[] picture;
 
     @ManyToOne
     @JoinColumn(name = "equip_id", nullable = false)
