@@ -1,9 +1,83 @@
-.equipmentRegist-card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
+body {
+  background-color: #f0f0f0;
+  font-family: 'sans-serif';
+}
+
+form {
+  width: 700px;
   margin: 40px auto;
-  border: 1px solid #ddd;
+  padding: 30px;
+  background-color: white;
+  border: 2px solid #14333c;
+  border-radius: 40px;
+}
+
+h2 {
+  text-align: left;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 20px;
+  font-size: 18px;
+  border-bottom: 1px solid #333;
+  padding: 8px 0;
+}
+
+input,
+select {
+  flex: 1;
+  margin-left: 10px;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+input[type="file"] {
+  border: none;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+
+.button-group button {
+  padding: 10px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+/* 戻るボタンはグレーに */
+.button-group button:first-child {
+  background-color: #d3d3d3;
+  color: #000;
+}
+
+.button-group button:first-child:hover {
+  background-color: #bcbcbc;
+}
+
+/* 登録ボタンは緑に */
+.button-group button:last-child {
+  background-color: #a4d9a7;
+  color: #000;
+}
+
+.button-group button:last-child:hover {
+  background-color: #8ed093;
+}
+p {
+  color: red;
+  text-align: center;
+  margin-top: 5px;
+  font-size: 16px;
 }

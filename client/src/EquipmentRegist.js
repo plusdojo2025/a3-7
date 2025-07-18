@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './css/EquipmentRegist.css';
 
 const unitMap = {
   '個': 1,
@@ -81,6 +82,7 @@ export default function EquipmentRegist() {
   return (
     <form onSubmit={handleSubmit}>
       <h2>備品登録</h2>
+      <label>画像: <input type="file" accept="image/*" onChange={handleImageChange} /></label><br /><br />
       <label>備品名: <input name="equipName" value={form.equipName} onChange={handleChange} /></label><br />
       <label>期限: <input type="date" name="limited" value={form.limited} onChange={handleChange} /></label><br />
       <label>残量: <input type="number" name="remaining" value={form.remaining} onChange={handleChange} /></label><br />
@@ -92,9 +94,12 @@ export default function EquipmentRegist() {
       </label><br />
       <label>保管場所: <input name="storage" value={form.storage} onChange={handleChange} /></label><br />
       <label>備考: <input name="remarks" value={form.remarks} onChange={handleChange} /></label><br />
-      <label>画像: <input type="file" accept="image/*" onChange={handleImageChange} /></label><br /><br />
+      
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button type="submit">登録</button>
+        <div className="button-group">
+          <button type="button" onClick={() => window.history.back()}>戻る</button>
+          <button type="submit">登録</button>
+        </div>
     </form>
   );
 }

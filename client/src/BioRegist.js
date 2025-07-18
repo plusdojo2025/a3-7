@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import './css/BioRegist.css';
 
@@ -12,7 +12,7 @@ export default function BioRegist() {
     note: '',
   });
 
-  const [image, setImage] = useState(null); // ← 画像用state追加
+  const [image, setImage] = useState(null);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
@@ -21,117 +21,77 @@ export default function BioRegist() {
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // 画像1枚だけ
+    setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!form.kind || !form.name || !form.gender || !form.age || !form.projectProcess) {
-    setError('入力されていない項目があります');
-    return;
-  }
+    if (!form.kind || !form.name || !form.gender || !form.age || !form.projectProcess) {
+      setError('入力されていない項目があります');
+      return;
+    }
 
-  // 数値に変換
-  const genderNum = Number(form.gender);
-  const ageNum = Number(form.age);
-  const projectProcessNum = Number(form.projectProcess);
+    const genderNum = Number(form.gender);
+    const ageNum = Number(form.age);
+    const projectProcessNum = Number(form.projectProcess);
 
-  if ([genderNum, ageNum, projectProcessNum].some(n => isNaN(n))) {
-    setError('性別、年齢、実験工程は数値で入力してください');
-    return;
-  }
+    if ([genderNum, ageNum, projectProcessNum].some(n => isNaN(n))) {
+      setError('性別、年齢、実験工程は数値で入力してください');
+      return;
+    }
 
-  setError('');
+    setError('');
 
-  try {
-    const formData = new FormData();
-    if (image) formData.append('image', image);
-    formData.append('kind', form.kind);
-    formData.append('name', form.name);
-    formData.append('gender', genderNum);
-    formData.append('age', ageNum);
-    formData.append('projectProcess', projectProcessNum);
-    formData.append('note', form.note);
+    try {
+      const formData = new FormData();
+      if (image) formData.append('image', image);
+      formData.append('kind', form.kind);
+      formData.append('name', form.name);
+      formData.append('gender', genderNum);
+      formData.append('age', ageNum);
+      formData.append('projectProcess', projectProcessNum);
+      formData.append('note', form.note);
 
-    await axios.post('/api/biology/', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+      await axios.post('/api/biology/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
 
-await axios.post('/api/biology/', formData, {
-  headers: { 'Content-Type': 'multipart/form-data' }
-});
+      // リセット
+      setForm({
+        kind: '',
+        name: '',
+        gender: '',
+        age: '',
+        projectProcess: '',
+        note: '',
+      });
+      setImage(null);
 
-
-// フォームの内容をリセットする
-setForm({
-  kind: '',
-  name: '',
-  gender: '',
-  age: '',
-  projectProcess: '',
-  note: '',
-});
-setImage(null);
-
-
-    alert('登録完了！');
-  } catch (err) {
-    console.error(err);
-    setError('登録に失敗しました');
-  }
-};
-
+      alert('登録完了！');
+    } catch (err) {
+      console.error(err);
+      setError('登録に失敗しました');
+    }
+  };
 
   return (
-    <div style={{ maxWidth: 400, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }} 
-    className='bioRegist-card'>
+    <div>
       <h2>生物の登録</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        {/* 画像アップロード欄 */}
-        <div>
-          <label>画像</label><br/>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-        </div>
+        <label>画像<input type="file" accept="image/*" onChange={handleImageChange} /></label>
+        <label>種類<input type="text" name="kind" value={form.kind} onChange={handleChange} /></label>
+        <label>名前<input type="text" name="name" value={form.name} onChange={handleChange} /></label>
+        <label>性別<input type="text" name="gender" value={form.gender} onChange={handleChange} /></label>
+        <label>年齢<input type="number" name="age" value={form.age} onChange={handleChange} /></label>
+        <label>対象の実験工程<input type="text" name="projectProcess" value={form.projectProcess} onChange={handleChange} /></label>
+        <label>備考<input type="text" name="note" value={form.note} onChange={handleChange} /></label>
 
-        <div style={{ marginTop: 10 }}>
-          <label>種類</label><br/>
-          <input type="text" name="kind" value={form.kind} onChange={handleChange} />
-        </div>
+        {error && <p className="error-message">{error}</p>}
 
-        <div style={{ marginTop: 10 }}>
-          <label>名前</label><br/>
-          <input type="text" name="name" value={form.name} onChange={handleChange} />
-        </div>
-       
-
-        <div style={{ marginTop: 10 }}>
-        <label>性別</label><br/>
-        <input type="text" name="gender" value={form.gender} onChange={handleChange} />
-        </div>
-
-        <div style={{ marginTop: 10 }}>
-          <label>年齢</label><br/>
-          <input type="number" name="age" value={form.age} onChange={handleChange} />
-        </div>
-
-        <div style={{ marginTop: 10 }}>
-          <label>対象の実験工程</label><br/>
-          <input type="text" name="projectProcess" value={form.projectProcess} onChange={handleChange} />
-        </div>
-
-        <div style={{ marginTop: 10 }}>
-          <label>備考</label><br/>
-          <input type="text" name="note" value={form.note} onChange={handleChange} />
-        </div>
-
-        {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
-
-        <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between' }}>
+        <div className="button-group">
           <button type="button" onClick={() => window.history.back()}>戻る</button>
-          <button type="submit" style={{ backgroundColor: '#cfc', border: '1px solid #9c9', padding: '5px 10px' }}>
-            登録
-          </button>
+          <button type="submit">登録</button>
         </div>
       </form>
     </div>
