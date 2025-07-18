@@ -1,4 +1,3 @@
-
 package com.example.demo.Entity;
 
 import java.sql.Date;
@@ -29,6 +28,8 @@ public class EquipDetail {
     private String remarks;
 
     private String storage;
+    
+    private double judge;
 
     @Lob
     private byte[] picture;

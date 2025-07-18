@@ -2,7 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './css/EquipmentEdit.css';
 
-const alertTimingOptions = ['50%', '40%', '30%', '20%', '10%'];
+const alertTimingOptions = ['50', '40', '30', '20', '10'];
+
+const unitMap = {
+  '個': 1,
+  '箱': 2,
+  'kg': 3,
+  'g': 4,
+  'mg': 5,
+  'L': 6,
+  'ml': 7
+};
+
+const reverseUnitMap = Object.fromEntries(Object.entries(unitMap).map(([k, v]) => [v, k]));
 
 export default function EquipmentEdit({ equipmentId }) {
   const [form, setForm] = useState({
@@ -19,7 +31,6 @@ export default function EquipmentEdit({ equipmentId }) {
   const [newImage, setNewImage] = useState(null);
   const [error, setError] = useState('');
 
-  // 画面初期表示で既存データを取得
   useEffect(() => {
     axios.get(`/equipment/details/equip/${equipmentId}`)
       .then((res) => {
@@ -27,7 +38,7 @@ export default function EquipmentEdit({ equipmentId }) {
         setForm({
           itemName: data.itemName,
           quantity: data.quantity,
-          unit: data.unit,
+          unit: reverseUnitMap[data.unit],
           expiryDate: data.expiryDate,
           location: data.location,
           alertTiming: data.alertTiming,
@@ -62,12 +73,18 @@ export default function EquipmentEdit({ equipmentId }) {
 
     try {
       const formData = new FormData();
+
       if (newImage) {
         formData.append('image', newImage);
       }
-      Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
+
+      formData.append('itemName', form.itemName);
+      formData.append('quantity', form.quantity);
+      formData.append('unit', unitMap[form.unit]); // ← ここがポイント！
+      formData.append('expiryDate', form.expiryDate);
+      formData.append('location', form.location);
+      formData.append('alertTiming', form.alertTiming);
+      formData.append('note', form.note);
 
       await axios.put(`/equipment/details/equip/${equipmentId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -135,7 +152,12 @@ export default function EquipmentEdit({ equipmentId }) {
 
           <div style={{ marginTop: 10 }}>
             <label>単位</label><br/>
-            <input type="text" name="unit" value={form.unit} onChange={handleChange} />
+            <select name="unit" value={form.unit} onChange={handleChange}>
+              <option value="">選択</option>
+              {Object.entries(unitMap).map(([label, value]) => (
+                <option key={value} value={label}>{label}</option>
+              ))}
+            </select>
           </div>
 
           <div style={{ marginTop: 10 }}>
@@ -153,7 +175,7 @@ export default function EquipmentEdit({ equipmentId }) {
             <select name="alertTiming" value={form.alertTiming} onChange={handleChange}>
               <option value="">選択</option>
               {alertTimingOptions.map((a) => (
-                <option key={a} value={a}>{a}</option>
+                <option key={a} value={a}>{a}%</option>
               ))}
             </select>
           </div>

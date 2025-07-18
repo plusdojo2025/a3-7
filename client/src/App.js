@@ -8,6 +8,7 @@ import MyPageEdit from './MyPageEdit';
 import Mail from './Mail';
 import Search from './Search';
 import EquipmentRegist from './EquipmentRegist';
+import Equipment from './Equipment';
 import BioRegist from './BioRegist';
 import EquipmentEdit from './EquipmentEdit';
 import BioEdit from './BioEdit';
@@ -46,6 +47,7 @@ function App() {
               <Route path="search" element={<Search />} />
               <Route path="project/:projectId" element={<ViewProject />} />
               <Route path="equipmentRegist" element={<EquipmentRegist />} />
+              <Route path="equipment" element={<Equipment />} />
               <Route path="bioRegist" element={<BioRegist />} />
               <Route path="equipmentEdit" element={<EquipmentEdit />} />
               <Route path="bioEdit" element={<BioEdit />} />
