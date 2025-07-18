@@ -70,7 +70,9 @@
 
     margin-top: 25px;
     width: 100%;
+    /* 横並び */
     display: flex;
+    /* 両端均等配置 */
     justify-content: space-between;
 
     /* margin-top: 25px;
@@ -79,7 +81,7 @@
     gap: 20px; */
 }
 
-/* ボタン共通のサイズ・フォント設定 */
+/* ボタン共通の見た目設定 */
 .edit-buttons button {
     /* width: 120px;
     height: 40px;
