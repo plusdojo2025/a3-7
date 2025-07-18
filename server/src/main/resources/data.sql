@@ -1,4 +1,4 @@
-
+INSERT INTO users (email, password, name) VALUES ('yazawa@hisao.com', 'ninnkikoushi', '矢沢　久雄');
 INSERT INTO users (email, password, name) VALUES ('ex@exam.com', 'pass1234', '山田 太郎');
 
 INSERT INTO project_tags (project_tag_name) VALUES ('昆虫学');

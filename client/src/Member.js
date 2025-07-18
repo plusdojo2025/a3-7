@@ -18,7 +18,7 @@ export default class Member extends React.Component {
   };
 
   handleSearch = () => {
-    const { email } = this.state;
+    const email = this.state.email.trim();
 
     if (!email) {
       this.setState({ name: 'メールアドレスを入力してください' });
@@ -27,10 +27,14 @@ export default class Member extends React.Component {
 
     axios.get(`http://localhost:8080/getUserNameByEmail?email=${encodeURIComponent(email)}`)
       .then((res) => {
-        this.setState({ 
-          name: res.data.name,
-          userId: res.data.userId
-         });
+        if (res.data) {
+          this.setState({
+            name: res.data.name,
+            userId: res.data.userId
+          });
+        } else {
+          this.setState({ name: "該当するユーザーが見つかりません。" });
+        }
       })
       .catch((err) => {
         console.error("名前の取得に失敗:", err);
@@ -46,21 +50,21 @@ export default class Member extends React.Component {
     this.setState({ isOpen: false });
   };
 
-  inviteUser = () =>{
+  inviteUser = () => {
     const { email } = this.state;
 
-    axios.post("http://localhost:8080/members/invite",{
+    axios.post("http://localhost:8080/api/members/invite", {
       userId: this.state.userId,
       projectId: 1
     })
-    .then(() =>{
-      alert("招待を送信しました");
-      this.setState({ isOpen: false});
-    })
-    .catch((err)=>{
-      console.error("招待の送信に失敗",err);
-      alert("招待に失敗しました。");
-    });
+      .then(() => {
+        alert("招待を送信しました");
+        this.setState({ isOpen: false });
+      })
+      .catch((err) => {
+        console.error("招待の送信に失敗", err);
+        alert("招待に失敗しました。");
+      });
   };
 
   render() {
@@ -88,7 +92,7 @@ export default class Member extends React.Component {
           <div className="welcome-container">
             <div className="result">
               <p className="user-name-display">一致した名前：{this.state.name}</p>
-              <button onClick={this.openModal}>招待メール送信</button>
+              {this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (<button onClick={this.openModal}>招待メール送信</button>)}
               {this.state.isOpen && (
                 <div className="modal-overlay" >
                   <div className="modal-content" onClick={(e) => e.stopPropagation()}>
