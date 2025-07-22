@@ -22,6 +22,9 @@ public class ProjectReport {
 	private Integer projectReportId;
 	
 	private String createdAt;
+	
+	
+	@Column(name = "report", columnDefinition = "TEXT", nullable = false)
 	private String report;
 	
 	@Column(name = "project_id")

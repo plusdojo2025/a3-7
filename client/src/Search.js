@@ -14,13 +14,12 @@ class SearchComponent extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
-            title: "",          // 検索入力フォームのプロジェクト名
-            tagId: "",          // 検索入力フォームのタグID
-            tags: [],           // 取得したタグ一覧
-            projects: [],       // 検索結果のプロジェクト一覧
-            loading: false,     // APIリクエスト中かどうかのフラグ
-            error: null,        // エラーメッセージ
-            searchPerformed: false, // 検索が一度でも実行されたかどうかのフラグ
+            title: "",         
+            tags: [],           
+            projects: [],       
+            loading: false,     
+            error: null,        
+            searchPerformed: false, 
         };
     }
 

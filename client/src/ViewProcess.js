@@ -93,17 +93,16 @@ class ViewProcessComponent extends React.Component {
 
         return (
             <div className="view-process-container">
-                {/* プロジェクト名（h2）と工程名（h3） */}
                 <h3>{process.processName}</h3>
                 
-                <hr /> {/* ここはメインの見出しの下の区切り線 */}
+                <hr />
 
                 {/* 日報一覧と反省一覧を並べるコンテナ */}
-                <div className="content-lists-wrapper"> {/* ★新しく追加するラッパー */}
+                <div className="content-lists-wrapper">
 
                     {/* --- 日報一覧セクション --- */}
-                    <div className="list-card"> {/* ★角丸の四角形にするためのラッパー */}
-                        <h4>日報一覧</h4> {/* ★h4に変更 */}
+                    <div className="list-card">
+                        <h4>日報一覧</h4>
                         {reports.length > 0 ? (
                             <ul>
                                 {reports.map(report => (
@@ -117,11 +116,10 @@ class ViewProcessComponent extends React.Component {
                         ) : (
                             <p>日報はまだ登録されていません。</p>
                         )}
-                    </div> {/* .list-card 閉じタグ */}
+                    </div>
 
-                    {/* --- 反省一覧セクション --- */}
-                    <div className="list-card"> {/* ★角丸の四角形にするためのラッパー */}
-                        <h4>反省一覧</h4> {/* ★h4に変更 */}
+                    <div className="list-card">
+                        <h4>反省一覧</h4>
                         {reflects.length > 0 ? (
                             <ul>
                                 {reflects.map(reflect => (
@@ -135,13 +133,13 @@ class ViewProcessComponent extends React.Component {
                         ) : (
                             <p>反省はまだ登録されていません。</p>
                         )}
-                    </div> {/* .list-card 閉じタグ */}
+                    </div>
 
-                </div> {/* .content-lists-wrapper 閉じタグ */}
+                </div>
 
                 {/* 「前のページに戻る」リンク */}
-                <hr className="bottom-hr" /> {/* ★下のhrにクラス名追加 */}
-                <Link to={`/project/${projectId}`} className="back-link">戻る</Link> {/* ★クラス名追加 */}
+                <hr className="bottom-hr" />
+                <Link to={`/project/${projectId}`} className="back-link">戻る</Link>
             </div>
         );
     }
