@@ -91,6 +91,16 @@ public class UsersController {
             return null;
         }
     }
+    
+ // ログイン中のユーザー情報を返す
+    @GetMapping("/getCurrentUser")
+    public User getCurrentUser(HttpSession session) {
+        Object obj = session.getAttribute("user");
+        if (obj instanceof User) {
+            return (User) obj;
+        }
+        return null;
+    }
 
     // 内部クラスでJSON形式のレスポンスを表現
     static class UserResponse {
