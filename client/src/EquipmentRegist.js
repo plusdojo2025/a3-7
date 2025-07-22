@@ -12,6 +12,8 @@ const unitMap = {
   'ml': 7
 };
 
+const judgeOptions = ['50', '40', '30', '20', '10'];
+
 export default function EquipmentRegist() {
   const [form, setForm] = useState({
     equipName: '',
@@ -19,7 +21,9 @@ export default function EquipmentRegist() {
     remaining: '',
     unit: '',
     storage: '',
+    judge: '',
     remarks: '',
+    
   });
   const [image, setImage] = useState(null);
   const [error, setError] = useState('');
@@ -49,6 +53,7 @@ export default function EquipmentRegist() {
     formData.append('remaining', form.remaining);
     formData.append('unit', unitMap[form.unit]);
     formData.append('storage', form.storage);
+    formData.append('judge', form.judge);
     formData.append('remarks', form.remarks || '');
     if (image) {
       formData.append('picture', image);
@@ -62,7 +67,7 @@ export default function EquipmentRegist() {
       alert('登録成功');
       console.log(res.data);
 
-      // 🔽 フォームと画像をクリア
+      //フォームと画像をクリア
       setForm({
         equipName: '',
         limited: '',
@@ -70,6 +75,7 @@ export default function EquipmentRegist() {
         unit: '',
         storage: '',
         remarks: '',
+        judge: '',
       });
       setImage(null);
       setError('');
@@ -93,6 +99,14 @@ export default function EquipmentRegist() {
         </select>
       </label><br />
       <label>保管場所: <input name="storage" value={form.storage} onChange={handleChange} /></label><br />
+      <label>アラートのタイミング:
+        <select name="judge" value={form.judge} onChange={handleChange}>
+          <option value="">選択</option>
+          {judgeOptions.map(opt => (
+            <option key={opt} value={opt}>{opt}%</option>
+          ))}
+        </select>
+      </label><br />
       <label>備考: <input name="remarks" value={form.remarks} onChange={handleChange} /></label><br />
       
       {error && <p style={{ color: 'red' }}>{error}</p>}

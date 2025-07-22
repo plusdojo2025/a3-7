@@ -1,141 +1,152 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
-export default class Report extends React.Component {
-  state = {
-     equipmentList: [],
-  
-     form: {
-      createdAt: "",
-      processId: "",
-      projectId: "",
-      comment: "",
-      projectName: "",
-      equipId: "",
-      usageAmount: ""
-    },
-    error: ""
-  };
+export default function Report() {
+  const { projectId, processId } = useParams(); 
 
-  componentDidMount() {
-    
+  const [form, setForm] = useState({
+    createdAt: "",
+    processId: processId || "",
+    comment: "",
+    equipId: "",
+    usageAmount: ""
+  });
+
+  const [projectName, setProjectName] = useState("");
+  const [equipmentList, setEquipmentList] = useState([]);
+  const [error, setError] = useState("");
+
+ 
+  useEffect(() => {
+    if (projectId) {
+      axios.get(`/api/project/${projectId}`)
+        .then(res => setProjectName(res.data.projectName))
+        .catch(err => {
+          console.error("プロジェクト名取得エラー:", err);
+          setProjectName("（取得失敗）");
+        });
+    }
+  }, [projectId]);
+
+  // Fetch equipment list
+  useEffect(() => {
     axios.get("/api/equip")
-      .then(json => {
-        this.setState({ equipmentList: json.data });
-      })
+      .then(res => setEquipmentList(res.data))
       .catch(err => {
         console.error("備品取得エラー:", err);
+        setError("備品リストの取得に失敗しました");
       });
-  }
+  }, []);
 
-  handleChange = (e) => {
+   
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState(prevState => ({
-      form: {
-        ...prevState.form,
-        [name]: value
-      }
+    setForm(prev => ({
+      ...prev,
+      [name]: value
     }));
   };
 
-  handleSubmit = (e) => {
+  // Handle form submit
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { form } = this.state;
 
-    
+    const payload = {
+      ...form,
+      projectId: parseInt(projectId, 10),
+      processId: parseInt(form.processId, 10),
+      equipId: parseInt(form.equipId, 10),
+      usageAmount: parseFloat(form.usageAmount) || 0
+    };
 
-    axios.post("/api/report", form)
+    axios.post("/api/report", payload)
       .then(() => {
         alert("登録成功！");
-        this.setState({
-          form: {
-            createdAt: "",
-            processId: "",
-            projectId: "",
-            comment: "",
-            projectName: "",
-            equipId: "",
-            usageAmount: ""
-          },
-          error: ""
+        setForm({
+          createdAt: "",
+          processId: processId || "",
+          comment: "",
+          equipId: "",
+          usageAmount: ""
         });
+        setError("");
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("登録失敗:", err);
         alert("登録失敗");
       });
   };
 
-  render() {
-    const { equipmentList, projectList, form, error } = this.state;
+  return (
+    <div style={{ maxWidth: 600, margin: "0 auto" }}>
+      <h2>日報登録</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-    return (
-      <div className="report-register">
-        <h2 className="title">日報登録</h2>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            日付:
-            <input
-              type="date"
-              name="createdAt"
-              value={form.createdAt}
-              onChange={this.handleChange}
-              required
-            />
-          </div>
+      <form onSubmit={handleSubmit}>
+        <input type="hidden" name="projectId" value={projectId} />
+        <input type="hidden" name="processId" value={form.processId} />
 
-          <div>
-            研修タイトル:
-            <input type="text" name="projectName" value={form.projectName}  onChange={this.handleChange}/>
+        <div>
+          日付:
+          <input
+            type="date"
+            name="createdAt"
+            value={form.createdAt}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-          </div>
+        <div style={{ marginTop: 10 }}>
+          研修タイトル:
+          <input
+            type="text"
+            value={projectName}
+            readOnly
+          />
+        </div>
 
-          <div>
-            備品名:
-            <select
-              name="equipId"
-              value={form.equipId}
-              onChange={this.handleChange}
-             
-            >
-              <option value="">選択してください</option>
-              {equipmentList.map(equip => (
-                <option key={equip.equipId} value={equip.equipId}>
-                  {equip.equipName}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div style={{ marginTop: 10 }}>
+          備品名:
+          <select name="equipId" value={form.equipId} onChange={handleChange} required>
+            <option value="">選択してください</option>
+            {equipmentList.map(equip => (
+              <option key={equip.equipId} value={equip.equipId}>
+                {equip.equipName}
+              </option>
+            ))}
+          </select>
+        </div>
 
-          <div>
-            使用量:
-            <input
-              type="text"
-              name="usageAmount"
-              value={form.usageAmount}
-              onChange={this.handleChange}
-            />
-          </div>
+        <div style={{ marginTop: 10 }}>
+          使用量:
+          <input
+            type="text"
+            name="usageAmount"
+            value={form.usageAmount}
+            onChange={handleChange}
+          />
+        </div>
 
-          <div>
-            コメント:
-            <textarea
-              name="comment"
-              value={form.comment}
-              onChange={this.handleChange}
-            />
-          </div>
+        <div style={{ marginTop: 10 }}>
+          コメント:
+          <textarea
+            name="comment"
+            value={form.comment}
+            onChange={handleChange}
+          />
+        </div>
 
-          <div>
-            <button type="button" onClick={() => window.history.back()}>
-              戻る
-            </button>
-            <button type="submit" style={{ marginLeft: 10 }}>
-              登録
-            </button>
-          </div>
-        </form>
-      </div>
-    );
-  }
+        <div style={{ marginTop: 20 }}>
+          <button type="button" onClick={() => window.history.back()}>
+            戻る
+          </button>
+          <button type="submit" style={{ marginLeft: 10 }}>
+            登録
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }

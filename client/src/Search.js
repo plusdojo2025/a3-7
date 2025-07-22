@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import './css/Search.css';
 import './css/Common.css'; 
 import { useNavigate, Link } from "react-router-dom"; 
 
@@ -13,13 +14,12 @@ class SearchComponent extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
-            title: "",
-            tagId: "",
-            tags: [],
-            projects: [],
-            loading: false,
-            error: null,
-            searchPerformed: false,
+            title: "",         
+            tags: [],           
+            projects: [],       
+            loading: false,     
+            error: null,        
+            searchPerformed: false, 
         };
     }
 
@@ -34,7 +34,7 @@ class SearchComponent extends React.Component {
         .catch(err => {
             console.error("タグ一覧の取得に失敗しました。", err);
             this.setState({ error: "タグ一覧の取得に失敗しました。" });
-        });    
+        });
     }
 
     // 入力フォームの値が変更されたときにstateを更新する
@@ -90,63 +90,71 @@ class SearchComponent extends React.Component {
 
         return (
             <div className="searchMain">
-                <h2>プロジェクト検索</h2>
-                <div className="searchForm">
-                    <label>
-                        プロジェクト名：
-                        <input type="text" name="title" value={title} onChange={this.onInput} />
-                    </label><br />
-                    <label>
-                        タグ：
-                        <select name="tagId" value={tagId} onChange={this.onInput}>
-                           <option value="">タグを選択</option>
-                           {tags.map(tag => (
-                                <option key={tag.projectTagId} value={tag.projectTagId}>
-                                    {tag.projectTagName}
-                                </option>
-                           ))} 
-                        </select>
-                    </label><br />
-                    <button onClick={this.searchProjects}>検索</button>
-                </div>
+    <div className="search-controls-area"> 
+        {/* プロジェクト名入力のグループ */}
+        <div className="search-input-group"> 
+            <label htmlFor="project-name-input"></label>
+            <input
+                type="text"
+                id="project-name-input"
+                name="title"
+                value={title}
+                onChange={this.onInput}
+                placeholder="プロジェクト名を入力"
+            />
+        </div>
 
-                {/* --- 検索結果表示エリア --- */}
-                <hr />
-                <h3>検索結果</h3>
-                
-                {loading && <p>検索中...</p>}
-                {error && <p className="error-message">{error}</p>}
-                
-                {searchPerformed && !loading && !error && projects.length === 0 && (
-                    <p>検索条件に一致するプロジェクトは見つかりませんでした。</p>
-                )}
+        {/* タグ選択のグループ */}
+        <div className="search-input-group">
+            <label htmlFor="tag-select"></label>
+            <select id="tag-select" name="tagId" value={tagId} onChange={this.onInput}>
+                <option value="">タグを選択</option>
+                {tags.map(tag => (
+                    <option key={tag.projectTagId} value={tag.projectTagId}>
+                        {tag.projectTagName}
+                    </option>
+                ))}
+            </select>
+        </div>
 
-                {/* 検索結果がある場合のみリストを表示 */}
-                {!loading && !error && projects.length > 0 && (
-                    <div className="projectListBody">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>プロジェクト名</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {projects.map(project => (
-                                    <tr key={project.projectId} className="projectrow">
-                                        <td className="name">
-                                            {/* クリックでプロジェクト詳細ページへ遷移 */}
-                                            <Link to={`/project/${project.projectId}`}>
-                                                {project.projectName}
-                                            </Link>
-                                        </td>
-                                        
-                                    </tr> 
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+        {/* 検索ボタン */}
+        <button onClick={this.searchProjects} className="search-button">検索</button>
+    </div>
+
+    <hr />
+
+    {/* 検索結果のコンテナ */}
+    <div className="search-results-area">
+        <h3>検索結果</h3>
+
+        {loading && <p>検索中...</p>}
+        {error && <p className="error-message">{error}</p>}
+
+        {searchPerformed && !loading && !error && projects.length === 0 && (
+            <p>検索条件に一致するプロジェクトは見つかりませんでした。</p>
+        )}
+
+        {!loading && !error && projects.length > 0 && (
+            <div className="projectListBody">
+                <table>
+                    <tbody>
+                        {projects.map(project => (
+                            <tr key={project.projectId} className="projectrow">
+                                <td className="name">
+                                    <Link to={`/project/${project.projectId}`}>
+                                        {project.projectName}
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
+        )}
+    </div> 
+</div>
+
+
         );
     }
 }

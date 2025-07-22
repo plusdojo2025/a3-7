@@ -36,6 +36,7 @@ public class EquipRegistController {
     public ResponseEntity<String> registerEquipment(
         @RequestParam("equipName") String equipName,
         @RequestParam("limited") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate limited,
+        @RequestParam("judge") String judgeStr,
         @RequestParam("remaining") String remainingStr,
         @RequestParam("unit") String unitStr,
         @RequestParam("storage") String storage,
@@ -45,6 +46,7 @@ public class EquipRegistController {
 
         double remaining = Double.parseDouble(remainingStr);
         int unit = Integer.parseInt(unitStr);
+        double judge = Double.parseDouble(judgeStr);
 
         //備品を登録
         Equipment equipment = new Equipment();
@@ -54,11 +56,12 @@ public class EquipRegistController {
         //詳細を登録
         EquipDetail detail = new EquipDetail();
         detail.setLimited(java.sql.Date.valueOf(limited));
+        detail.setJudge(judge);
         detail.setRemaining(remaining);
         detail.setUnit(unit);
         detail.setStorage(storage);
         detail.setRemarks(remarks);
-        detail.setJudge(null); 
+         
 
         if (picture != null && !picture.isEmpty()) {
             detail.setPicture(picture.getBytes());

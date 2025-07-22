@@ -1,0 +1,75 @@
+/* テキスト表示ページのメインコンテナ */
+.view-text-container {
+    padding: 30px;
+    background-color: #ffffff;
+    max-width: 800px;
+    margin: 30px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    position: relative;
+    min-height: 400px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* タイトル（日付）の表示 */
+.view-text-container h2 {
+    color: #2c3e50;
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    text-align: left;
+}
+
+/* テキスト内容のコンテナ */
+.view-text-container .text-content {
+    flex-grow: 1;
+    background-color: #f9f9f9;
+    border: 1px solid #e9e9e9;
+    border-radius: 8px;
+    padding: 25px;
+    line-height: 1.8;
+    color: #333;
+    max-height: 400px;
+    overflow-y: auto; 
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+/* テキスト内容の段落 */
+.view-text-container .text-content p {
+    text-align: left;
+    color: #333;
+    margin: 0;
+}
+
+/* 区切り線 */
+.view-text-container hr {
+    border: none;
+    border-top: 1px solid #f0f0f0;
+    margin: 20px 0;
+}
+
+/* 「前のページに戻る」リンク - 左下配置 */
+.view-text-container .back-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+    margin-top: 10px;
+    margin-left: 0;
+    margin-bottom: 0;
+}
+
+.view-text-container .back-link:hover {
+    background-color: #5a6268;
+}

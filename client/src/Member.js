@@ -9,9 +9,13 @@ export default class Member extends React.Component {
     this.state = {
       email: '',
       name: '',
-      isOpen: false,
+      isInviteModalOpen: false,
+      isDeleteModal: false,
       userId: null,
       approvedMembers: [],
+      selectedMemberId: null,
+      currentUserId: null,
+      currentUserAuthority: null,
     };
   }
 
@@ -55,12 +59,20 @@ export default class Member extends React.Component {
       });
   };
 
-  openModal = () => {
-    this.setState({ isOpen: true });
+  openInviteModal = () => {
+    this.setState({ isInviteModalOpen: true });
   };
 
-  closeModal = () => {
-    this.setState({ isOpen: false });
+  closeInviteModal = () => {
+    this.setState({ isInviteModalOpen: false });
+  };
+
+  openDeleteModal = (memberId) => {
+    this.setState({ isDeleteModalOpen: true, selectedMemberId: memberId });
+  };
+
+  closeDeleteModal = () => {
+    this.setState({ isDeleteModalOpen: false, selectedMemberId: null });
   };
 
   inviteUser = () => {
@@ -78,53 +90,98 @@ export default class Member extends React.Component {
       });
   };
 
+  handleDeleteMember = () => {
+    const { selectedMemberId } = this.state;
+    if (!selectedMemberId) return;
+
+    axios.post("http://localhost:8080/api/members/cancel", {
+      userId: selectedMemberId,
+      projectId: 1
+    })
+
+      .then(() => {
+        alert("メンバーを削除しました");
+        this.setState((prevState) => ({
+          approvedMembers: prevState.approvedMembers.filter(
+            (m) => m.userId !== selectedMemberId
+          ),
+          isDeleteModalOpen: false,
+          selectedMemberId: null
+        }));
+      })
+      .catch((err) => {
+        console.error("削除に失敗しました:", err);
+        alert("削除に失敗しました。");
+      });
+  }
+
+  componentDidMount() {
+    axios.get("http://localhost:8080/getCurrentUser", { withCredentials: true })
+      .then((res) => {
+        const userId = res.data.userId;
+        this.setState({ currentUserId: userId});
+
+        axios.get(`http://localhost:8080/api/members/approved?projectId=1`, { withCredentials: true })
+          .then((res) => {
+            const approvedMembers = res.data;
+            const currentMenber = approvedMembers.find(m => m.userId === userId);
+            this.setState({
+              approvedMembers,
+              currentUserAuthority: currentMenber ? currentMenber.authority : null,
+            });
+          });
+      })
+      .catch((err) => console.error("ユーザー情報の取得に失敗:", err))
+  }
+
   render() {
     return (
       <>
         <h1>プロジェクトメンバー編集</h1>
+        {this.state.currentUserAuthority === 3 && (
+          <div className="input-wrapper">
+            <input
+              type="text"
+              id="mail"
+              name="mail"
+              value={this.state.email}
+              onChange={this.handleChange}
+              placeholder="招待したい方のメールアドレスを入力してください"
+            />
+            <input
+              className="sub_botun"
+              type="button"
+              name="submit"
+              value="検索"
+              onClick={this.handleSearch}
+            />
 
-        <div className="input-wrapper">
-          <input
-            type="text"
-            id="mail"
-            name="mail"
-            value={this.state.email}
-            onChange={this.handleChange}
-            placeholder="招待したい方のメールアドレスを入力してください"
-          />
-          <input
-            className="sub_botun"
-            type="button"
-            name="submit"
-            value="検索"
-            onClick={this.handleSearch}
-          />
-
-          <div className="welcome-container">
-            <div className="result">
-              <p className="user-name-display">一致した名前：{this.state.name}</p>
-              {this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
-                <button onClick={this.openModal}>招待メール送信</button>
-              )}
-              {this.state.isOpen && (
-                <div className="modal-overlay">
-                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                    <h2>この方をプロジェクトに招待しますか？</h2>
-                    <button onClick={this.closeModal}>いいえ</button>
-                    <input
-                      className="sub_botun"
-                      type="button"
-                      name="submit"
-                      value="はい"
-                      onClick={this.inviteUser}
-                    />
+            <div className="welcome-container">
+              <div className="result">
+                <p className="user-name-display">一致した名前：{this.state.name}</p>
+                {this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
+                  <button onClick={this.openModal}>招待メール送信</button>
+                )}
+                {this.state.isInviteModalOpen && (
+                  <div className="modal-overlay">
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                      <h2>この方をプロジェクトに招待しますか？</h2>
+                      <button onClick={this.closeInviteModal}>いいえ</button>
+                      <input
+                        className="sub_botun"
+                        type="button"
+                        name="submit"
+                        value="はい"
+                        onClick={this.inviteUser}
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+              <div className="underline"></div>
             </div>
-            <div className="underline"></div>
           </div>
-        </div>
+        )}
 
         <div>
           <table>
@@ -141,15 +198,32 @@ export default class Member extends React.Component {
               {this.state.approvedMembers.map((member, index) => (
                 <tr key={index}>
                   <td>{member.userName || `ユーザーID: ${member.userId}`}</td>
-                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 1} /></td>
-                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 2} /></td>
-                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 3} /></td>
-                  <td><input type="button" value="削除" /></td>
+                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 1} disabled={this.state.currentUserAuthority !== 3} /></td>
+                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 2} disabled={this.state.currentUserAuthority !== 3} /></td>
+                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 3} disabled={this.state.currentUserAuthority !== 3} /></td>
+                  <td><button onClick={() => this.openDeleteModal(member.userId)} disabled={this.state.currentUserAuthority !== 3}>削除</button></td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <input type="button" name="update" value="更新" />
+          {this.state.isDeleteModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <h2>この方をメンバーから削除しますか</h2>
+                <input
+                  className="sub_botun"
+                  type="button"
+                  name="submit"
+                  value="はい"
+                  onClick={this.handleDeleteMember}
+                />
+                <button onClick={this.closeDeleteModal}>いいえ</button>
+              </div>
+            </div>
+          )}
+          {this.state.currentUserAuthority === 3 && (
+            <input type="button" name="update" value="更新" />
+          )}
         </div>
       </>
     );
