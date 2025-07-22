@@ -3,6 +3,8 @@ import axios from "axios";
 import "./css/Mail.css";
 
 export default class Mail extends React.Component {
+  
+
   constructor(props){
     super(props);
     this.state = {

@@ -44,8 +44,8 @@ class ViewTextComponent extends React.Component {
         try {
             switch (type) {
                 case "process": 
-                    const dailyReportsRes = await axios.get(`/api/process/${id}/report`); 
-                    const reflectionsRes = await axios.get(`/api/process/${id}/reflect`); 
+                    const dailyReportsRes = await axios.get(`/api/projects/processes/${id}/report`); 
+                    const reflectionsRes = await axios.get(`/api/projects/processes/${id}/reflect`); 
 
                     const dailyReportsContent = dailyReportsRes.data.length > 0
                         ? dailyReportsRes.data.map(r => `[日報] ${new Date(r.reportDate).toLocaleDateString()} - ${r.title}\n${r.content || r.reportContent}`).join('\n\n')
@@ -57,7 +57,7 @@ class ViewTextComponent extends React.Component {
                     let processName = "工程";
                     try {
                        
-                        const processRes = await axios.get(`/api/processes/${id}`); 
+                        const processRes = await axios.get(`/api/projects/processes/${id}`); 
                         processName = processRes.data.processName || processName;
                     } catch (e) {
                         console.warn("工程名の取得に失敗しました。", e);
