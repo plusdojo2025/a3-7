@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Entity.Member;
 import com.example.demo.Entity.Project;
+import com.example.demo.Entity.ProjectReport;
 import com.example.demo.Entity.ProjectTag;
+import com.example.demo.Entity.Reflect;
 import com.example.demo.Entity.User;
 import com.example.demo.Repository.MembersRepository;
+import com.example.demo.Repository.ProcessesRepository;
 import com.example.demo.Repository.ProjectTagsRepository;
 import com.example.demo.Repository.ProjectsRepository;
 import com.example.demo.Repository.ReflectTagsRepository;
@@ -42,6 +46,8 @@ public class ProjectController {
     private ReflectsRepository reflectRepository;
     @Autowired
     private ReflectTagsRepository reflectTagRepository;
+    @Autowired
+    private ProcessesRepository processRepository;
 	
     
     @GetMapping("/projects/")
@@ -101,7 +107,29 @@ public class ProjectController {
     	return projectTagsRepository.findAll();
     }
     
-
+    //プロジェクトの詳細画面表示
+    @GetMapping("/projectDetails/{projectId}/")
+    public List<com.example.demo.Entity.Process> getProjectDtails(@PathVariable int projectId){
+    	return processRepository.findByProjectId(projectId);
+    }
+    
+    //プロジェクトの詳細画面表示時の反省取得
+    @GetMapping("/getReflects/{projectId}/")
+    public List<Reflect> getReflects(@PathVariable int projectId){
+    	return reflectRepository.findByProjectId(projectId);
+    }
+    
+    //プロジェクトの終了処理
+    @PostMapping("/closeProject/{projectId}/")
+    public void closeProject(@PathVariable int projectId, @RequestBody ProjectReport projectReport) {
+    	
+    }
+    
+    //プロジェクトに工程を追加
+    @PostMapping("/addProcess/{projectId}/")
+    public void addProcess(@PathVariable int projectId, @RequestBody Process newProcess) {
+    	
+    }
     
 	// メンバー招待（承認待ちで保存）
 	@PostMapping("/members/invite")
