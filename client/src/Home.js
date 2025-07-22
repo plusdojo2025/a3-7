@@ -37,7 +37,8 @@ export default class Home extends React.Component{
 
     //プロジェクトの詳細ページに遷移するための関数
     lookPloject(projectId) {
-        window.alert("ここにプロジェクトid="+projectId+"に対しての画面遷移を実装");
+        //window.alert("ここにプロジェクトid="+projectId+"に対しての画面遷移を実装");
+        window.location.href = `/project?id=${projectId}`;
     }
 
     //プロジェクトを新規登録する処理
@@ -87,6 +88,9 @@ export default class Home extends React.Component{
             <div className="Home">
                 <h1>プロジェクト選択</h1>
                 <p>{error}</p>
+                {projects.length === 0 ? (
+                <p>プロジェクトがありません。</p>
+                ) : (
                 <table>
                     <tbody>
                     {projects.map((project, index) =>
@@ -99,6 +103,7 @@ export default class Home extends React.Component{
                     )}
                     </tbody>
                 </table>
+                )}
 
                 <button onClick={this.toggleModal}>プロジェクト新規作成</button>
 
