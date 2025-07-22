@@ -54,6 +54,14 @@ export default class Project extends React.Component{
             .catch(error => {
                 console.error("データ取得エラー:", error);
             });
+
+        this.setState({
+            error:"",
+            showCloseProjectModal:false,
+            showAddProcessModal:false,
+            addName:"",
+            report:"",
+        });
     }
 
     onInput = (e) => {
@@ -153,6 +161,7 @@ export default class Project extends React.Component{
         .then(json =>{
             this.toggleAddProcessModal();
             this.componentDidMount();
+            
         })
         .catch(error => {
                 console.error("登録時にエラーが発生しました:", error);
@@ -227,7 +236,7 @@ export default class Project extends React.Component{
                             <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
                             <button onClick={() => this.closeProject(1)}>はい</button>
                             <button onClick={() => this.closeProject(0)}>いいえ</button>
-                            <button onClick={this.toggleModal}>キャンセル</button>
+                            <button onClick={this.toggleCloseProjectModal}>キャンセル</button>
                             
                         </div>
                     </div>
@@ -239,7 +248,7 @@ export default class Project extends React.Component{
                         <div id="content">
                             <h2>工程の追加</h2>
                             工程名：<input type="text" name="addName" value={this.state.addName} onChange={this.onInput} /><br />
-                            <button onClick={this.toggleModal}>戻る</button>
+                            <button onClick={this.toggleAddProcessModal}>戻る</button>
                             <button onClick={() => this.addProcess()}>登録</button>
                             
                         </div>
