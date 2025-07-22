@@ -38,21 +38,35 @@ export default function SearchPage() {
         <button onClick={handleSearch}>検索</button>
       </div>
 
-      <div className="list-area">
-        {items.map((item) => (
-          <div className="item-card" key={item.id}>
-            {/* 画像があれば表示、無ければ「No image」など */}
-            {item.image ? (
-              <img src={`data:image/png;base64,${item.image}`} alt="画像" />
-            ) : (
-              <div className="no-image">画像</div>
-            )}
-            <div>{item.name}</div>
-          </div>
-        ))}
+      <div className="item-list">
+        {items.length === 0 ? (
+          <p>該当する備品が見つかりませんでした。</p>
+        ) : (
+          items.map((item, index) => (
+            <div
+              className="item-card"
+              key={`${item.equipId}-${index}`}
+              onClick={() => navigate(`/equipmentDetail/${item.equipId}`)}
+              style={{ cursor: 'pointer' }}
+            >
+              {item.image ? (
+                <img
+                  src={`data:image/png;base64,${item.image}`}
+                  alt={`${item.equipName}の画像`}
+                  className="item-image"
+                />
+              ) : (
+                <div className="no-image">No image</div>
+              )}
+              <div className="item-name">{item.equipName}</div>
+            </div>
+          ))
+        )}
       </div>
 
+
       <div className="button-area">
+        <button onClick={() => navigate(-1)}>戻る</button>
         <button onClick={() => navigate('/equipmentregist')}>備品登録</button>
         <button onClick={() => navigate('/bioregist')}>生体登録</button>
       </div>
