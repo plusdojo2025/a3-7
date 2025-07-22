@@ -27,7 +27,7 @@ import com.example.demo.Repository.ReportsRepository;
 
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/api")
 public class ProjectController {
