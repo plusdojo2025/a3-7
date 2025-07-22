@@ -53,7 +53,7 @@ export default class Login extends React.Component{
             if (result === true) {
             console.log("ログイン成功");
             window.location.href = "/home";
-            } else {
+            } else { 
             console.log("ログイン失敗");
             alert("メールアドレスかパスワードが間違っています");
             }
