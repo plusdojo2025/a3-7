@@ -9,5 +9,6 @@ import com.example.demo.Entity.Reflect;
 public interface ReflectsRepository extends JpaRepository<Reflect, Integer> {
 	
 	List<Reflect> findByProcessId(Integer processId);
+	List<Reflect> findByProjectId(Integer projectId);
 
 }
