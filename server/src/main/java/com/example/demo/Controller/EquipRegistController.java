@@ -18,7 +18,6 @@ import com.example.demo.Entity.Equipment;
 import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipmentsRepository;
 
-
 @RestController
 @RequestMapping("/api/equipment")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -59,11 +58,13 @@ public class EquipRegistController {
         detail.setUnit(unit);
         detail.setStorage(storage);
         detail.setRemarks(remarks);
-        detail.setEquipment(savedEquipment); // 外部キーでつなぐ
+        detail.setJudge(null); // フォームで送ってないから null を入れておく
 
         if (picture != null && !picture.isEmpty()) {
             detail.setPicture(picture.getBytes());
         }
+
+
 
         equipmentDetailRepository.save(detail);
 
