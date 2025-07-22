@@ -52,10 +52,41 @@ public class ViewProjectController {
     }
 	
 	//工程一覧取得
-	@GetMapping("/{projectId}/process")
-	public List<Process> getProcessByProjectId(@PathVariable Integer projectId) {
-		return processesRepository.findByProjectId(projectId);
+	@GetMapping("/{projectId}/processes")
+	public List<Process> getProcessesByProjectId(@PathVariable Integer projectId) {
+	    return processesRepository.findByProjectId(projectId); 
 	}
+	 // 単一の工程詳細取得 (ViewProcess.jsで利用)
+    @GetMapping("/processes/{processId}")
+    public ResponseEntity<Process> getProcessById(@PathVariable Integer processId) {
+        return processesRepository.findById(processId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // 単一のプロジェクト報告書取得 (ViewText.jsで利用)
+    @GetMapping("/project-reports/{projectReportId}")
+    public ResponseEntity<ProjectReport> getProjectReportById(@PathVariable Integer projectReportId) {
+        return projectReportRepository.findById(projectReportId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // 単一の日報取得 (ViewText.jsで利用)
+    @GetMapping("/reports/{reportId}")
+    public ResponseEntity<Report> getReportById(@PathVariable Integer reportId) {
+        return reportRepository.findById(reportId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // 単一の反省取得 (ViewText.jsで利用)
+    @GetMapping("/reflects/{reflectId}")
+    public ResponseEntity<Reflect> getReflectById(@PathVariable Integer reflectId) {
+        return reflectsRepository.findById(reflectId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 	
 	//報告書取得
 	@GetMapping("/{projectId}/project-report")
@@ -64,13 +95,13 @@ public class ViewProjectController {
 	}
 	
 	//日報取得
-	@GetMapping("/process/{processId}/report")
+	@GetMapping("/processes/{processId}/report")
 	public List<Report> getReportByProcessId(@PathVariable Integer processId) {
 		return reportRepository.findByProcessId(processId);
 	}
 	
 	//反省取得
-	@GetMapping("/process/{processId}/reflect")
+	@GetMapping("/processes/{processId}/reflect")
 	public List<Reflect> getReflectByProcessId(@PathVariable Integer processId) {
 		return reflectsRepository.findByProcessId(processId);
 	}

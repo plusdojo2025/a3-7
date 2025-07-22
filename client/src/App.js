@@ -6,7 +6,7 @@ import Home from './Home';
 import Mypage from './Mypage';
 import MyPageEdit from './MyPageEdit';
 import Mail from './Mail';
-import Search from './Search';
+import SearchWrapper from './Search';
 import EquipmentRegist from './EquipmentRegist';
 import Equipment from './Equipment';
 import BioRegist from './BioRegist';
@@ -19,9 +19,9 @@ import Common from "./Common";
 import Report from './Report';
 import ReportEdit from './ReportEdit';
 import Reflect from './Reflect';
-import ViewProject from './ViewProject';
-import ViewProcess from './ViewProcess';
-import ViewText from './ViewText';
+import ViewProjectWrapper from './ViewProject';
+import ViewProcessWrapper from './ViewProcess';
+import ViewTextWrapper from './ViewText';
 
 
 function App() {
@@ -46,10 +46,10 @@ function App() {
               <Route path="mypage" element={<Mypage />} />
               <Route path="mypage/edit" element={<MyPageEdit />} />
               <Route path="mypage/mail" element={<Mail />} />
-              <Route path="search" element={<Search />} />
-              <Route path="project/:projectId" element={<ViewProject />} />
-              <Route path="project/:projectId/processes" element={<ViewProcess />} />
-               <Route path="view-text/:resourceId" element={<ViewText />} />
+              <Route path="search" element={<SearchWrapper />} /> 
+              <Route path="project/:projectId" element={<ViewProjectWrapper />} />
+              <Route path="project/:projectId/processes/:processId" element={<ViewProcessWrapper />} />
+              <Route path="view-text/:type/:id" element={<ViewTextWrapper />} />
               <Route path="equipmentRegist" element={<EquipmentRegist />} />
               <Route path="equipment" element={<Equipment />} />
               <Route path="bioRegist" element={<BioRegist />} />
