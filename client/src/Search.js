@@ -1,55 +1,60 @@
 import React from "react";
 import axios from "axios";
-// useNavigate はWrapperで使用するため、Linkのみをクラスコンポーネント内で直接使用
+import './css/Common.css'; 
 import { useNavigate, Link } from "react-router-dom"; 
 
-// 関数コンポーネントでクラスコンポーネントをラップし、Hooksを注入する
+// useNavigate をクラスコンポーネントで使うためのラッパー
 function SearchWrapper() {
-    const navigate = useNavigate(); // useNavigate はここで呼び出す
-    return <SearchComponent navigate={navigate} />; // クラスコンポーネントにnavigateをpropsとして渡す
+    const navigate = useNavigate(); 
+    return <SearchComponent navigate={navigate} />; 
 }
 
-// クラスコンポーネントはデフォルトエクスポートしない（SearchWrapperがデフォルトエクスポートするため）
-class SearchComponent extends React.Component { // コンポーネント名をSearchComponentに変更
+class SearchComponent extends React.Component { 
     constructor(props) {
-        super(props) 
+        super(props); 
         this.state = {
             title: "",
             tagId: "",
-            tags: [], // プロジェクトタグ一覧
-            projects: [], // 検索結果を保持するstate
-            loading: false, // 検索中の状態を示す
-            error: null,    // エラーメッセージを保持する
-            searchPerformed: false, // 検索が一度実行されたかどうかを示す
+            tags: [],
+            projects: [],
+            loading: false,
+            error: null,
+            searchPerformed: false,
         };
     }
 
-    // 初期マウント時にタグ一覧を取得
+    // コンポーネントがマウントされた後にタグ一覧を取得する
     componentDidMount() {
+        console.log("SearchComponent componentDidMount: Fetching project tags...");
         axios.get("/api/project-tags")
         .then(res => {
+            console.log("Project tags fetched successfully:", res.data);
             this.setState({tags: res.data});
         })
         .catch(err => {
             console.error("タグ一覧の取得に失敗しました。", err);
+            this.setState({ error: "タグ一覧の取得に失敗しました。" });
         });    
     }
 
-    // 入力が変更されたときにstateを更新
+    // 入力フォームの値が変更されたときにstateを更新する
     onInput = (e) => {
         const { name, value } = e.target;
+        console.log(`Input changed: name=${name}, value=${value}`);
         this.setState({ [name]: value });
     }
 
-    // 検索ボタン処理 (非同期処理)
+    // プロジェクト検索ボタンがクリックされた時の処理
     searchProjects = async () => {
         const { title, tagId } = this.state;
         
+        console.log(`Searching projects with title: "${title}", tagId: "${tagId}"`);
+
         // 検索開始時に状態をリセット
         this.setState({ 
             loading: true, 
             error: null, 
-            projects: [], // 新しい検索のために以前の結果をクリア
+            projects: [], 
             searchPerformed: true 
         });
 
@@ -65,6 +70,7 @@ class SearchComponent extends React.Component { // コンポーネント名をSe
         try {
             // プロジェクト検索APIを呼び出す
             const res = await axios.get("/api/projects/search", { params: apiParams });
+            console.log("Search results received:", res.data);
             this.setState({
                 projects: res.data,
                 loading: false,
@@ -74,11 +80,9 @@ class SearchComponent extends React.Component { // コンポーネント名をSe
             this.setState({
                 error: "プロジェクトの検索に失敗しました。時間をおいて再度お試しください。",
                 loading: false,
-                projects: [], // エラー時はプロジェクトリストをクリア
+                projects: [],
             });
         }
-        // Search.js内で結果を表示するため、ここではnavigateは使用しない
-        // もし特定の条件で他のページに遷移したい場合は、this.props.navigate を使用
     }
 
     render() {
@@ -113,27 +117,38 @@ class SearchComponent extends React.Component { // コンポーネント名をSe
                 {loading && <p>検索中...</p>}
                 {error && <p className="error-message">{error}</p>}
                 
-                {/* 検索が実行され、ローディング中でなく、エラーもなく、結果が0件の場合 */}
                 {searchPerformed && !loading && !error && projects.length === 0 && (
                     <p>検索条件に一致するプロジェクトは見つかりませんでした。</p>
                 )}
 
                 {/* 検索結果がある場合のみリストを表示 */}
                 {!loading && !error && projects.length > 0 && (
-                    <ul className="project-list">
-                       {projects.map(project => (
-                        <li key={project.projectId}>
-                            {/* クリックで工程詳細ページへ遷移 */}
-                            <Link to={`/project/${project.projectId}/processes`}>
-                                {project.projectName}
-                            </Link>
-                        </li> 
-                       ))}
-                    </ul>
+                    <div className="projectListBody">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>プロジェクト名</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {projects.map(project => (
+                                    <tr key={project.projectId} className="projectrow">
+                                        <td className="name">
+                                            {/* クリックでプロジェクト詳細ページへ遷移 */}
+                                            <Link to={`/project/${project.projectId}`}>
+                                                {project.projectName}
+                                            </Link>
+                                        </td>
+                                        
+                                    </tr> 
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
         );
     }
 }
 
-export default SearchWrapper; // ラッパーコンポーネントのみをデフォルトエクスポート
+export default SearchWrapper;

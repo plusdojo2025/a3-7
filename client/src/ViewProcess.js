@@ -1,130 +1,138 @@
-import React from "react";
-import axios from "axios";
-import { Link, useParams } from "react-router-dom"; 
-
+import React from 'react';
+import axios from 'axios';
+import { useParams, Link } from 'react-router-dom';
 
 function ViewProcessWrapper() {
     const params = useParams();
-    return <ViewProcessComponent params={params} />; 
+    return <ViewProcessComponent params={params} />;
 }
 
-class ViewProcessComponent extends React.Component { 
+class ViewProcessComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            process: null,
             project: null,
-            processes: [],
-            projectReports: [],
+            reports: [],
+            reflects: [],
             loading: true,
             error: null,
         };
     }
 
     componentDidMount() {
-
-        const { projectId } = this.props.params; 
-        if (!projectId) {
-            this.setState({ error: "プロジェクトIDが見つかりません。", loading: false });
-            return;
-        }
-        this.fetchProjectAndProcessData(projectId);
+        this.fetchProcessDetails();
     }
 
     componentDidUpdate(prevProps) {
-
-        const { projectId } = this.props.params;
-        if (projectId !== prevProps.params.projectId) {
-            this.setState({ loading: true, error: null });
-            this.fetchProjectAndProcessData(projectId);
+        if (this.props.params.projectId !== prevProps.params.projectId ||
+            this.props.params.processId !== prevProps.params.processId) {
+            this.fetchProcessDetails();
         }
     }
 
-    fetchProjectAndProcessData = async (projectId) => {
+    fetchProcessDetails = async () => {
+        const { projectId, processId } = this.props.params;
+
+        this.setState({ loading: true, error: null });
+
+        if (!projectId || !processId) {
+            console.error("ViewProcessComponent Error: Project ID or Process ID is missing.");
+            this.setState({
+                loading: false,
+                error: "プロジェクトIDまたは工程IDが指定されていません。",
+            });
+            return;
+        }
+
         try {
-            // プロジェクト詳細を取得
+            //単一工程の詳細取得
+            const processRes = await axios.get(`/api/projects/processes/${processId}`);
+            this.setState({ process: processRes.data });
+
+            //親プロジェクト情報の取得
             const projectRes = await axios.get(`/api/projects/${projectId}`);
             this.setState({ project: projectRes.data });
 
-            // 工程一覧を取得
-            const processesRes = await axios.get(`/api/projects/${projectId}/process`); 
-            this.setState({ processes: processesRes.data });
+            //日報一覧の取得
+            const reportsRes = await axios.get(`/api/projects/processes/${processId}/report`);
+            this.setState({ reports: reportsRes.data });
 
-            // プロジェクト報告書一覧を取得
-            const projectReportsRes = await axios.get(`/api/projects/${projectId}/project-report`);
-            this.setState({ projectReports: projectReportsRes.data });
+            //反省一覧の取得
+            const reflectsRes = await axios.get(`/api/projects/processes/${processId}/reflect`);
+            this.setState({ reflects: reflectsRes.data });
+
+            this.setState({ loading: false });
 
         } catch (err) {
-            console.error("データの取得に失敗しました:", err);
-            this.setState({ error: "データの取得に失敗しました。", project: null, processes: [], projectReports: [] });
-        } finally {
-            this.setState({ loading: false });
+            console.error("工程詳細の取得に失敗しました:", err);
+            this.setState({
+                error: "工程情報の取得中にエラーが発生しました。",
+                loading: false,
+            });
         }
-    }
+    };
 
     render() {
-        const { project, processes, projectReports, loading, error } = this.state;
-
+        const { process, project, reports, reflects, loading, error } = this.state;
         const { projectId } = this.props.params;
 
         if (loading) {
-            return <p>読み込み中...</p>;
+            return <div className="loading">工程情報を読み込み中...</div>;
         }
 
         if (error) {
-            return <p className="error-message">{error}</p>;
+            return <div className="error-message">{error}</div>;
         }
 
-        if (!project) {
-            return <p>プロジェクトが見つかりませんでした。</p>;
+        if (!process) {
+            return <div className="not-found">指定された工程が見つかりませんでした。</div>;
         }
 
         return (
-            <div className="viewProcessMain">
-                <h2>プロジェクト: {project.projectName}</h2>
-                <h3>工程一覧</h3>
+            <div className="view-process-container">
+                {project && <h2>プロジェクト: {project.projectName}</h2>}
+                <h3>工程名: {process.processName}</h3>
+               
+                <hr />
 
-                {processes.length === 0 ? (
-                    <p>工程が登録されていません。</p>
-                ) : (
-                    <ul className="process-list">
-                        {processes.map(process => (
-                            <li key={process.processId} className="process-item">
-                                <span className="process-name">
-                                    工程名: {process.processName}
-                                </span>
-                                <Link 
-                                    to={`/view-text/${process.processId}?type=process&projectId=${projectId}`} 
-                                    className="process-link"
-                                >
-                                    日報・反省を見る
+                <h4>日報一覧</h4>
+                {reports.length > 0 ? (
+                    <ul>
+                        {reports.map(report => (
+                            <li key={report.reportId}>
+                                <Link to={`/view-text/report/${report.reportId}`}>
+                                    {report.reportTitle} - {report.createdAt}
                                 </Link>
                             </li>
                         ))}
                     </ul>
+                ) : (
+                    <p>日報はまだ登録されていません。</p>
                 )}
 
-                <h3>プロジェクト報告書一覧</h3>
-                {projectReports.length === 0 ? (
-                    <p>プロジェクト報告書がありません。</p>
-                ) : (
-                    <ul className="report-list">
-                        {projectReports.map(report => (
-                            <li key={report.id} className="report-item">
-                                <Link to={`/view-text/${report.id}?type=projectReport&projectId=${projectId}`} className="report-link">
-                                    {report.reportTitle} ({new Date(report.reportDate).toLocaleDateString()})
+                <hr />
+
+                <h4>反省一覧</h4>
+                {reflects.length > 0 ? (
+                    <ul>
+                        {reflects.map(reflect => (
+                            <li key={reflect.reflectId}>
+                                <Link to={`/view-text/reflect/${reflect.reflectId}`}>
+                                    {reflect.reflectTitle} - {reflect.createdAt}
                                 </Link>
                             </li>
                         ))}
                     </ul>
+                ) : (
+                    <p>反省はまだ登録されていません。</p>
                 )}
-                
-                <hr/>
-                <Link to="/" className="back-link">
-                    検索ページに戻る
-                </Link>
+
+                <hr />
+                <Link to={`/project/${projectId}`}>前のページに戻る</Link>
             </div>
         );
     }
 }
 
-export default ViewProcessWrapper; 
+export default ViewProcessWrapper;

@@ -1,4 +1,4 @@
-import React, { useId } from "react";
+import React from "react";
 import './css/Common.css';
 import './css/Member.css';
 import axios from "axios";
@@ -10,7 +10,20 @@ export default class Member extends React.Component {
       email: '',
       name: '',
       isOpen: false,
+      userId: null,
+      approvedMembers: [],
     };
+  }
+
+  componentDidMount() {
+    const projectId = 1;
+    axios.get(`http://localhost:8080/api/members/approved?projectId=${projectId}`, { withCredentials: true })
+      .then((res) => {
+        this.setState({ approvedMembers: res.data });
+      })
+      .catch((err) => {
+        console.error("承認メンバーの取得に失敗:", err);
+      });
   }
 
   handleChange = (e) => {
@@ -51,8 +64,6 @@ export default class Member extends React.Component {
   };
 
   inviteUser = () => {
-    const { email } = this.state;
-
     axios.post("http://localhost:8080/api/members/invite", {
       userId: this.state.userId,
       projectId: 1
@@ -92,9 +103,11 @@ export default class Member extends React.Component {
           <div className="welcome-container">
             <div className="result">
               <p className="user-name-display">一致した名前：{this.state.name}</p>
-              {this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (<button onClick={this.openModal}>招待メール送信</button>)}
+              {this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
+                <button onClick={this.openModal}>招待メール送信</button>
+              )}
               {this.state.isOpen && (
-                <div className="modal-overlay" >
+                <div className="modal-overlay">
                   <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <h2>この方をプロジェクトに招待しますか？</h2>
                     <button onClick={this.closeModal}>いいえ</button>
@@ -111,6 +124,32 @@ export default class Member extends React.Component {
             </div>
             <div className="underline"></div>
           </div>
+        </div>
+
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>メンバー名</th>
+                <th>閲覧</th>
+                <th>編集</th>
+                <th>管理</th>
+                <th>削除</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.approvedMembers.map((member, index) => (
+                <tr key={index}>
+                  <td>{member.userName || `ユーザーID: ${member.userId}`}</td>
+                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 1} /></td>
+                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 2} /></td>
+                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 3} /></td>
+                  <td><input type="button" value="削除" /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <input type="button" name="update" value="更新" />
         </div>
       </>
     );
