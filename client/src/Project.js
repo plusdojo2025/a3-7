@@ -1,50 +1,51 @@
 import React from "react";
+import axios from "axios";
 import './css/Common.css';
 import './css/Project.css';
-import { Link, Navigate } from "react-router-dom";
 
 export default class Project extends React.Component{
-    constructor(props) {
-    super(props);
-    // stateの初期化
-    this.state = {
-        // メールボックスに遷移するかどうかのフラグ
-        redirect: false,
-    };
-  }
+    state ={
+        projectId:0,
+        process:[],
+        error:""
+    }
+    constructor(props){
+        super(props);
 
-    // 「はい」「いいえ」どちらでもメールボックスに遷移
-    handleResponse = () => {
-        this.setState({ redirect: true });
-    };
+        //表示するプロジェクトのidを取得
+        const params = new URLSearchParams(window.location.search);
+        const projectId = params.get('id');
 
+
+        this.state = {
+            projectId:projectId,
+        }
+    }
+
+    componentDidMount() {
+        const { projectId } = this.state;
+        console.log("projectId:"+projectId);
+
+        axios.get(`/api/projectDetails/${projectId}/`)
+            .then(json => {
+                console.log(json);
+                this.setState({
+                    processes:json.data
+                });
+            })
+            .catch(error => {
+                console.error("データ取得エラー:", error);
+            });
+    }
     
     render(){
-    // redirectがtrueなら、メールボックス画面へ自動遷移
-    if (this.state.redirect) {
-        return <Navigate to="/mypage/mail" />;
-    }
-        return (
-            <div className="project-invite-container">
-                <div className="project-invite-box">
-                    {/* 招待メッセージ表示 */}
-                    <p>〇〇さんから招待が届きました！</p>
-                    <p>〇〇プロジェクト</p>
-                    <p className="project-question">
-                    このプロジェクトに参加しますか？
-                    </p>
+        const {error} = this.state;
+        return( 
+            <div className="ProjectDetails">
+                <h1>プロジェクト名</h1>
+                <p>{error}</p>
 
-                    {/* ボタンを表示 */}
-                    <div className="invite-buttons">
-                        <button className="reject-button" onClick={this.handleResponse}>
-                            いいえ
-                        </button>
-                        <button className="accept-button" onClick={this.handleResponse}>
-                                はい
-                        </button>
-                    </div>
-                </div>
             </div>
         )
     };
-} 
+}
