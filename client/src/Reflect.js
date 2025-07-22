@@ -1,29 +1,35 @@
 import React from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-export default class Reflect extends React.Component {
+
+function ReflectWrapper() {
+  const { projectId, processId } = useParams(); 
+  return <Reflect projectId={projectId} processId={processId} />;
+}
+
+class Reflect extends React.Component {
   state = {
     reflectList: [],
     form: {
       createdAt: "",
       reflectTagId: "",
+      projectId: this.props.projectId || "",
+      processId: this.props.processId || "",
       comment: ""
     },
     error: ""
   };
 
   componentDidMount() {
-   
     axios.get("/api/reflectTag")
-  
       .then(json => {
         this.setState({ reflectList: json.data });
       })
       .catch(err => {
-        console.error("プロジェクト取得エラー:", err);
+        console.error("タグ取得エラー:", err);
+        this.setState({ error: "タグの取得に失敗しました" });
       });
-
-  
   }
 
   handleChange = (e) => {
@@ -49,7 +55,13 @@ export default class Reflect extends React.Component {
       .then(() => {
         alert("登録しました！");
         this.setState({
-          form: { createdAt: "", reflectTagId: "", comment: "" },
+          form: {
+            createdAt: "",
+            reflectTagId: "",
+            comment: "",
+            processId: this.props.processId || "",
+            projectId: this.props.projectId || ""
+          },
           error: ""
         });
       })
@@ -66,8 +78,11 @@ export default class Reflect extends React.Component {
         <h2>反省登録</h2>
         {error && <p style={{ color: "red" }}>{error}</p>}
         <form onSubmit={this.handleSubmit}>
+          <input type="hidden" name="projectId" value={form.projectId} />
+          <input type="hidden" name="processId" value={form.processId} />
+
           <div>
-            <label>日付：</label>
+            <label>日付：</label><br />
             <input
               type="date"
               name="createdAt"
@@ -78,12 +93,12 @@ export default class Reflect extends React.Component {
           </div>
 
           <div>
-            <label>タグの選択：</label>
-               <select
+            <label>タグの選択：</label><br />
+            <select
               name="reflectTagId"
               value={form.reflectTagId}
               onChange={this.handleChange}
-             
+              required
             >
               <option value="">選択してください</option>
               {reflectList.map(tag => (
@@ -95,7 +110,7 @@ export default class Reflect extends React.Component {
           </div>
 
           <div>
-            <label>コメント：</label>
+            <label>コメント：</label><br />
             <textarea
               name="comment"
               value={form.comment}
@@ -114,3 +129,6 @@ export default class Reflect extends React.Component {
     );
   }
 }
+
+
+export default ReflectWrapper;

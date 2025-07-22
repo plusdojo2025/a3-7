@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function Report() {
+  const { projectId, processId } = useParams(); 
+
   const [form, setForm] = useState({
     createdAt: "",
-    processId: "",
-    projectId: "",
+    processId: processId || "",
     comment: "",
     equipId: "",
     usageAmount: ""
@@ -15,7 +17,19 @@ export default function Report() {
   const [equipmentList, setEquipmentList] = useState([]);
   const [error, setError] = useState("");
 
-  // Fetch equipment list once on mount
+ 
+  useEffect(() => {
+    if (projectId) {
+      axios.get(`/api/project/${projectId}`)
+        .then(res => setProjectName(res.data.projectName))
+        .catch(err => {
+          console.error("プロジェクト名取得エラー:", err);
+          setProjectName("（取得失敗）");
+        });
+    }
+  }, [projectId]);
+
+  // Fetch equipment list
   useEffect(() => {
     axios.get("/api/equip")
       .then(res => setEquipmentList(res.data))
@@ -25,18 +39,7 @@ export default function Report() {
       });
   }, []);
 
-  
-  useEffect(() => {
-    if (!form.projectId) {
-      setProjectName("");
-      return;
-    }
-
-    axios.get(`/api/project/${form.projectId}`)
-      .then(res => setProjectName(res.data.projectName))
-      .catch(() => setProjectName("（取得失敗）"));
-  }, [form.projectId]);
-
+   
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({
@@ -44,34 +47,46 @@ export default function Report() {
       [name]: value
     }));
   };
-   const handleSubmit = (e) => {
+
+  // Handle form submit
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post("/api/report", form)
+    const payload = {
+      ...form,
+      projectId: parseInt(projectId, 10),
+      processId: parseInt(form.processId, 10),
+      equipId: parseInt(form.equipId, 10),
+      usageAmount: parseFloat(form.usageAmount) || 0
+    };
+
+    axios.post("/api/report", payload)
       .then(() => {
         alert("登録成功！");
         setForm({
           createdAt: "",
-          processId: "",
-          projectId: "",
+          processId: processId || "",
           comment: "",
           equipId: "",
           usageAmount: ""
         });
-        setProjectName("");
         setError("");
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error("登録失敗:", err);
         alert("登録失敗");
       });
   };
 
   return (
-    <div className="report-register">
-      <h2 className="title">日報登録</h2>
+    <div style={{ maxWidth: 600, margin: "0 auto" }}>
+      <h2>日報登録</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <form onSubmit={handleSubmit}>
+        <input type="hidden" name="projectId" value={projectId} />
+        <input type="hidden" name="processId" value={form.processId} />
+
         <div>
           日付:
           <input
@@ -83,26 +98,18 @@ export default function Report() {
           />
         </div>
 
-        <div>
+        <div style={{ marginTop: 10 }}>
           研修タイトル:
-        <input
-    type="text"
-    name="projectName"
-    value={projectName || ''}
-    
-  />
-          
-            
-        
+          <input
+            type="text"
+            value={projectName}
+            readOnly
+          />
         </div>
 
-        <div>
+        <div style={{ marginTop: 10 }}>
           備品名:
-          <select
-            name="equipId"
-            value={form.equipId}
-            onChange={handleChange}
-          >
+          <select name="equipId" value={form.equipId} onChange={handleChange} required>
             <option value="">選択してください</option>
             {equipmentList.map(equip => (
               <option key={equip.equipId} value={equip.equipId}>
@@ -112,7 +119,7 @@ export default function Report() {
           </select>
         </div>
 
-        <div>
+        <div style={{ marginTop: 10 }}>
           使用量:
           <input
             type="text"
@@ -122,7 +129,7 @@ export default function Report() {
           />
         </div>
 
-        <div>
+        <div style={{ marginTop: 10 }}>
           コメント:
           <textarea
             name="comment"
@@ -131,7 +138,7 @@ export default function Report() {
           />
         </div>
 
-        <div>
+        <div style={{ marginTop: 20 }}>
           <button type="button" onClick={() => window.history.back()}>
             戻る
           </button>
