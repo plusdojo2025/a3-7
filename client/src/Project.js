@@ -11,6 +11,10 @@ export default class Project extends React.Component{
         const params = new URLSearchParams(window.location.search);
         const projectId = params.get('id');
 
+        //今日の日付を取得
+        const currentDate = new Date();
+        const defaultDate = currentDate.toISOString().slice(0, 10);
+
 
         this.state = {
             projectId:projectId,
@@ -20,6 +24,8 @@ export default class Project extends React.Component{
             showCloseProjectModal:false,
             showAddProcessModal:false,
             addName:"",
+            date:defaultDate,
+            report:"",
         }
     }
 
@@ -56,7 +62,7 @@ export default class Project extends React.Component{
             [name]: e.target.value
         });
     }  
-    
+
     //プロジェクトの詳細ページに遷移するための関数
     lookProcess(processId) {
         window.alert("ここにプロセスid="+processId+"に対しての画面遷移を実装");
@@ -78,8 +84,47 @@ export default class Project extends React.Component{
     }
 
     //プロジェクトを終了する
-    closePloject(close){
-        window.alert("ここに処理を実装"+close);
+    closeProject(close){
+        const{date, report, projectId} = this.state;
+
+        //入力チェック
+        if (!date) {
+            this.setState({ error: "作成日を設定してください" });
+            return;
+        }
+        if (!report) {
+            this.setState({ error: "報告書が記載されていません" });
+            return;
+        }
+
+        const data = {projectReportId:null, createdAt:date, report:report, projectId:projectId};
+        console.log(data);
+
+        if(close === 1){
+            axios.post(`/api/closePublicProject/${projectId}/`, data)
+            .then(json =>{
+                this.toggleCloseProjectModal();
+                this.componentDidMount();
+            })
+            .catch(error => {
+                console.error("登録時にエラーが発生しました:", error);
+            });
+        }
+        else{
+            axios.post(`/api/closeUnpublishProject/${projectId}/`,data)
+            .then(json =>{
+                this.toggleCloseProjectModal();
+                this.componentDidMount();
+            })
+            .catch(error => {
+                console.error("登録時にエラーが発生しました:", error);
+            });
+        }
+        
+
+        
+        
+        
     }
 
     //メンバー編集をする
@@ -94,7 +139,24 @@ export default class Project extends React.Component{
 
     //工程を追加する
     addProcess(){
-        
+        const{addName, projectId} = this.state;
+
+        //入力チェック
+        if (!addName) {
+            this.setState({ error: "プロジェクト名を設定してください" });
+            return;
+        }
+
+        const data = {processtId:null, processName:addName, projectId:projectId, complete:0};
+        console.log(data);
+        axios.post(`/api/addProcess/${projectId}/`, data)
+        .then(json =>{
+            this.toggleAddProcessModal();
+            this.componentDidMount();
+        })
+        .catch(error => {
+                console.error("登録時にエラーが発生しました:", error);
+        });
     }
     
     render(){
@@ -158,8 +220,10 @@ export default class Project extends React.Component{
                     <div id="overlayCloseProject">
                         <div id="content">
                             <h2>報告書登録</h2>
-                            日時：
-                            報告書:
+                            日時
+                            <input type="date" name="date" value={this.state.date} onChange={this.onInput} /><br />
+                            コメント
+                            <input type="text" name="report" onChange={this.onInput} /><br />
                             <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
                             <button onClick={() => this.closeProject(1)}>はい</button>
                             <button onClick={() => this.closeProject(0)}>いいえ</button>

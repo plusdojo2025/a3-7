@@ -33,4 +33,7 @@ public class Project {
 	@ManyToOne
     @JoinColumn(name = "tag_id") 
     private ProjectTag tag;
+	
+	@Column(columnDefinition = "int default 0")
+	private Integer complete;
 }

@@ -24,7 +24,7 @@ public class ProjectReport {
 	private String createdAt;
 	private String report;
 	
-	@Column(name = "project_id")
+	@Column(name = "project_id", unique = true)
 	private Integer projectId;
 
 }

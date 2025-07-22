@@ -9,4 +9,5 @@ import com.example.demo.Entity.Process;
 public interface ProcessesRepository extends JpaRepository<Process, Integer> {
 	
 	List<Process> findByProjectId(Integer projectId);
+	
 }

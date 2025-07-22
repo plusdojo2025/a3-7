@@ -36,7 +36,8 @@ INSERT INTO processes (project_id, process_name, complete) VALUES (1, 'ハナア
 
 --報告書
 INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-03-25', '初期調査進捗報告：調査地選定が順調に進み、主要な候補地を絞り込みました。');
-INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-05-15', '中間報告：これまでに約50種のハナアブを捕獲。未識別の種も複数確認。');
+--プロジェクトに対する報告書は常に一つ(プロジェクト終了時のみ)
+--INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-05-15', '中間報告：これまでに約50種のハナアブを捕獲。未識別の種も複数確認。');
 
 --日報
 INSERT INTO reports (process_id, project_id, created_at, comment) VALUE (1, 1, '2024-03-25', '明日からがんばる！');
