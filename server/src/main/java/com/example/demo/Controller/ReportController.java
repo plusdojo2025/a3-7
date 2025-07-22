@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,18 +66,18 @@ public class ReportController {
     }
  
 
-    @GetMapping("/report/{id}")
-    public Report getReport(@PathVariable Integer reportId) {
+    @GetMapping("/report/{reportId}")
+    public Report getReport(@PathVariable("reportId") Integer reportId) {
         return reportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Reportが見つかりません"));
+                .orElseThrow(() -> new RuntimeException("Report not found"));
     }
 
-   
-    @PutMapping("/report/{id}")
-    public Report updateReport(@PathVariable Integer reportId, @RequestBody Report updatedReport) {
+    @PostMapping("/report/{reportId}")
+    public Report updateReport(@PathVariable("reportId") Integer reportId, @RequestBody Report updatedReport) {
         Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new RuntimeException("Reportが見つかりません"));
+                .orElseThrow(() -> new RuntimeException("Report not found"));
 
+        // Update fields
         report.setEquipId(updatedReport.getEquipId());
         report.setProjectId(updatedReport.getProjectId());
         report.setProcessId(updatedReport.getProcessId());
@@ -86,8 +85,6 @@ public class ReportController {
         report.setComment(updatedReport.getComment());
 
         return reportRepository.save(report);
-    }
-    }
-
+    }}
   
 

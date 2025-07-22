@@ -57,7 +57,7 @@ function App() {
               <Route path="bioEdit" element={<BioEdit />} />
               <Route path="report" element={<Report />} />
               <Route path="reflect" element={<Reflect />} />
-              <Route path="reportEdit" element={<ReportEdit />} />
+              <Route path="reportEdit/:reportId" element={<ReportEdit />} />
             </Routes>
           </Common>
         } />

@@ -1,18 +1,23 @@
 import React from "react";
 import axios from "axios";
 
+
 export default class ReportEdit extends React.Component {
+  
   constructor(props) {
+    
     super(props);
     this.state = {
       equipmentList: [],
-     form: {
-  id: "",
+     
+  form: {
   createdAt: "",
-  projectId: "",       
-  processId: "",      
+  projectId: "",
+  processId: "",
   equipId: "",
-  comment: ""
+  comment: "",
+  projectName: "",
+  usageAmount: ""
 },
       error: ""
     };
@@ -27,9 +32,9 @@ export default class ReportEdit extends React.Component {
         this.setState({ error: "備品リストの取得に失敗しました" });
       });
 
-    const { id } = this.props;
-    if (id) {
-      axios.get(`/api/report/${id}`)
+    const { reportId } = this.props;
+    if (reportId) {
+      axios.get(`/api/report/${reportId}`)
         .then(json => {
           this.setState({ form: json.data });
         })
@@ -51,11 +56,11 @@ export default class ReportEdit extends React.Component {
 handleSubmit = (e) => {
   e.preventDefault();
   const { form } = this.state;
-  const { id } = this.props;
+  const { reportId } = this.props;
 
 
 
-  axios.put(`/api/report/${id}`, form)
+ axios.post(`/api/report/${reportId}`, form)
     .then(() => alert("更新成功！"))
     .catch((err) => {
       console.error("エラー", err.response);
@@ -73,14 +78,13 @@ handleSubmit = (e) => {
         <form onSubmit={this.handleSubmit}>
           <div>
             日付:
-            <input
-              type="date"
-              name="createdAt"
-              value={form.createdAt}
-              onChange={this.handleChange}
-              readOnly 
-              required
-            />
+         <input
+  name="createdAt"
+  value={form.createdAt}
+  onChange={this.handleChange}
+  readOnly 
+ 
+/> {form.createdAt}
           </div>
 
           <div>
