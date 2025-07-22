@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import './css/Common.css';
+import './css/ViewProcess.css';
 import { useParams, Link } from 'react-router-dom';
 
 function ViewProcessWrapper() {
@@ -74,7 +76,7 @@ class ViewProcessComponent extends React.Component {
     };
 
     render() {
-        const { process, project, reports, reflects, loading, error } = this.state;
+        const { process, reports, reflects, loading, error } = this.state;
         const { projectId } = this.props.params;
 
         if (loading) {
@@ -91,45 +93,55 @@ class ViewProcessComponent extends React.Component {
 
         return (
             <div className="view-process-container">
-                {project && <h2>プロジェクト: {project.projectName}</h2>}
-                <h3>工程名: {process.processName}</h3>
-               
-                <hr />
+                {/* プロジェクト名（h2）と工程名（h3） */}
+                <h3>{process.processName}</h3>
+                
+                <hr /> {/* ここはメインの見出しの下の区切り線 */}
 
-                <h4>日報一覧</h4>
-                {reports.length > 0 ? (
-                    <ul>
-                        {reports.map(report => (
-                            <li key={report.reportId}>
-                                <Link to={`/view-text/report/${report.reportId}`}>
-                                    {report.reportTitle} - {report.createdAt}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>日報はまだ登録されていません。</p>
-                )}
+                {/* 日報一覧と反省一覧を並べるコンテナ */}
+                <div className="content-lists-wrapper"> {/* ★新しく追加するラッパー */}
 
-                <hr />
+                    {/* --- 日報一覧セクション --- */}
+                    <div className="list-card"> {/* ★角丸の四角形にするためのラッパー */}
+                        <h4>日報一覧</h4> {/* ★h4に変更 */}
+                        {reports.length > 0 ? (
+                            <ul>
+                                {reports.map(report => (
+                                    <li key={report.reportId}>
+                                        <Link to={`/view-text/report/${report.reportId}`}>
+                                            {report.createdAt}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>日報はまだ登録されていません。</p>
+                        )}
+                    </div> {/* .list-card 閉じタグ */}
 
-                <h4>反省一覧</h4>
-                {reflects.length > 0 ? (
-                    <ul>
-                        {reflects.map(reflect => (
-                            <li key={reflect.reflectId}>
-                                <Link to={`/view-text/reflect/${reflect.reflectId}`}>
-                                    {reflect.reflectTitle} - {reflect.createdAt}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>反省はまだ登録されていません。</p>
-                )}
+                    {/* --- 反省一覧セクション --- */}
+                    <div className="list-card"> {/* ★角丸の四角形にするためのラッパー */}
+                        <h4>反省一覧</h4> {/* ★h4に変更 */}
+                        {reflects.length > 0 ? (
+                            <ul>
+                                {reflects.map(reflect => (
+                                    <li key={reflect.reflectId}>
+                                        <Link to={`/view-text/reflect/${reflect.reflectId}`}>
+                                            {reflect.createdAt}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>反省はまだ登録されていません。</p>
+                        )}
+                    </div> {/* .list-card 閉じタグ */}
 
-                <hr />
-                <Link to={`/project/${projectId}`}>前のページに戻る</Link>
+                </div> {/* .content-lists-wrapper 閉じタグ */}
+
+                {/* 「前のページに戻る」リンク */}
+                <hr className="bottom-hr" /> {/* ★下のhrにクラス名追加 */}
+                <Link to={`/project/${projectId}`} className="back-link">戻る</Link> {/* ★クラス名追加 */}
             </div>
         );
     }
