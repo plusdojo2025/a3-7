@@ -55,7 +55,7 @@ function App() {
               <Route path="bioRegist" element={<BioRegist />} />
               <Route path="equipmentEdit" element={<EquipmentEdit />} />
               <Route path="bioEdit" element={<BioEdit />} />
-              <Route path="report" element={<Report />} />
+              <Route path="report/:projectId" element={<Report />} />
               <Route path="reflect" element={<Reflect />} />
               <Route path="reportEdit/:reportId" element={<ReportEdit />} />
             </Routes>

@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import './css/Common.css';
+import './css/ViewText.css';
 import { useParams, Link } from 'react-router-dom';
 
 // useParams をクラスコンポーネントで使うためのラッパー
@@ -127,7 +129,7 @@ class ViewTextComponent extends React.Component {
                     <p>{content}</p>
                 </div>
                 <hr />
-                <Link to={-1}>前のページに戻る</Link>
+                <Link to={-1} className='back-link'>戻る</Link>
             </div>
         );
     }

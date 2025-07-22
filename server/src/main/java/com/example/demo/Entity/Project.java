@@ -23,7 +23,7 @@ public class Project {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "project_id")
 	private Integer projectId;
-	@Column(name = "project_name")
+	@Column(name = "project_name", length=100)
 	private String  projectName;
 	private Integer privacy;
 	

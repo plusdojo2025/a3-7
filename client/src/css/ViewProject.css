@@ -1,0 +1,135 @@
+/* プロジェクト詳細ページのメインコンテナ */
+.view-project-container {
+    padding: 30px;
+    background-color: #ffffff;
+    max-width: 900px;
+    margin: 30px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    position: relative;
+    min-height: 500px;
+}
+
+/* プロジェクト名 (h2) - 左上配置 */
+.view-project-container h2.left-aligned-title {
+    color: #2c3e50;
+    font-size: 2.2em;
+    margin-top: 0;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    text-align: left;
+}
+
+/* 工程一覧とプロジェクト報告書一覧を並べるコンテナ */
+.content-sections-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 30px; 
+    margin-bottom: 50px;
+    flex-wrap: wrap; 
+}
+
+/* 各セクション（工程一覧、プロジェクト報告書一覧)*/
+.section-card {
+    flex: 1;
+    min-width: 380px;
+    max-width: 48%;
+    background-color: #fcfcfc;
+    border: 1px solid #e0e0e0; 
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 各セクション見出し (h3) */
+.section-card h3 {
+    color: #34495e;
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    border-left: 5px solid #007bff;
+}
+
+/* 区切り線（ページ下部、戻るリンクの上） */
+.view-project-container hr.bottom-hr {
+    border: none;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+/* リストの共通スタイル */
+.process-list,
+.project-report-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.process-list li,
+.project-report-list li {
+    background-color: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    padding: 12px 15px;
+    transition: all 0.2s ease-in-out;
+}
+
+.process-list li:last-child,
+.project-report-list li:last-child {
+    margin-bottom: 0;
+}
+
+
+.process-list li:hover,
+.project-report-list li:hover {
+    background-color: #e9f5ff;
+    border-color: #a7d9ff;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* リスト内のリンク */
+.process-list li a,
+.project-report-list li a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    display: block;
+}
+
+.process-list li a:hover,
+.project-report-list li a:hover {
+    text-decoration: underline;
+}
+
+/* リストが空の場合のメッセージ */
+.section-card p {
+    color: #555;
+    font-style: italic;
+    padding: 10px 0;
+    text-align: center;
+}
+
+/* 「前のページに戻る」リンク - 左下配置 */
+.view-project-container .back-link {
+    display: inline-block;
+    margin-top: 0;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+}
+
+.view-project-container .back-link:hover {
+    background-color: #5a6268;
+}

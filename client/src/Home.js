@@ -89,7 +89,7 @@ export default class Home extends React.Component{
                 <h1>プロジェクト選択</h1>
                 <p>{error}</p>
                 {projects.length === 0 ? (
-                <p>プロジェクトがありません。</p>
+                <p>プロジェクトがありません</p>
                 ) : (
                 <table>
                     <tbody>

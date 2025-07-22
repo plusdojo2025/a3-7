@@ -1,7 +1,10 @@
 package com.example.demo.Controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Entity.Member;
 import com.example.demo.Entity.Project;
+import com.example.demo.Entity.ProjectReport;
 import com.example.demo.Entity.ProjectTag;
+import com.example.demo.Entity.Reflect;
 import com.example.demo.Entity.User;
 import com.example.demo.Repository.MembersRepository;
 import com.example.demo.Repository.ProcessesRepository;
@@ -24,6 +29,7 @@ import com.example.demo.Repository.ProjectsRepository;
 import com.example.demo.Repository.ReflectTagsRepository;
 import com.example.demo.Repository.ReflectsRepository;
 import com.example.demo.Repository.ReportsRepository;
+import com.example.demo.Repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -46,6 +52,8 @@ public class ProjectController {
     private ReflectTagsRepository reflectTagRepository;
     @Autowired
     private ProcessesRepository processRepository;
+    @Autowired
+    private UserRepository userRepository;
 	
     
     @GetMapping("/projects/")
@@ -110,8 +118,24 @@ public class ProjectController {
     public List<com.example.demo.Entity.Process> getProjectDtails(@PathVariable int projectId){
     	return processRepository.findByProjectId(projectId);
     }
-
     
+    //プロジェクトの詳細画面表示時の反省取得
+    @GetMapping("/getReflects/{projectId}/")
+    public List<Reflect> getReflects(@PathVariable int projectId){
+    	return reflectRepository.findByProjectId(projectId);
+    }
+    
+    //プロジェクトの終了処理
+    @PostMapping("/closeProject/{projectId}/")
+    public void closeProject(@PathVariable int projectId, @RequestBody ProjectReport projectReport) {
+    	
+    }
+    
+    //プロジェクトに工程を追加
+    @PostMapping("/addProcess/{projectId}/")
+    public void addProcess(@PathVariable int projectId, @RequestBody Process newProcess) {
+    	
+    }
     
 	// メンバー招待（承認待ちで保存）
 	@PostMapping("/members/invite")
@@ -133,10 +157,27 @@ public class ProjectController {
 		}
 	}
 	
-	// プロジェクトに承認済みのメンバーだけを取得
+	// ユーザー名付きの承認済みメンバーを取得
 	@GetMapping("/members/approved")
-	public List<Member> getApprovedMembers(Integer projectId) {
-		return membersRepository.findByProjectIdAndAttend(projectId, 1);
+	public List<Map<String, Object>> getApprovedMembers(@RequestParam Integer projectId) {
+	    List<Member> approvedMembers = membersRepository.findByProjectIdAndAttend(projectId, 1);
+	    List<Map<String, Object>> result = new ArrayList<>();
+
+	    for (Member member : approvedMembers) {
+	        Map<String, Object> map = new HashMap<>();
+	        map.put("userId", member.getUserId());
+	        map.put("projectId", member.getProjectId());
+	        map.put("authority", member.getAuthority());
+	        map.put("attend", member.getAttend());
+
+	        // Userテーブルから名前取得
+	        Optional<User> userOpt = userRepository.findById(member.getUserId());
+	        map.put("userName", userOpt.map(User::getName).orElse("不明なユーザー"));
+
+	        result.add(map);
+	    }
+
+	    return result;
 	}
 	// 承認待ちメンバーを取得（管理画面などで使用）
 	@GetMapping("/members/pending")
