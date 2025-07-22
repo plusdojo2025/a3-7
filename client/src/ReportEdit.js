@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 export default function ReportEdit() {
   const { reportId } = useParams();
-  const { projectId } = useParams();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -13,29 +12,36 @@ export default function ReportEdit() {
     processId: '',
     equipId: '',
     comment: '',
-    projectName: '',
     usageAmount: ''
   });
 
+  const [projectName, setProjectName] = useState('');
   const [equipmentList, setEquipmentList] = useState([]);
   const [error, setError] = useState('');
 
   // 初期データ取得
   useEffect(() => {
-    // 備品リスト
+    // 備品リストの取得
     axios.get('/api/equip')
       .then(res => setEquipmentList(res.data))
       .catch(() => setError('備品リストの取得に失敗しました'));
-      
-    
-   //レポートデータ
+
+    // レポート内容の取得
     if (reportId) {
       axios.get(`/api/report/${reportId}`)
-        .then(res => setForm(res.data))
+        .then(res => {
+          setForm(res.data);
+          // projectName を取得
+          const projectId = res.data.projectId;
+          if (projectId) {
+            axios.get(`/api/project/${projectId}`)
+              .then(resp => setProjectName(resp.data.projectName))
+              .catch(() => setProjectName('（取得失敗）'));
+          }
+        })
         .catch(() => setError('レポートの取得に失敗しました'));
     }
   }, [reportId]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,7 +53,7 @@ export default function ReportEdit() {
     try {
       await axios.put(`/api/report/${reportId}`, form);
       alert('更新成功！');
-      navigate(-1); // 戻る
+      navigate(-1); // 前のページに戻る
     } catch (err) {
       console.error('更新エラー', err.response || err);
       setError('更新に失敗しました');
@@ -68,7 +74,7 @@ export default function ReportEdit() {
 
         <div style={{ marginTop: 10 }}>
           <label>研修タイトル:</label><br />
-          <input name="projectName" value={form.projectName || ''} onChange={handleChange} />
+          <input name="projectName" value={projectName} readOnly />
         </div>
 
         <div style={{ marginTop: 10 }}>
@@ -83,7 +89,7 @@ export default function ReportEdit() {
 
         <div style={{ marginTop: 10 }}>
           <label>使用量:</label><br />
-          <input name="usageAmount" value={form.usageAmount || ''} onChange={handleChange} />
+          <input name="usageAmount" value={form.usageAmount} onChange={handleChange} />
         </div>
 
         <div style={{ marginTop: 10 }}>

@@ -10,9 +10,6 @@ INSERT INTO project_tags (project_tag_name) VALUES ('植物学');
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('熱帯雨林におけるハナアブの生態', 1, 1);
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病', 1, 2);
 
---プロセスリスト
-INSERT INTO processes (process_name, project_id, complete) VALUES ('ウイルスAを用いた実験', 2, 1);
-INSERT INTO processes (process_name, project_id, complete) VALUES ('ウイルスBを用いた実験', 2, 0);
 
 --メンバーリスト
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(1, 1, 3, 1);
@@ -31,12 +28,14 @@ INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, pi
 INSERT INTO units (unit) VALUES ('本'),('個'),('箱'),('kg'),('g'),('mg'),('L'),('ml');
 
 --工程
-INSERT INTO processes (project_id, process_name, complete) VALUES (1, '調査地選定と許可申請', 1); 
-INSERT INTO processes (project_id, process_name, complete) VALUES (1, 'ハナアブ捕獲と識別', 0);
+INSERT INTO processes (process_name, project_id, complete) VALUES ('調査地選定と許可申請', 1, 1); 
+INSERT INTO processes (process_name, project_id, complete) VALUES ('ハナアブ捕獲と識別', 1, 0);
+INSERT INTO processes (process_name, project_id, complete) VALUES ('ウイルスAを用いた実験', 2, 1);
+INSERT INTO processes (process_name, project_id, complete) VALUES ('ウイルスBを用いた実験', 2, 0);
 
 --報告書
-INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-03-25', '初期調査進捗報告：調査地選定が順調に進み、主要な候補地を絞り込みました。');
-INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-05-15', '中間報告：これまでに約50種のハナアブを捕獲。未識別の種も複数確認。');
+INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-03-25', '調査地選定が順調に進み、主要な候補地を絞り込みました。');
+INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-05-15', 'これまでに約50種のハナアブを捕獲。未識別の種も複数確認。');
 
 --日報
 INSERT INTO reports (process_id, project_id, created_at, comment) VALUE (1, 1, '2024-03-25', '明日からがんばる！');

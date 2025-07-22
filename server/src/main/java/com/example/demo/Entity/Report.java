@@ -27,6 +27,7 @@ public class Report {
 	private Integer projectId;
 	@Column(name = "process_id")
 	private Integer processId;
+	private Integer usageAmount;
 	private String createdAt;
 	private String comment;
 }
