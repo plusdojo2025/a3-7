@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import './css/Common.css';
+import './css/ViewProject.css';
 import { useParams, Link } from 'react-router-dom';
 
 // useParams をクラスコンポーネントで使うためのラッパー
@@ -95,46 +97,54 @@ class ViewProjectComponent extends React.Component {
         }
 
         return (
-            <div className="view-project-container">
-                <h2>{project.projectName}</h2>
+           <div className="view-project-container">
 
-                {/* --- 工程一覧 --- */}
-                <hr />
-                <h3>工程一覧</h3>
-                {processes.length > 0 ? (
-                    <ul className="process-list">
-                        {processes.map(process => (
-                            <li key={process.processId}>
-                                <Link to={`/project/${project.projectId}/processes/${process.processId}`}>
-                                    {process.processName}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>このプロジェクトには工程が登録されていません。</p>
-                )}
+    <h2 className="left-aligned-title">{project.projectName}</h2>
 
-                {/* --- プロジェクト報告書一覧 --- */}
-                <hr />
-                <h3>プロジェクト報告書</h3>
-                {projectReports.length > 0 ? (
-                    <ul className="project-report-list">
-                        {projectReports.map(report => (
-                            <li key={report.projectReportId}>
-                                <Link to={`/view-text/project-report/${report.projectReportId}`}>
-                                    {report.projectReportTitle || `プロジェクト報告書 #${report.projectReportId}`}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>このプロジェクトには報告書がありません。</p>
-                )}
+    <div className="content-sections-wrapper">
 
-                <hr />
-                <Link to={-1}>前のページに戻る</Link>
-            </div>
+        {/* --- 工程一覧 --- */}
+        <div className="section-card">
+            <h3>工程一覧</h3>
+            {processes.length > 0 ? (
+                <ul className="process-list">
+                    {processes.map(process => (
+                        <li key={process.processId}>
+                            <Link to={`/project/${project.projectId}/processes/${process.processId}`}>
+                                {process.processName}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>このプロジェクトには工程が登録されていません。</p>
+            )}
+        </div>
+
+        {/* --- プロジェクト報告書一覧 --- */}
+        <div className="section-card">
+            <h3>プロジェクト報告書</h3>
+            {projectReports.length > 0 ? (
+                <ul className="project-report-list">
+                    {projectReports.map(report => (
+                        <li key={report.projectReportId}>
+                            <Link to={`/view-text/project-report/${report.projectReportId}`}>
+                                {report.createdAt}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>このプロジェクトには報告書がありません。</p>
+            )}
+        </div>
+
+    </div>
+
+    {/* 「前のページに戻る」リンク */}
+    <hr className="bottom-hr" />
+    <Link to={-1} className="back-link">戻る</Link>
+</div>
         );
     }
 }

@@ -9,9 +9,11 @@ export default class Member extends React.Component {
     this.state = {
       email: '',
       name: '',
-      isOpen: false,
+      isInviteModalOpen: false,
+      isDeleteModal: false,
       userId: null,
       approvedMembers: [],
+      selectedMemberId: null,
     };
   }
 
@@ -55,12 +57,20 @@ export default class Member extends React.Component {
       });
   };
 
-  openModal = () => {
-    this.setState({ isOpen: true });
+  openInviteModal = () => {
+    this.setState({ isInviteModalOpen: true });
   };
 
-  closeModal = () => {
-    this.setState({ isOpen: false });
+  closeInviteModal = () => {
+    this.setState({ isInviteModalOpen: false });
+  };
+
+  openDeleteModal = (memberId) => {
+    this.setState({ isDeleteModalOpen: true, selectedMemberId: memberId});
+  };
+
+  closeDeleteModal = () => {
+    this.setState({ isDeleteModalOpen: false, selectedMemberId: null });
   };
 
   inviteUser = () => {
@@ -77,6 +87,31 @@ export default class Member extends React.Component {
         alert("招待に失敗しました。");
       });
   };
+
+  handleDeleteMember =() =>{
+    const{ selectedMemberId } =this.state;
+    if(!selectedMemberId) return;
+
+    axios.post("http://localhost:8080/api/members/cancel",{
+      userId: selectedMemberId,
+      projectId: 1
+    })
+
+    .then(()=>{
+      alert("メンバーを削除しました");
+      this.setState((prevState) =>({
+        approvedMembers: prevState.approvedMembers.filter(
+          (m) =>m.userId !== selectedMemberId
+        ),
+        isDeleteModalOpen: false,
+        selectedMemberId: null
+      }));
+    })
+    .catch((err) =>{
+      console.error("削除に失敗しました:",err);
+      alert("削除に失敗しました。");
+    });
+  }
 
   render() {
     return (
@@ -106,11 +141,11 @@ export default class Member extends React.Component {
               {this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
                 <button onClick={this.openModal}>招待メール送信</button>
               )}
-              {this.state.isOpen && (
+              {this.state.isInviteModalOpen && (
                 <div className="modal-overlay">
                   <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <h2>この方をプロジェクトに招待しますか？</h2>
-                    <button onClick={this.closeModal}>いいえ</button>
+                    <button onClick={this.closeInviteModal}>いいえ</button>
                     <input
                       className="sub_botun"
                       type="button"
@@ -144,11 +179,26 @@ export default class Member extends React.Component {
                   <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 1} /></td>
                   <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 2} /></td>
                   <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 3} /></td>
-                  <td><input type="button" value="削除" /></td>
+                  <td><button onClick={()=>this.openDeleteModal(member.userId)}>削除</button></td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {this.state.isDeleteModalOpen && (
+                <div className="modal-overlay">
+                  <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <h2>この方をメンバーから削除しますか</h2>
+                    <input
+                      className="sub_botun"
+                      type="button"
+                      name="submit"
+                      value="はい"
+                      onClick={this.handleDeleteMember}
+                    />
+                    <button onClick={this.closeDeleteModal}>いいえ</button>
+                  </div>
+                </div>
+              )}
           <input type="button" name="update" value="更新" />
         </div>
       </>
