@@ -46,19 +46,19 @@ public class EquipRegistController {
         double remaining = Double.parseDouble(remainingStr);
         int unit = Integer.parseInt(unitStr);
 
-        // 1. 備品を登録
+        //備品を登録
         Equipment equipment = new Equipment();
         equipment.setEquipName(equipName);
         Equipment savedEquipment = equipmentRepository.save(equipment);
 
-        // 2. 詳細を登録
+        //詳細を登録
         EquipDetail detail = new EquipDetail();
         detail.setLimited(java.sql.Date.valueOf(limited));
         detail.setRemaining(remaining);
         detail.setUnit(unit);
         detail.setStorage(storage);
         detail.setRemarks(remarks);
-        detail.setJudge(null); // フォームで送ってないから null を入れておく
+        detail.setJudge(null); 
 
         if (picture != null && !picture.isEmpty()) {
             detail.setPicture(picture.getBytes());
