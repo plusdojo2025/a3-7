@@ -243,21 +243,21 @@ export default class Project extends React.Component{
                 {showCloseProjectModal && (
                 <div id="overlayCloseProject" className="modal-overlay">
                     <div id="contentCloseProject" className="modal-content">
-                    <h2>報告書登録</h2>
-                    <div className="inputContainer">
-                        <label>日時</label>
-                        <input type="date" name="date" value={this.state.date} onChange={this.onInput} />
-                    </div>
-                    <div className="inputContainer">
-                        <label>コメント</label>
-                        <input type="text" name="report" onChange={this.onInput} />
-                    </div>
-                    <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
-                    <div className="buttonContainer">
-                        <button onClick={() => this.closeProject(1)}>はい</button>
-                        <button onClick={() => this.closeProject(0)}>いいえ</button>
-                        <button onClick={this.toggleCloseProjectModal}>キャンセル</button>
-                    </div>
+                        <h2>報告書登録</h2>
+                        <div className="inputContainer">
+                            <label>日時</label>
+                            <input type="date" name="date" value={this.state.date} onChange={this.onInput} />
+                        </div>
+                        <div className="inputContainer">
+                            <label>コメント</label>
+                            <input type="text" name="report" onChange={this.onInput} />
+                        </div>
+                        <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
+                        <div className="buttonContainer">
+                            <button onClick={() => this.closeProject(1)}>はい</button>
+                            <button onClick={() => this.closeProject(0)}>いいえ</button>
+                            <button onClick={this.toggleCloseProjectModal}>キャンセル</button>
+                        </div>
                     </div>
                 </div>
                 )}
@@ -266,15 +266,15 @@ export default class Project extends React.Component{
                 {showAddProcessModal && (
                 <div id="overlayAddProcess" className="modal-overlay">
                     <div id="contentAddProcess" className="modal-content">
-                    <h2>工程の追加</h2>
-                    <div className="inputContainer">
-                        <label>工程名</label>
-                        <input type="text" name="addName" value={this.state.addName} onChange={this.onInput} />
-                    </div>
-                    <div className="buttonContainer">
-                        <button onClick={this.toggleAddProcessModal}>戻る</button>
-                        <button onClick={() => this.addProcess()}>登録</button>
-                    </div>
+                        <h2>工程の追加</h2>
+                        <div className="inputContainer">
+                            <label>工程名</label>
+                            <input type="text" name="addName" value={this.state.addName} onChange={this.onInput} />
+                        </div>
+                        <div className="buttonContainer">
+                            <button onClick={this.toggleAddProcessModal}>戻る</button>
+                            <button onClick={() => this.addProcess()}>登録</button>
+                        </div>
                     </div>
                 </div>
                 )}
