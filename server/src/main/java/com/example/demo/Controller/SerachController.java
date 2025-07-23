@@ -36,18 +36,22 @@ public class SerachController {
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "tagId", required = false) Integer tagId) {
 
-
+    	//検索条件ロジック
+    	//１．titleとtagId両方
         if (title != null && !title.isEmpty() && tagId != null) {
             return projectsRepository.findByProjectNameContainingIgnoreCaseAndProjectTagId(title, tagId);
-        } else if (tagId != null) {
+        } 
+        //２．tagIdのみが指定
+        else if (tagId != null) {
             return projectsRepository.findByProjectTagId(tagId);
-        } else if (title != null && !title.isEmpty()) {
+        } 
+        //３．titleのみが指定
+        else if (title != null && !title.isEmpty()) {
             return projectsRepository.findByProjectNameContainingIgnoreCase(title);
-        } else {
-            return List.of(); // 条件がないときは空リスト
+        } 
+        //４．どちらもなし（空リスト）
+        else {
+            return List.of(); 
         }
     }
-	
-	//プロジェクト詳細取得
-
 }

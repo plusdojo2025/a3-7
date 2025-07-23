@@ -56,7 +56,7 @@ public class ViewProjectController {
 	public List<Process> getProcessesByProjectId(@PathVariable Integer projectId) {
 	    return processesRepository.findByProjectId(projectId); 
 	}
-	 // 単一の工程詳細取得 (ViewProcess.jsで利用)
+	 // 単一の工程詳細取得
     @GetMapping("/processes/{processId}")
     public ResponseEntity<Process> getProcessById(@PathVariable Integer processId) {
         return processesRepository.findById(processId)
@@ -64,7 +64,7 @@ public class ViewProjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 単一のプロジェクト報告書取得 (ViewText.jsで利用)
+    // 単一のプロジェクト報告書取得
     @GetMapping("/project-reports/{projectReportId}")
     public ResponseEntity<ProjectReport> getProjectReportById(@PathVariable Integer projectReportId) {
         return projectReportRepository.findById(projectReportId)
@@ -72,7 +72,7 @@ public class ViewProjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 単一の日報取得 (ViewText.jsで利用)
+    // 単一の日報取得
     @GetMapping("/reports/{reportId}")
     public ResponseEntity<Report> getReportById(@PathVariable Integer reportId) {
         return reportRepository.findById(reportId)
@@ -80,7 +80,7 @@ public class ViewProjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 単一の反省取得 (ViewText.jsで利用)
+    // 単一の反省取得
     @GetMapping("/reflects/{reflectId}")
     public ResponseEntity<Reflect> getReflectById(@PathVariable Integer reflectId) {
         return reflectsRepository.findById(reflectId)

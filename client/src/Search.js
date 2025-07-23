@@ -14,13 +14,13 @@ class SearchComponent extends React.Component {
     constructor(props) {
         super(props); 
         this.state = {
-            title: "",          // 検索入力フォームのプロジェクト名
-            tagId: "",          // 検索入力フォームのタグID
-            tags: [],           // 取得したタグ一覧
-            projects: [],       // 検索結果のプロジェクト一覧
-            loading: false,     // APIリクエスト中かどうかのフラグ
-            error: null,        // エラーメッセージ
-            searchPerformed: false, // 検索が一度でも実行されたかどうかのフラグ
+            title: "",         
+            tags: [],
+            tagId: "",           
+            projects: [],       
+            loading: false,     
+            error: null,        
+            searchPerformed: false, 
         };
     }
 
@@ -43,6 +43,14 @@ class SearchComponent extends React.Component {
         const { name, value } = e.target;
         console.log(`Input changed: name=${name}, value=${value}`);
         this.setState({ [name]: value });
+    }
+
+    //Enterキー押下で検索処理を呼び出す
+    handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            this.searchProjects();
+        }
     }
 
     // プロジェクト検索ボタンがクリックされた時の処理
@@ -101,6 +109,7 @@ class SearchComponent extends React.Component {
                 name="title"
                 value={title}
                 onChange={this.onInput}
+                onKeyDown={this.handleKeyDown}
                 placeholder="プロジェクト名を入力"
             />
         </div>

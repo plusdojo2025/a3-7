@@ -52,6 +52,7 @@ export default function BioRegist() {
       formData.append('age', ageNum);
       formData.append('projectProcess', projectProcessNum);
       formData.append('note', form.note);
+      formData.append('projectId', 1); //とりあえず1にしとく
 
       await axios.post('/api/biology/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }

@@ -3,11 +3,133 @@
     padding: 30px;
 }
 
+/*親コンテナ*/
+.container {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin: 20px;
+    padding: 0px, 20px;
+}
+/*ボタンコンテナ*/
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 30px;
+}
+
+.closeButton{
+    margin: 10px;
+    background-color: red;
+    width: 100%;
+    padding: 10px 10px;
+    border-radius: 15px;
+}
+
+.button {
+    margin: 10px;
+    width: 70%;
+    padding: 10px 10px;
+    border-radius: 15px;
+}
+
+.Progress{
+    text-align: center;
+    background-color: #fff;
+    padding: 10px 10px;
+    border-radius: 15px;
+    width: 30%;
+}
+
+.Closed{
+    text-align: center;
+    background-color: #fff;
+    padding: 10px 10px;
+    border-radius: 15px;
+    width: 30%;
+}
+
+.process_name{
+    background-color: #006600;
+    padding: 10px 10px;
+    border-radius: 15px;
+}
+
+.showAlert{
+    background-color: #009900;
+    padding: 10px 10px;
+    border-radius: 15px;
+}
+
+/* モーダル背景 (オーバーレイ) */
+.modal-overlay {
+  display: none; /* 最初は非表示 */
+  position: fixed; /* 固定位置 */
+  z-index: 1; /* 他の要素より前に表示 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.7); /* グレーの半透明背景 */
+  display: flex; /* フレックスボックスで中央揃え */
+  align-items: center; /* 縦方向に中央揃え */
+  justify-content: center; /* 横方向に中央揃え */
+}
+
+/* モーダルのコンテンツ (中身) */
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 15px; /* 丸角の設定 */
+  width: 80%;
+  max-width: 500px; /* 最大幅 */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 少し影をつける */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 入力フォーム */
+.inputContainer {
+  margin: 10px 0;
+  width: 100%;
+  text-align: left;
+}
+
+.inputContainer label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.inputContainer input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 10px; /* 丸角 */
+  box-sizing: border-box; /* パディングが幅に影響しないように */
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+/* モーダルを開いた時に表示する */
+.modal-overlay {
+  display: flex; /* フレックスボックスで中央に配置 */
+}
+
 /* タイトルのスタイル */
-.project-title {
+.projectTitle {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
+    text-align: left;
 }
 
 /* プロジェクト一覧のテーブルスタイル */

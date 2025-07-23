@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
+import './css/reflect.css';
 
 function ReflectWrapper() {
   const { projectId, processId } = useParams(); 
@@ -74,27 +74,27 @@ class Reflect extends React.Component {
     const { reflectList, form, error } = this.state;
 
     return (
-      <div className="reflection-form">
+      <div >
         <h2>反省登録</h2>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <div className="reflection-form">
+          {error && <p style={{ color: "red" }}>{error}</p>}
         <form onSubmit={this.handleSubmit}>
           <input type="hidden" name="projectId" value={form.projectId} />
           <input type="hidden" name="processId" value={form.processId} />
 
           <div>
-            <label>日付：</label><br />
-            <input
+            <label>日付：<input
               type="date"
               name="createdAt"
               value={form.createdAt}
               onChange={this.handleChange}
               required
-            />
+            /></label><br />
+            
           </div>
 
           <div>
-            <label>タグの選択：</label><br />
-            <select
+            <label>タグの選択： <select
               name="reflectTagId"
               value={form.reflectTagId}
               onChange={this.handleChange}
@@ -106,16 +106,17 @@ class Reflect extends React.Component {
                   {tag.reflectName}
                 </option>
               ))}
-            </select>
+            </select></label><br />
+           
           </div>
 
           <div>
-            <label>コメント：</label><br />
-            <textarea
+            <label>コメント：<textarea
               name="comment"
               value={form.comment}
               onChange={this.handleChange}
-            />
+            /></label><br />
+            
           </div>
 
           <div style={{ marginTop: "10px" }}>
@@ -125,6 +126,7 @@ class Reflect extends React.Component {
             <button type="submit">登録</button>
           </div>
         </form>
+        </div>
       </div>
     );
   }

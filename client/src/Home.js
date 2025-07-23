@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import './css/Home.css';
 
 export default class Home extends React.Component{
 
@@ -23,6 +24,7 @@ export default class Home extends React.Component{
             .catch(error => {
                 console.error("データ取得エラー:", error);
             });
+
         axios.get("/api/projectTags/")
             .then(json => {
                 console.log(json);
@@ -33,10 +35,17 @@ export default class Home extends React.Component{
             .catch(error => {
                 console.error("データ取得エラー:", error);
             });
+
+        this.setState({
+            addName:"",
+            addProjectTagId:0,
+            showModal:false,
+            error:""
+        });  
     }
 
     //プロジェクトの詳細ページに遷移するための関数
-    lookPloject(projectId) {
+    lookProject(projectId) {
         //window.alert("ここにプロジェクトid="+projectId+"に対しての画面遷移を実装");
         window.location.href = `/project?id=${projectId}`;
     }
@@ -89,23 +98,23 @@ export default class Home extends React.Component{
                 <h1>プロジェクト選択</h1>
                 <p>{error}</p>
                 {projects.length === 0 ? (
-                <p>プロジェクトがありません</p>
+                    <p>プロジェクトがありません</p>
                 ) : (
-                <table>
-                    <tbody>
-                    {projects.map((project, index) =>
-                        <tr key={index} className="projects">
-                            <td className="project_id" onClick={() =>this.lookPloject(project.projectId)}>
-                                {project.projectId}</td>
-                            <td className="project_name" onClick={()=> this.lookPloject(project.projectId)}>
-                                {project.projectName}</td>
-                        </tr>
-                    )}
-                    </tbody>
-                </table>
+                    <div className="project-container">
+                        {projects.map((project, index) => (
+                            <div key={index} className="project-box">
+                                <div className="project-info" onClick={() => this.lookProject(project.projectId)}>
+                                    <h3>{project.projectName}</h3>
+                                    <p>{project.complete === 0 ? "進行中" : "完了済"}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 )}
-
-                <button onClick={this.toggleModal}>プロジェクト新規作成</button>
+                
+                <div className="home-button-container">
+                    <button onClick={this.toggleModal}>プロジェクト新規作成</button>
+                </div>
 
                 {/* モーダルウィンドウ(編集) */}
                 {showModal &&

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Entity.Member;
+import com.example.demo.Entity.Process;
 import com.example.demo.Entity.Project;
 import com.example.demo.Entity.ProjectReport;
 import com.example.demo.Entity.ProjectTag;
@@ -24,6 +25,7 @@ import com.example.demo.Entity.Reflect;
 import com.example.demo.Entity.User;
 import com.example.demo.Repository.MembersRepository;
 import com.example.demo.Repository.ProcessesRepository;
+import com.example.demo.Repository.ProjectReportRepository;
 import com.example.demo.Repository.ProjectTagsRepository;
 import com.example.demo.Repository.ProjectsRepository;
 import com.example.demo.Repository.ReflectTagsRepository;
@@ -40,6 +42,8 @@ public class ProjectController {
 	
 	@Autowired
     private ProjectsRepository projectsRepository;
+	@Autowired
+	private ProjectReportRepository projectReportRepository;
 	@Autowired
 	private ProjectTagsRepository projectTagsRepository;
 	@Autowired
@@ -113,6 +117,14 @@ public class ProjectController {
     	return projectTagsRepository.findAll();
     }
     
+    //プロジェクトのパラメータを取得
+    @GetMapping("/project/{projectId}/")
+    public Project getProjectData(@PathVariable int projectId) {
+    	System.out.println("done");
+    	return projectsRepository.findByProjectId(projectId);
+    }
+    
+    
     //プロジェクトの詳細画面表示
     @GetMapping("/projectDetails/{projectId}/")
     public List<com.example.demo.Entity.Process> getProjectDtails(@PathVariable int projectId){
@@ -125,18 +137,41 @@ public class ProjectController {
     	return reflectRepository.findByProjectId(projectId);
     }
     
-    //プロジェクトの終了処理
-    @PostMapping("/closeProject/{projectId}/")
-    public void closeProject(@PathVariable int projectId, @RequestBody ProjectReport projectReport) {
-    	
+    //プロジェクトの終了報告書を追加し公開状態にする
+    @PostMapping("/closePublicProject/{projectId}/")
+    public void closeProject(@PathVariable int projectId, @RequestBody ProjectReport newProjectReport) {
+    	projectReportRepository.save(newProjectReport);
+    	Project project = projectsRepository.findByProjectId(projectId);
+    	project.setComplete(1);
+    	project.setPrivacy(1);
+    	projectsRepository.save(project);
+    	return;
     }
+    
+    //プロジェクトの終了報告書を追加し非公開状態にする
+    @PostMapping("/closeUnpublishProject/{projectId}/")
+    public void updateProject(@PathVariable int projectId, @RequestBody ProjectReport newProjectReport) {
+    	projectReportRepository.save(newProjectReport);
+    	Project project = projectsRepository.findByProjectId(projectId);
+    	project.setComplete(1);
+    	project.setPrivacy(0);
+    	projectsRepository.save(project);
+    	}
+    
     
     //プロジェクトに工程を追加
     @PostMapping("/addProcess/{projectId}/")
     public void addProcess(@PathVariable int projectId, @RequestBody Process newProcess) {
-    	
+    	processRepository.save(newProcess);
+    	return;
     }
     
+    //IDを使ってプロセスの情報を取得
+    @GetMapping("/process/{processId}/")
+    public Process getProcess(@PathVariable int processId) {
+    	return processRepository.findByProcessId(processId);
+    }
+   
 	// メンバー招待（承認待ちで保存）
 	@PostMapping("/members/invite")
 	public Member inviteMember(@RequestBody Member member) {
