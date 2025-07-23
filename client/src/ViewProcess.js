@@ -101,12 +101,14 @@ class ViewProcessComponent extends React.Component {
         <>
             {/* --- 工程名（タイトル） --- */}
             <h2 className="process-title">{process.processName}</h2> 
+            
 
             <div className="content-lists-wrapper">
 
                 {/* --- 日報一覧セクション --- */}
                 <div className="list-card section-card">
                     <h3>日報</h3>
+                 <div className="scrollable-list-content">
                     {reports.length > 0 ? (
                         <ul className="report-list">
                             {reports.map(report => (
@@ -120,11 +122,13 @@ class ViewProcessComponent extends React.Component {
                     ) : (
                         <p>日報はまだ登録されていません。</p>
                     )}
+                 </div>
                 </div>
 
                 {/* --- 反省一覧セクション --- */}
                 <div className="list-card section-card">
                     <h3>反省</h3>
+                 <div className="scrollable-list-content">
                     {reflects.length > 0 ? (
                         <ul className="reflect-list">
                             {reflects.map(reflect => (
@@ -139,6 +143,7 @@ class ViewProcessComponent extends React.Component {
                     ) : (
                         <p>反省はまだ登録されていません。</p>
                     )}
+                 </div>
                 </div>
 
             </div>

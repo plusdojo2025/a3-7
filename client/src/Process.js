@@ -1,33 +1,48 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const WeeklyWorkflow = () => {
-  const { project, projectId, processId } = useParams(); 
+  const { project, projectId, processId } = useParams();
+  const [processName, setProcessName] = useState("");
+  const navigate = useNavigate();
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [weekDates, setWeekDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [reportDetail, setReportDetail] = useState(null);
-
+useEffect(() => {
+  if (processId) {
+    axios.get(`/api/processes/${processId}`)
+      .then((res) => {
+        setProcessName(res.data.name); // assuming response has a `name` field
+      })
+      .catch(() => {
+        setProcessName("（不明な工程）");
+      });
+  }
+}, [processId]);
   useEffect(() => {
     generateWeek(currentDate);
   }, [currentDate]);
 
   useEffect(() => {
     if (selectedDate) {
-      const dateStr = selectedDate.toISOString().split("T")[0];
-      axios.get(`/api/weekly-reports?date=${dateStr}`).then((res) => {
-        setReportDetail(res.data);
-      }).catch(() => {
-        setReportDetail(null);
-      });
+      const dateStr = selectedDate.toLocaleDateString("sv-SE"); // YYYY-MM-DD
+      axios
+        .get(`/api/weekly-reports?date=${dateStr}`)
+        .then((res) => {
+          setReportDetail(res.data);
+        })
+        .catch(() => {
+          setReportDetail(null);
+        });
     }
   }, [selectedDate]);
 
   const generateWeek = (date) => {
     const start = new Date(date);
-    start.setDate(start.getDate() - start.getDay() + 1);
+    start.setDate(start.getDate() - start.getDay() + 1); // Monday start
     const newWeek = [...Array(7)].map((_, i) => {
       const d = new Date(start);
       d.setDate(d.getDate() + i);
@@ -44,30 +59,30 @@ const WeeklyWorkflow = () => {
   };
 
   const handleConfirm = () => {
-    if (window.confirm("工程を完了してもよろしいですか？")) {
-      window.location.href = "/project-management";
-    } else {
-      window.location.href = "/process";
-    }
+    const confirmed = window.confirm("工程を完了してもよろしいですか？");
+    navigate(confirmed ? "/project" : "/process");
+  };
+
+  const handleReportCreate = () => {
+    navigate(`/report/${project}/project/${projectId}/process/${processId}`);
+  };
+
+  const handleEdit = () => {
+    const dateStr = selectedDate.toLocaleDateString("sv-SE");
+    navigate(`/edit-report?date=${dateStr}`);
   };
 
   return (
     <div>
-      <h2>工程進捗管理</h2>
+      <h2 name="processName">{processName}</h2>
 
       <div>
-        <button
-          onClick={() =>
-            window.location.href = `/report/${project}/${projectId}/process/${processId}`
-          }
-        >
-          日報作成
-        </button>
-        <button onClick={() => window.location.href = "/reflect"}>反省作成</button>
+        <button onClick={handleReportCreate}>日報作成</button>
+        <button onClick={() => navigate("/reflect")}>反省作成</button>
         <button onClick={handleConfirm}>工程を完了</button>
       </div>
 
-      <div>
+      <div style={{ marginTop: "20px" }}>
         <button onClick={() => handleArrow("prev")}>←</button>
         {weekDates.map((date) => (
           <button
@@ -95,13 +110,7 @@ const WeeklyWorkflow = () => {
               <div>
                 <p><strong>日報:</strong> {reportDetail.report}</p>
                 <p><strong>反省:</strong> {reportDetail.reflection}</p>
-                <button
-                  onClick={() =>
-                    window.location.href = `/edit-report?date=${selectedDate.toISOString().split("T")[0]}`
-                  }
-                >
-                  編集
-                </button>
+                <button onClick={handleEdit}>編集</button>
               </div>
             ) : (
               <p>登録された日報がありません</p>

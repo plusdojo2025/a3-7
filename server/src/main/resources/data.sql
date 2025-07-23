@@ -5,6 +5,17 @@ INSERT INTO users (email, password, name) VALUES ('ex@exam.com', 'pass1234', '�
 --タグリスト
 INSERT INTO project_tags (project_tag_name) VALUES ('昆虫学');
 INSERT INTO project_tags (project_tag_name) VALUES ('植物学');
+INSERT INTO project_tags (project_tag_name) VALUES ('動物生命科学');
+INSERT INTO project_tags (project_tag_name) VALUES ('実験動物学');
+INSERT INTO project_tags (project_tag_name) VALUES ('分子生物学');
+INSERT INTO project_tags (project_tag_name) VALUES ('構造生物化学');
+INSERT INTO project_tags (project_tag_name) VALUES ('機能生物化学');
+INSERT INTO project_tags (project_tag_name) VALUES ('生物物理学');
+INSERT INTO project_tags (project_tag_name) VALUES ('ゲノム生物学');
+INSERT INTO project_tags (project_tag_name) VALUES ('システムゲノム科学');
+INSERT INTO project_tags (project_tag_name) VALUES ('細胞生物学');
+INSERT INTO project_tags (project_tag_name) VALUES ('発生生物学');
+INSERT INTO project_tags (project_tag_name) VALUES ('植物分子学');
 
 --プロジェクトリスト
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('熱帯雨林におけるハナアブの生態', 1, 1);
@@ -57,6 +68,12 @@ INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, commen
 INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2024-03-27', 1, '寝坊した。');
 --反省タグ
 INSERT INTO reflect_tags (reflect_name) VALUE ('災害');
+INSERT INTO reflect_tags (reflect_name) VALUE ('報連相');
+INSERT INTO reflect_tags (reflect_name) VALUE ('ケアレスミス');
+INSERT INTO reflect_tags (reflect_name) VALUE ('確認漏れ');
+INSERT INTO reflect_tags (reflect_name) VALUE ('ヒヤリハット');
+INSERT INTO reflect_tags (reflect_name) VALUE ('準備不足');
+INSERT INTO reflect_tags (reflect_name) VALUE ('思い込み');
 
 /*
 INSERT INTO equipments (

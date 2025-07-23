@@ -146,6 +146,7 @@ class SearchComponent extends React.Component {
                 )}
 
                 {!loading && !error && projects.length > 0 && (
+                   <div className="scrollable-results-content"> 
                     <div className="projectListBody">
                         <table>
                             <tbody>
@@ -161,6 +162,7 @@ class SearchComponent extends React.Component {
                             </tbody>
                         </table>
                     </div>
+                   </div> 
                 )}
             </div>
         </>

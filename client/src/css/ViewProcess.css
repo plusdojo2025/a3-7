@@ -16,6 +16,12 @@ body {
     word-wrap: break-word;
 }
 
+/* 各リストカード内のスクロール可能コンテンツ */
+.scrollable-list-content {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
 /* --- コンテンツリストのラッパー（日報と反省を横並びにするため） --- */
 .content-lists-wrapper {
     display: flex;

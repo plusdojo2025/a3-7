@@ -8,11 +8,15 @@ import com.example.demo.Entity.Project;
 
 public interface ProjectsRepository extends JpaRepository<Project, Integer>{
 	
-	List<Project> findByProjectNameContainingIgnoreCase(String name);
+	    //プロジェクト名で検索し、かつ privacyが１ (公開) のプロジェクト
+		List<Project> findByProjectNameContainingIgnoreCaseAndPrivacy(String name, Integer privacy);
 
-	List<Project> findByProjectNameContainingIgnoreCaseAndProjectTagId(String name, Integer tagId);
-	List<Project> findByProjectTagId(Integer tagId);
+	    //プロジェクト名とタグID両方で検索し、かつ privacyが１ (公開) のプロジェクト
+		List<Project> findByProjectNameContainingIgnoreCaseAndProjectTagIdAndPrivacy(String name, Integer tagId, Integer privacy);
+	    
+	    //タグIDで検索し、かつ privacyが１ (公開) のプロジェクト
+		List<Project> findByProjectTagIdAndPrivacy(Integer tagId, Integer privacy);
 
-	Project findByProjectId(Integer projectId);
+		Project findByProjectId(Integer projectId);
 
 }
