@@ -6,27 +6,43 @@ import axios from "axios";
 export default class Member extends React.Component {
   constructor(props) {
     super(props);
+    this.projectId = 1;
+
     this.state = {
       email: '',
       name: '',
       isInviteModalOpen: false,
-      isDeleteModal: false,
+      isDeleteModalOpen: false,
       userId: null,
       approvedMembers: [],
       selectedMemberId: null,
       currentUserId: null,
       currentUserAuthority: null,
+      updatedAuthorities: {},
     };
   }
 
   componentDidMount() {
-    const projectId = 1;
-    axios.get(`http://localhost:8080/api/members/approved?projectId=${projectId}`, { withCredentials: true })
+    axios.get("http://localhost:8080/getCurrentUser", { withCredentials: true })
       .then((res) => {
-        this.setState({ approvedMembers: res.data });
+        const userId = res.data.userId;
+        this.setState({ currentUserId: userId });
+
+        return axios.get(`http://localhost:8080/api/members/approved?projectId=${this.projectId}`, {
+          withCredentials: true
+        });
+      })
+      .then((res) => {
+        const approvedMembers = res.data;
+        const currentMember = approvedMembers.find(m => m.userId === this.state.currentUserId);
+
+        this.setState({
+          approvedMembers,
+          currentUserAuthority: currentMember ? currentMember.authority : null,
+        });
       })
       .catch((err) => {
-        console.error("承認メンバーの取得に失敗:", err);
+        console.error("初期データの取得に失敗:", err);
       });
   }
 
@@ -36,7 +52,6 @@ export default class Member extends React.Component {
 
   handleSearch = () => {
     const email = this.state.email.trim();
-
     if (!email) {
       this.setState({ name: 'メールアドレスを入力してください' });
       return;
@@ -47,7 +62,7 @@ export default class Member extends React.Component {
         if (res.data) {
           this.setState({
             name: res.data.name,
-            userId: res.data.userId
+            userId: res.data.userId,
           });
         } else {
           this.setState({ name: "該当するユーザーが見つかりません。" });
@@ -59,13 +74,8 @@ export default class Member extends React.Component {
       });
   };
 
-  openInviteModal = () => {
-    this.setState({ isInviteModalOpen: true });
-  };
-
-  closeInviteModal = () => {
-    this.setState({ isInviteModalOpen: false });
-  };
+  openInviteModal = () => this.setState({ isInviteModalOpen: true });
+  closeInviteModal = () => this.setState({ isInviteModalOpen: false });
 
   openDeleteModal = (memberId) => {
     this.setState({ isDeleteModalOpen: true, selectedMemberId: memberId });
@@ -78,11 +88,11 @@ export default class Member extends React.Component {
   inviteUser = () => {
     axios.post("http://localhost:8080/api/members/invite", {
       userId: this.state.userId,
-      projectId: 1
+      projectId: this.projectId
     })
       .then(() => {
         alert("招待を送信しました");
-        this.setState({ isOpen: false });
+        this.setState({ isInviteModalOpen: false });
       })
       .catch((err) => {
         console.error("招待の送信に失敗", err);
@@ -96,9 +106,8 @@ export default class Member extends React.Component {
 
     axios.post("http://localhost:8080/api/members/cancel", {
       userId: selectedMemberId,
-      projectId: 1
+      projectId: this.projectId
     })
-
       .then(() => {
         alert("メンバーを削除しました");
         this.setState((prevState) => ({
@@ -113,36 +122,60 @@ export default class Member extends React.Component {
         console.error("削除に失敗しました:", err);
         alert("削除に失敗しました。");
       });
-  }
+  };
 
-  componentDidMount() {
-    axios.get("http://localhost:8080/getCurrentUser", { withCredentials: true })
-      .then((res) => {
-        const userId = res.data.userId;
-        this.setState({ currentUserId: userId});
+  handleAuthorityChange = (userId, authority) => {
+    this.setState((prevState) => ({
+      updatedAuthorities: {
+        ...prevState.updatedAuthorities,
+        [userId]: authority,
+      },
+    }));
+  };
 
-        axios.get(`http://localhost:8080/api/members/approved?projectId=1`, { withCredentials: true })
-          .then((res) => {
-            const approvedMembers = res.data;
-            const currentMenber = approvedMembers.find(m => m.userId === userId);
-            this.setState({
-              approvedMembers,
-              currentUserAuthority: currentMenber ? currentMenber.authority : null,
-            });
-          });
+  handleUpdateAuthorities = () => {
+    const updates = Object.entries(this.state.updatedAuthorities);
+    if (updates.length === 0) {
+      alert("変更された権限はありません。");
+      return;
+    }
+
+    Promise.all(
+      updates.map(([userId, authority]) =>
+        axios.post("http://localhost:8080/api/members/updateAuthority", {
+          userId: Number(userId),
+          projectId: this.projectId,
+          authority: Number(authority),
+        })
+      )
+    )
+      .then(() => {
+        return axios.get(`http://localhost:8080/api/members/approved?projectId=${this.projectId}`, {
+          withCredentials: true,
+        });
       })
-      .catch((err) => console.error("ユーザー情報の取得に失敗:", err))
-  }
+      .then((res) => {
+        this.setState({
+          approvedMembers: res.data,
+          updatedAuthorities: {},
+        });
+        alert("権限を更新しました");
+      })
+      .catch((err) => {
+        console.error("権限更新エラー", err);
+        alert("更新に失敗しました。");
+      });
+  };
 
   render() {
     return (
       <>
         <h1>プロジェクトメンバー編集</h1>
+
         {this.state.currentUserAuthority === 3 && (
           <div className="input-wrapper">
             <input
               type="text"
-              id="mail"
               name="mail"
               value={this.state.email}
               onChange={this.handleChange}
@@ -151,7 +184,6 @@ export default class Member extends React.Component {
             <input
               className="sub_botun"
               type="button"
-              name="submit"
               value="検索"
               onClick={this.handleSearch}
             />
@@ -159,8 +191,8 @@ export default class Member extends React.Component {
             <div className="welcome-container">
               <div className="result">
                 <p className="user-name-display">一致した名前：{this.state.name}</p>
-                {this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
-                  <button onClick={this.openModal}>招待メール送信</button>
+                {this.state.userId && this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
+                  <button onClick={this.openInviteModal}>招待メール送信</button>
                 )}
                 {this.state.isInviteModalOpen && (
                   <div className="modal-overlay">
@@ -170,7 +202,6 @@ export default class Member extends React.Component {
                       <input
                         className="sub_botun"
                         type="button"
-                        name="submit"
                         value="はい"
                         onClick={this.inviteUser}
                       />
@@ -198,31 +229,52 @@ export default class Member extends React.Component {
               {this.state.approvedMembers.map((member, index) => (
                 <tr key={index}>
                   <td>{member.userName || `ユーザーID: ${member.userId}`}</td>
-                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 1} disabled={this.state.currentUserAuthority !== 3} /></td>
-                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 2} disabled={this.state.currentUserAuthority !== 3} /></td>
-                  <td><input type="radio" name={`authority-${index}`} defaultChecked={member.authority === 3} disabled={this.state.currentUserAuthority !== 3} /></td>
-                  <td><button onClick={() => this.openDeleteModal(member.userId)} disabled={this.state.currentUserAuthority !== 3}>削除</button></td>
+                  {[1, 2, 3].map((auth) => (
+                    <td key={auth}>
+                      <label>
+                        <input
+                          type="radio"
+                          name={`authority-${index}`}
+                          checked={(this.state.updatedAuthorities[member.userId] ?? member.authority) === auth}
+                          onChange={() => this.handleAuthorityChange(member.userId, auth)}
+                          disabled={this.state.currentUserAuthority !== 3}
+                        />
+                        {auth === 1 ? "閲覧" : auth === 2 ? "編集" : "管理"}
+                      </label>
+                    </td>
+                  ))}
+                  <td>
+                    <button
+                      onClick={() => this.openDeleteModal(member.userId)}
+                      disabled={this.state.currentUserAuthority !== 3}
+                    >
+                      削除
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
           {this.state.isDeleteModalOpen && (
-            <div className="modal-overlay">
+            <div className="modal-overlay" onClick={this.closeDeleteModal}>
               <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <h2>この方をメンバーから削除しますか</h2>
+                <h2>このメンバーをプロジェクトから削除してもよろしいですか？</h2>
+                <button onClick={this.closeDeleteModal}>いいえ</button>
                 <input
                   className="sub_botun"
                   type="button"
-                  name="submit"
                   value="はい"
                   onClick={this.handleDeleteMember}
                 />
-                <button onClick={this.closeDeleteModal}>いいえ</button>
               </div>
             </div>
           )}
+
           {this.state.currentUserAuthority === 3 && (
-            <input type="button" name="update" value="更新" />
+            <button className="sub_botun" onClick={this.handleUpdateAuthorities}>
+              権限を保存
+            </button>
           )}
         </div>
       </>
