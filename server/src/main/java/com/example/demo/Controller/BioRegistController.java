@@ -56,7 +56,7 @@ public class BioRegistController {
             //equipmentsにも登録
             Equipment equipment = new Equipment();
             equipment.setEquipName(name);
-            equipment.setEquipKindId(1); //生物だから1、備品は0
+            equipment.setEquipId(1); //生物だから1、備品は0
             equipment.setEquipDetailId(savedBio.getBiologyDetailId());
             equipment.setProjectId(projectId);
 
