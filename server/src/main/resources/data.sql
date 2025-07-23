@@ -8,12 +8,27 @@ INSERT INTO project_tags (project_tag_name) VALUES ('植物学');
 
 --プロジェクトリスト
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('熱帯雨林におけるハナアブの生態', 1, 1);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病1', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病2', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病3', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病4', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病5', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病6', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病7', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病8', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病9', 1, 2);
 
 --メンバーリスト
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(1, 1, 3, 1);
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(2, 2, 2, 1);
-
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(3, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(4, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(5, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(6, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(7, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(8, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(9, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(10, 2, 2, 1);
 --備品種類
 INSERT INTO equip_kinds (equip_kind_name) VALUES ('道具');
 
