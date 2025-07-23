@@ -79,16 +79,26 @@ export default class SignUp extends React.Component{
                     <h2>新規登録</h2>
                     <p>{error}</p>
                     <p>メールアドレス</p>
-                    <input type="text" name="email" onChange={this.onInput} value={email}/>
+                    <div className="inputBox">
+                        <input type="text" name="email" onChange={this.onInput} value={email}/>
+                    </div>
                     <p>氏名</p>
-                    <input type="text" name="name" onChange={this.onInput} value={name}/>
+                    <div className="inputBox">
+                        <input type="text" name="name" onChange={this.onInput} value={name}/>
+                    </div>
                     <p>会社コード</p>
-                    <input type="text" name="companyCode" onChange={this.onInput} value={companyCode}/>
+                    <div className="inputBox">
+                        <input type="text" name="companyCode" onChange={this.onInput} value={companyCode}/>
+                    </div>
                     <p>パスワード</p>
-                    <input type="password" name="password" onChange={this.onInput} value={password}/>
+                    <div className="inputBox">
+                        <input type="password" name="password" onChange={this.onInput} value={password}/>
+                    </div>
                     <p>確認用パスワード</p>
-                    <input type="password" name="check" onChange={this.onInput} value={check}/><br />
-                    <button type="submit">登録</button>
+                    <div className="inputBox">
+                        <input type="password" name="check" onChange={this.onInput} value={check}/><br />
+                    </div>
+                    <button type="submit" className="Button">登録</button>
                 </form>
             </div>
         )

@@ -1,11 +1,13 @@
 package com.example.demo.Controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,6 +25,7 @@ import com.example.demo.Entity.Project;
 import com.example.demo.Entity.ProjectReport;
 import com.example.demo.Entity.ProjectTag;
 import com.example.demo.Entity.Reflect;
+import com.example.demo.Entity.ReflectTag;
 import com.example.demo.Entity.User;
 import com.example.demo.Repository.MembersRepository;
 import com.example.demo.Repository.ProcessesRepository;
@@ -59,6 +62,8 @@ public class ProjectController {
     private ProcessesRepository processRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ReflectTagsRepository reflectTagsRepository;
 	
     
     @GetMapping("/projects/")
@@ -126,6 +131,11 @@ public class ProjectController {
     	return projectTagsRepository.findAll();
     }
     
+    //reflectTag
+    @GetMapping("/reflectTags/")
+    public List<ReflectTag> getRefrectTags(){
+		return reflectTagsRepository.findAll();
+    }
     //プロジェクトのパラメータを取得
     @GetMapping("/project/{projectId}/")
     public Project getProjectData(@PathVariable int projectId) {
@@ -173,6 +183,34 @@ public class ProjectController {
     public void addProcess(@PathVariable int projectId, @RequestBody Process newProcess) {
     	processRepository.save(newProcess);
     	return;
+    }
+    
+    //プロジェクト画面で反省の情報を一部表示
+    @GetMapping("/reflectSummary/{projectId}/")
+    public List<Reflect> getReflectSummary(@PathVariable int projectId){
+    	List<Reflect> allList = reflectRepository.findByProjectId(projectId);
+    	
+    	if (allList.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // reflectTagIdごとに件数をカウント
+        Map<Integer, Long> countMap = allList.stream()
+            .collect(Collectors.groupingBy(Reflect::getReflectTagId, Collectors.counting()));
+
+        // 件数が最大のreflectTagIdを取得
+        long maxCount = Collections.max(countMap.values());
+        List<Integer> maxTagIds = countMap.entrySet().stream()
+            .filter(entry -> entry.getValue() == maxCount)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+
+        // 最大数のreflectTagIdに一致するReflectだけ抽出
+        List<Reflect> result = allList.stream()
+            .filter(reflect -> maxTagIds.contains(reflect.getReflectTagId()))
+            .collect(Collectors.toList());
+
+        return result;
     }
     
     //IDを使ってプロセスの情報を取得

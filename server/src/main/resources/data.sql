@@ -52,7 +52,9 @@ INSERT INTO reports (process_id, project_id, created_at, comment) VALUE (1, 1, '
 
 --反省
 INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 1, '2024-03-25', 1, '寝坊した。');
-
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2024-03-25', 1, '寝坊した。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2024-03-26', 2, 'よくわからなかった。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2024-03-27', 1, '寝坊した。');
 --反省タグ
 INSERT INTO reflect_tags (reflect_name) VALUE ('災害');
 
