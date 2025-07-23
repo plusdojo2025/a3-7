@@ -41,7 +41,7 @@ function App() {
             <Routes>
               <Route path="home" element={<Home />} />
               <Route path="project" element={<Project />} />
-              <Route path="process" element={<Process />} />
+              <Route path="process/:processId" element={<Process />} />
               <Route path="member" element={<Member />} />
               <Route path="mypage" element={<Mypage />} />
               <Route path="mypage/edit" element={<MyPageEdit />} />

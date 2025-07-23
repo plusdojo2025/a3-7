@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +30,6 @@ public class Report {
 	@Column(name = "process_id")
 	private Integer processId;
 	private Integer usageAmount;
-	private String createdAt;
+	private LocalDate createdAt;
 	private String comment;
 }
