@@ -1,0 +1,78 @@
+/* 全体のフォームコンテナ */
+
+/* タイトル */
+.reflection-form h2 {
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+/* 各フォーム項目のラベルと入力 */
+.reflection-form label {
+  
+  font-size: 14px;
+   
+}
+
+/* 日付とセレクトボックス、テキストエリア */
+.reflection-form input[type="date"],
+.reflection-form select,
+.reflection-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-top: 2px;
+
+}
+
+/* テキストエリアは大きくする */
+.reflection-form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* ボタン配置 */
+.reflection-form div:last-child {
+  
+    display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* 戻るボタン */
+.reflection-form button[type="button"] {
+  width: 120px;
+  padding: 10px;
+  background-color: #999;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 登録ボタン */
+.reflection-form button[type="submit"] {
+  width: 120px;
+  padding: 10px;
+  background-color: #b8f1b0;
+  color: #000;
+  border: 2px solid #6b9a6e;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 登録ボタンのホバー時 */
+.reflection-form button[type="submit"]:hover {
+  background-color: #a2e09c;
+}
+
+/* 戻るボタンのホバー時 */
+.reflection-form button[type="button"]:hover {
+  background-color: #777;
+}
