@@ -9,7 +9,6 @@ function ViewTextWrapper() {
     const params = useParams();
     return <ViewTextComponent params={params} />;
 }
-
 class ViewTextComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -22,10 +21,12 @@ class ViewTextComponent extends React.Component {
         };
     }
 
+    // マウント直後
     componentDidMount() {
         this.fetchTextDetails();
     }
 
+    // 更新後
     componentDidUpdate(prevProps) {
         if (this.props.params.type !== prevProps.params.type ||
             this.props.params.id !== prevProps.params.id) {
@@ -33,7 +34,9 @@ class ViewTextComponent extends React.Component {
         }
     }
 
+    // テキスト詳細データ取得（非同期）
     fetchTextDetails = async () => {
+        // propsからURLパラメータのtypeとidを抽出
         const { type, id } = this.props.params;
 
         console.log(`ViewTextComponent: Fetching details for Type: ${type}, ID: ${id}`);
@@ -59,23 +62,33 @@ class ViewTextComponent extends React.Component {
         let currentTitleFieldName = '';
         let currentContentFieldName = '';
 
+
+        // URLパラメータのtypeに基づいて、APIエンドポイントと表示フィールドを決定
+        // 仮に登録日をタイトルとしている
         switch (type) {
+
+            // プロジェクト報告書
             case 'project-report':
                 apiUrl = `/api/projects/project-reports/${id}`;
                 currentTitleFieldName = 'createdAt';
                 currentContentFieldName = 'report';
                 break;
+
+            // 日報
             case 'report':
                 apiUrl = `/api/projects/reports/${id}`;
                 currentTitleFieldName = 'createdAt';
                 currentContentFieldName = 'comment';
                 break;
+
+            // 反省
             case 'reflect':
                 apiUrl = `/api/projects/reflects/${id}`;
                 currentTitleFieldName = 'createdAt';
                 currentContentFieldName = 'comment';
                 break;
             default:
+                // 未知エラー
                 this.setState({
                     error: "不正なテキストタイプです。",
                     loading: false,
@@ -84,6 +97,7 @@ class ViewTextComponent extends React.Component {
         }
 
         try {
+            // 決定したapiUrlでGETリクエスト
             const res = await axios.get(apiUrl);
             console.log(`API Response - ${type} (ID: ${id}):`, res.data);
 
@@ -119,7 +133,9 @@ class ViewTextComponent extends React.Component {
             return <div className="not-found">指定された情報が見つかりませんでした。</div>;
         }
 
-        const title = textData[titleFieldName] || textData.title || `タイトルなし (タイプ: ${type}, ID: ${id})`;
+
+        // 取得したtextDataからタイトル（登録日）とコンテンツの取得
+        const title = textData[titleFieldName] || textData.title || `タイトルなし`;
         const content = textData[contentFieldName] || textData.content || '内容なし';
 
         return (
