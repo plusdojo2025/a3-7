@@ -55,9 +55,9 @@ function App() {
               <Route path="bioRegist" element={<BioRegist />} />
               <Route path="equipmentEdit" element={<EquipmentEdit />} />
               <Route path="bioEdit" element={<BioEdit />} />
-              <Route path="report/:projectId/:processId" element={<Report />} />
-              <Route path="reflect/:projectId/:processId" element={<Reflect />} />
-              <Route path="reportEdit/:reportId/:projectId/:processId" element={<ReportEdit />} />
+              <Route path="report/:project/:projectId/process/:processId" element={<Report />} />
+              <Route path="reflect/:project/:projectId/process/:processId" element={<Reflect />} />
+              <Route path="reportEdit/:reportId/:project/:projectId/:process/:processId" element={<ReportEdit />} />
             </Routes>
           </Common>
         } />

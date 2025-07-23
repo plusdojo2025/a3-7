@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import './css/report.css';
 
 export default function Report() {
-  const { projectId, processId } = useParams(); 
+  const { projectId, processId } = useParams();
 
   const [form, setForm] = useState({
     createdAt: "",
@@ -17,7 +18,6 @@ export default function Report() {
   const [equipmentList, setEquipmentList] = useState([]);
   const [error, setError] = useState("");
 
- 
   useEffect(() => {
     if (projectId) {
       axios.get(`/api/project/${projectId}`)
@@ -29,7 +29,6 @@ export default function Report() {
     }
   }, [projectId]);
 
-  // Fetch equipment list
   useEffect(() => {
     axios.get("/api/equip")
       .then(res => setEquipmentList(res.data))
@@ -39,7 +38,6 @@ export default function Report() {
       });
   }, []);
 
-   
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({
@@ -48,7 +46,6 @@ export default function Report() {
     }));
   };
 
-  // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -79,74 +76,73 @@ export default function Report() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto" }}>
-      <h2>日報登録</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+     
+    <div >
+     <h2>日報登録</h2>
+     <div className="report-container">
+      {error && <p className="error-text">{error}</p>}
 
       <form onSubmit={handleSubmit}>
         <input type="hidden" name="projectId" value={projectId} />
         <input type="hidden" name="processId" value={form.processId} />
 
-        <div>
-          日付:
-          <input
+        <div className="form-group">
+          <label>日付:<input
             type="date"
             name="createdAt"
             value={form.createdAt}
             onChange={handleChange}
             required
-          />
+          /></label>
         </div>
 
-        <div style={{ marginTop: 10 }}>
-          研修タイトル:
-          <input
-            type="text"
-            value={projectName}
-            readOnly
-          />
+        <div className="form-group">
+          <label>研修タイトル: <input type="text" value={projectName} readOnly /></label>
+         
         </div>
 
-        <div style={{ marginTop: 10 }}>
-          備品名:
-          <select name="equipId" value={form.equipId} onChange={handleChange} required>
+        <div className="form-group">
+          <label>備品名:<select name="equipId" value={form.equipId} onChange={handleChange} required>
             <option value="">選択してください</option>
             {equipmentList.map(equip => (
               <option key={equip.equipId} value={equip.equipId}>
                 {equip.equipName}
               </option>
             ))}
-          </select>
+          </select></label>
+          
         </div>
 
-        <div style={{ marginTop: 10 }}>
-          使用量:
-          <input
+        <div className="form-group">
+          <label>使用量:<input
             type="text"
             name="usageAmount"
             value={form.usageAmount}
             onChange={handleChange}
-          />
+          /></label>
+          
         </div>
 
-        <div style={{ marginTop: 10 }}>
-          コメント:
-          <textarea
+        <div className="form-group">
+          <label>コメント:    <textarea
             name="comment"
             value={form.comment}
             onChange={handleChange}
-          />
+          /></label>
+          
         </div>
 
-        <div style={{ marginTop: 20 }}>
-          <button type="button" onClick={() => window.history.back()}>
+        <div className="button-group">
+          <button type="button" className="back-button" onClick={() => window.history.back()}>
             戻る
           </button>
-          <button type="submit" style={{ marginLeft: 10 }}>
+          <button type="submit" className="submit-button">
             登録
           </button>
         </div>
       </form>
+     </div>
+      
     </div>
   );
 }
