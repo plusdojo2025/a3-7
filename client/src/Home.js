@@ -33,6 +33,13 @@ export default class Home extends React.Component{
             .catch(error => {
                 console.error("データ取得エラー:", error);
             });
+
+        this.setState({
+            addName:"",
+            addProjectTagId:0,
+            showModal:false,
+            error:""
+        });  
     }
 
     //プロジェクトの詳細ページに遷移するための関数
