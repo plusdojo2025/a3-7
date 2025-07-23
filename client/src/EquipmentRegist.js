@@ -23,7 +23,8 @@ export default function EquipmentRegist() {
     storage: '',
     judge: '',
     remarks: '',
-    
+    equipKindId: '0',  //備品:0、生物:1（初期値0）
+    projectId: '1',     //ここ保留
   });
   const [image, setImage] = useState(null);
   const [error, setError] = useState('');
@@ -58,6 +59,7 @@ export default function EquipmentRegist() {
     if (image) {
       formData.append('picture', image);
     }
+    
 
     try {
       const res = await axios.post(

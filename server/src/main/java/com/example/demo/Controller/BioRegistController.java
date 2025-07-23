@@ -12,14 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.Entity.BiologyDetail;
+import com.example.demo.Entity.Equipment;
 import com.example.demo.Repository.BiologyDetailsRepository;
+import com.example.demo.Repository.EquipmentsRepository;
 
 @RestController
 @RequestMapping("/api/biology/")
 public class BioRegistController {
 
     @Autowired
-    private BiologyDetailsRepository biologyDetailsRepository;
+    private EquipmentsRepository EquipmentsRepository;
+    @Autowired
+    private BiologyDetailsRepository BiologyDetailsRepository;
+
 
     @PostMapping("/")
     public ResponseEntity<?> registerBiology(
@@ -29,6 +34,7 @@ public class BioRegistController {
             @RequestParam("age") Integer age,
             @RequestParam("projectProcess") Integer projectProcess,
             @RequestParam("note") String note,
+            @RequestParam("projectId") Integer projectId,
             @RequestParam(value = "image", required = false) MultipartFile image
     ) {
         try {
@@ -37,15 +43,25 @@ public class BioRegistController {
             bio.setName(name);
             bio.setGender(gender);
             bio.setAge(age);
-            bio.setProcessId(projectProcess); 
+            bio.setProcessId(projectProcess);
             bio.setRemarks(note);
-            bio.setEquipId(1);
 
             if (image != null && !image.isEmpty()) {
                 bio.setPicture(image.getBytes());
             }
 
-            biologyDetailsRepository.save(bio);
+            //生物詳細を保存
+            BiologyDetail savedBio = BiologyDetailsRepository.save(bio);
+
+            //equipmentsにも登録
+            Equipment equipment = new Equipment();
+            equipment.setEquipName(name);
+            equipment.setEquipKindId(1); //生物だから1、備品は0
+            equipment.setEquipDetailId(savedBio.getBiologyDetailId());
+            equipment.setProjectId(projectId);
+
+            EquipmentsRepository.save(equipment);
+
             return ResponseEntity.ok("登録完了！");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("画像の読み込みに失敗しました");
@@ -53,5 +69,6 @@ public class BioRegistController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("登録に失敗しました");
         }
     }
+           
     
 }
