@@ -83,10 +83,9 @@ export default class Project extends React.Component{
         });
     }  
 
-    //プロジェクトの詳細ページに遷移するための関数
+    //プロセスの詳細ページに遷移するための関数
     lookProcess(processId) {
-        window.alert("ここにプロセスid="+processId+"に対しての画面遷移を実装");
-        //window.location.href = `/project?id=${projectId}`;
+        window.location.href = `/process?id=${processId}`;
     }
 
     //モーダルウィンドウの表示切り替え

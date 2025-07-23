@@ -23,9 +23,8 @@
     align-items: center;
     padding: 10px;
     margin: 10px;
-    aspect-ratio: 1;  /* 正方形にする */
-    width: 130px;
-    height: 130px;  
+    width: 150px;
+    height: 150px;  
     overflow: hidden;  /* 内容がボックスからはみ出さないようにする */
 }
 
