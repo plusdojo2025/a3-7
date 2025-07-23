@@ -99,57 +99,58 @@ class ViewProjectComponent extends React.Component {
         }
 
         // ココから表示内容
-        return (
-           <div className="view-project-container">
+         return (
+        <>
+            {/* --- プロジェクト名（タイトル） --- */}
+            <h2 className="project-title">{project.projectName}</h2>
+            <div className="content-sections-wrapper">
 
-    <h2 className="left-aligned-title">{project.projectName}</h2>
+                {/* --- 工程一覧 --- */}
+                <div className="section-card process-section">
+                    <h3>工程一覧</h3>
+                    {processes.length > 0 ? (
+                        <ul className="process-list">
+                            {processes.map(process => (
+                                <li key={process.processId}>
+                                    <Link to={`/project/${project.projectId}/processes/${process.processId}`}>
+                                        {process.processName}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>このプロジェクトには工程が登録されていません。</p>
+                    )}
+                </div>
 
-    <div className="content-sections-wrapper">
+                {/* --- プロジェクト報告書一覧 --- */}
+                <div className="section-card report-section">
+                    <h3>プロジェクト報告書</h3>
+                    {projectReports.length > 0 ? (
+                        <ul className="project-report-list">
+                            {projectReports.map(report => (
+                                <li key={report.projectReportId}>
+                                    <Link to={`/view-text/project-report/${report.projectReportId}`}>
+                                        {/* 日付形式の調整が必要であればここで */}
+                                        {new Date(report.createdAt).toLocaleDateString()}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>このプロジェクトには報告書がありません。</p>
+                    )}
+                </div>
 
-        {/* --- 工程一覧 --- */}
-        <div className="section-card">
-            <h3>工程一覧</h3>
-            {processes.length > 0 ? (
-                <ul className="process-list">
-                    {processes.map(process => (
-                        <li key={process.processId}>
-                            <Link to={`/project/${project.projectId}/processes/${process.processId}`}>
-                                {process.processName}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>このプロジェクトには工程が登録されていません。</p>
-            )}
-        </div>
+            </div>
 
-        {/* --- プロジェクト報告書一覧 --- */}
-        <div className="section-card">
-            <h3>プロジェクト報告書</h3>
-            {projectReports.length > 0 ? (
-                <ul className="project-report-list">
-                    {projectReports.map(report => (
-                        <li key={report.projectReportId}>
-                            <Link to={`/view-text/project-report/${report.projectReportId}`}>
-                                {report.createdAt}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>このプロジェクトには報告書がありません。</p>
-            )}
-        </div>
-
-    </div>
-
-    {/* 「前のページに戻る」リンク */}
-    <hr className="bottom-hr" />
-    <Link to={-1} className="back-link">戻る</Link>
-</div>
-        );
-    }
+            {/* --- 「前のページに戻る」リンク --- */}
+            <div className="back-link-container"> 
+                <Link to={-1} className="back-link">戻る</Link>
+            </div>
+        </>
+    );
+}
 }
 
 export default ViewProjectWrapper;

@@ -97,58 +97,59 @@ class ViewProcessComponent extends React.Component {
         }
 
         // ココから表示内容
-        return (
-            <div className="view-process-container">
-                <h3>{process.processName}</h3>
-                
-                <hr />
+       return (
+        <>
+            {/* --- 工程名（タイトル） --- */}
+            <h2 className="process-title">{process.processName}</h2> 
 
-                {/* 日報一覧と反省一覧を並べるコンテナ */}
-                <div className="content-lists-wrapper">
+            <div className="content-lists-wrapper">
 
-                    {/* --- 日報一覧セクション --- */}
-                    <div className="list-card">
-                        <h4>日報一覧</h4>
-                        {reports.length > 0 ? (
-                            <ul>
-                                {reports.map(report => (
-                                    <li key={report.reportId}>
-                                        <Link to={`/view-text/report/${report.reportId}`}>
-                                            {report.createdAt}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>日報はまだ登録されていません。</p>
-                        )}
-                    </div>
-
-                    <div className="list-card">
-                        <h4>反省一覧</h4>
-                        {reflects.length > 0 ? (
-                            <ul>
-                                {reflects.map(reflect => (
-                                    <li key={reflect.reflectId}>
-                                        <Link to={`/view-text/reflect/${reflect.reflectId}`}>
-                                            {reflect.createdAt}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>反省はまだ登録されていません。</p>
-                        )}
-                    </div>
-
+                {/* --- 日報一覧セクション --- */}
+                <div className="list-card section-card">
+                    <h3>日報</h3>
+                    {reports.length > 0 ? (
+                        <ul className="report-list">
+                            {reports.map(report => (
+                                <li key={report.reportId}>
+                                    <Link to={`/view-text/report/${report.reportId}`}>
+                                        {new Date(report.createdAt).toLocaleDateString()}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>日報はまだ登録されていません。</p>
+                    )}
                 </div>
 
-                {/* 「前のページに戻る」リンク */}
-                <hr className="bottom-hr" />
-                <Link to={`/project/${projectId}`} className="back-link">戻る</Link>
+                {/* --- 反省一覧セクション --- */}
+                <div className="list-card section-card">
+                    <h3>反省</h3>
+                    {reflects.length > 0 ? (
+                        <ul className="reflect-list">
+                            {reflects.map(reflect => (
+                                <li key={reflect.reflectId}>
+                                    <Link to={`/view-text/reflect/${reflect.reflectId}`}>
+                                        {/* 日付形式の調整が必要であればここで */}
+                                        {new Date(reflect.createdAt).toLocaleDateString()}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>反省はまだ登録されていません。</p>
+                    )}
+                </div>
+
             </div>
-        );
-    }
+
+            {/* --- 「前のページに戻る」リンク --- */}
+            <div className="back-link-container">
+                <Link to={projectId ? `/project/${projectId}` : -1} className="back-link">戻る</Link>
+            </div>
+        </>
+    );
+}    
 }
 
 export default ViewProcessWrapper;
