@@ -22,17 +22,19 @@ class ViewProjectComponent extends React.Component {
         };
     }
 
+    // マウント直後
     componentDidMount() {
         this.fetchProjectDetails();
     }
 
+    // 更新後
     componentDidUpdate(prevProps) {
-        // projectId が変更された場合にのみデータを再取得
         if (this.props.params.projectId !== prevProps.params.projectId) {
             this.fetchProjectDetails();
         }
     }
 
+    // プロジェクト詳細（工程、報告書）を取得（非同期）
     fetchProjectDetails = async () => {
         const { projectId } = this.props.params; 
 
@@ -96,6 +98,7 @@ class ViewProjectComponent extends React.Component {
             return <div className="not-found">プロジェクトが見つかりませんでした。</div>;
         }
 
+        // ココから表示内容
         return (
            <div className="view-project-container">
 
