@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,10 @@ public class ProjectController {
         	myProjects.add(myProject);
         }
         
+
+        // completeで昇順にソート
+        myProjects.sort(Comparator.comparingInt(Project::getComplete));
+        
         return myProjects;
     
     }
@@ -96,6 +101,10 @@ public class ProjectController {
     	    throw new IllegalStateException("ユーザー情報が確認できませんでした");
     	}
     	
+    	// 新しいプロジェクトに complete = 0 をセット
+        if (newProject.getComplete() == null) {
+            newProject.setComplete(0);
+        }
     	System.out.println(newProject); 
     	System.out.println(userId); 
     	Project addedProject = projectsRepository.save(newProject);
@@ -182,14 +191,18 @@ public class ProjectController {
 	// メンバー承認
 	@PostMapping("/members/approve")
 	public String approveMember(@RequestBody Member member) {
-		Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
-		if (m != null) {
-			m.setAttend(1); // 承認済み
-			membersRepository.save(m);
-			return "参加承認しました";
-		} else {
-			return "該当メンバーが見つかりません";
-		}
+	    System.out.println("📩 承認リクエスト: userId=" + member.getUserId() + ", projectId=" + member.getProjectId());
+	    
+	    Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
+	    
+	    if (m != null) {
+	        m.setAttend(1); // 承認済み
+	        membersRepository.save(m);
+	        return "参加承認しました";
+	    } else {
+	        System.err.println("❌ 該当メンバーが見つかりません");
+	        throw new IllegalStateException("該当メンバーが見つかりません"); // または 404を返す処理に変更
+	    }
 	}
 	
 	// ユーザー名付きの承認済みメンバーを取得
@@ -234,4 +247,40 @@ public class ProjectController {
 	        return "該当メンバーが見つかりません";
 	    }
 	}
+	
+	@PostMapping("/members/updateAuthority")
+	public String updateMemberAuthority(@RequestBody Map<String, Object> payload, HttpSession session) {
+	    System.out.println("🔧 受信したpayload: " + payload);
+
+	    Object obj = session.getAttribute("user");
+	    if (!(obj instanceof User)) {
+	        return "ログイン情報が見つかりません";
+	    }
+
+	    Integer userId = (Integer) payload.get("userId");
+	    Integer projectId = (Integer) payload.get("projectId");
+	    Integer authority = (Integer) payload.get("authority");
+
+	    System.out.println("🔍 更新対象 userId=" + userId + ", projectId=" + projectId + ", authority=" + authority);
+
+	    User currentUser = (User) obj;
+	    Member operator = membersRepository.findByUserIdAndProjectId(currentUser.getUserId(), projectId);
+
+	    if (operator == null || operator.getAuthority() != 3) {
+	        System.out.println("⚠️ 操作者の権限が不正");
+	        return "権限がありません";
+	    }
+
+	    Member target = membersRepository.findByUserIdAndProjectId(userId, projectId);
+	    if (target != null && target.getAttend() == 1) {
+	        System.out.println("✅ 権限を更新する対象メンバー: memberId=" + target.getMemberId());
+	        target.setAuthority(authority);
+	        membersRepository.save(target);
+	        return "権限を更新しました";
+	    } else {
+	        System.out.println("❌ 対象メンバーが null または未承認: " + target);
+	        return "対象メンバーが見つかりません、または未承認です";
+	    }
+	}
+
 }

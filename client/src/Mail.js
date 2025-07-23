@@ -3,9 +3,9 @@ import axios from "axios";
 import "./css/Mail.css";
 
 export default class Mail extends React.Component {
-  
 
-  constructor(props){
+
+  constructor(props) {
     super(props);
     this.state = {
       pendingInvites: [], // { memberId, projectId … }
@@ -13,7 +13,7 @@ export default class Mail extends React.Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     axios.get("http://localhost:8080/checkLogin/", { withCredentials: true })
       .then(() => {
         return axios.get("http://localhost:8080/users/", { withCredentials: true });
@@ -39,31 +39,37 @@ export default class Mail extends React.Component {
   }
 
   handleApprove = (member) => {
-    axios.post("http://localhost:8080/api/members/approve",
-      { userId: this.state.userId, projectId: member.projectId },
-      { withCredentials: true }
-    )
-    .then(res => {
-      console.log("承認成功:", res.data);
-      this.setState(prev => ({
-        pendingInvites: prev.pendingInvites.filter(m => m.memberId !== member.memberId)
-      }));
-    })
-    .catch(err => console.error("承認エラー", err));
-  };
+  console.log("✅ 承認対象メンバー情報:", member);
+  console.log("✅ ログインユーザーID:", this.state.userId);
+
+  axios.post("http://localhost:8080/api/members/approve", {
+    userId: this.state.userId,
+    projectId: member.projectId
+  }, { withCredentials: true })
+  .then(res => {
+    console.log("✔️ 承認成功:", res.data);
+    this.setState(prev => ({
+      pendingInvites: prev.pendingInvites.filter(m => m.memberId !== member.memberId)
+    }));
+  })
+  .catch(err => {
+    console.error("❌ 承認エラー", err);
+  });
+};
+
 
   handleCancel = (member) => {
     axios.post("http://localhost:8080/api/members/cancel",
       { userId: this.state.userId, projectId: member.projectId },
       { withCredentials: true }
     )
-    .then(res => {
-      console.log("キャンセル成功:", res.data);
-      this.setState(prev => ({
-        pendingInvites: prev.pendingInvites.filter(m => m.memberId !== member.memberId)
-      }));
-    })
-    .catch(err => console.error("キャンセルエラー", err));
+      .then(res => {
+        console.log("キャンセル成功:", res.data);
+        this.setState(prev => ({
+          pendingInvites: prev.pendingInvites.filter(m => m.memberId !== member.memberId)
+        }));
+      })
+      .catch(err => console.error("キャンセルエラー", err));
   };
 
   render() {

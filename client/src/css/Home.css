@@ -1,36 +1,49 @@
 .Home {
     display: flex;
     flex-direction: column;
-    height: 100vh;  /* 画面全体の高さ */
+    background-color: #f8f8f8;
 }
 
 .project-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);  /* 横に3つ並べる */
     gap: 20px;
-    height: 400px;  /* 高さを画面の4割に設定 */
+    height: 400px;
     overflow-y: auto;  /* 縦スクロール */
-    
+    place-items: center;  /* グリッドのアイテムを縦横中央に配置 */
+    margin: 0 auto;  /* 横方向に中央配置 */
+    width: 80%;  /* 幅を指定して中央に寄せる */
+    max-width: 1200px;  /* 最大幅を設定して大きくなりすぎないように */
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
 }
 
 .project-box {
     background-color: #f0f0f0;
+    border-color: #000;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 10px;
     margin: 10px;
-    width: 150px;
+    width: 200px;
     height: 150px;  
     overflow: hidden;  /* 内容がボックスからはみ出さないようにする */
+    text-align: center; /* ボックス内のテキストを中央に配置 */
+}
+
+/* ホバー */
+.project-box:hover {
+    background-color: #e0e0e0;  /* 背景色を少し暗く */
+    transform: scale(1.05);  /* ボックスを少し大きく */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);  /* 影を強調 */
 }
 
 .project-info {
     margin-bottom: 10px;
-    text-align: center;
 }
 
 /* ボタンスタイル */
@@ -45,4 +58,18 @@ button {
     display: flex;
     justify-content: center;  /* ボタンを中央に配置 */
     margin-top: 20px;  /* ボタンとコンテンツの間隔 */
+}
+
+/* スクロールバーのデザイン */
+.project-container::-webkit-scrollbar {
+    width: 8px; /* 横スクロールバーの幅 */
+}
+
+.project-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.project-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
 }

@@ -118,23 +118,28 @@ export default class Home extends React.Component{
 
                 {/* モーダルウィンドウ(編集) */}
                 {showModal &&
-                    <div id="overlay">
-                        <div id="content">
+                    <div id="overlay" className="modal-overlay">
+                        <div id="content" className="modal-content">
                             <h2>プロジェクトの追加</h2>
-                            プロジェクトタグ：
-                            <select name="addProjectTagId" 
-                                value={this.state.addProjectTagId} onChange={this.onInput}>
-                                <option value="">------</option>
-                                {this.state.projectTags.map((tag, index)=> 
-                                    <option key={index} value={tag.projectTagId}>
-                                    {tag.projectTagName}
-                                    </option>
-                                )}
-                            </select><br />
-                            プロジェクト名：<input type="text" name="addName" value={this.state.addName} onChange={this.onInput} /><br />
-                            
-                            <button onClick={this.toggleModal}>戻る</button>
-                            <button onClick={() => this.saveProject()}>登録</button>
+                            <div className="tagContainer">
+                                プロジェクトタグ：
+                                <select name="addProjectTagId" 
+                                    value={this.state.addProjectTagId} onChange={this.onInput}>
+                                    <option value="">------</option>
+                                    {this.state.projectTags.map((tag, index)=> 
+                                        <option key={index} value={tag.projectTagId}>
+                                        {tag.projectTagName}
+                                        </option>
+                                    )}
+                                </select><br />
+                            </div>
+                            <div className="inputContainer">
+                                プロジェクト名：<input type="text" name="addName" value={this.state.addName} onChange={this.onInput} /><br />
+                            </div>
+                            <div className="buttonContainer">
+                                <button onClick={this.toggleModal}>戻る</button>
+                                <button onClick={() => this.saveProject()}>登録</button>
+                            </div>
                         </div>
                     </div>
                 }

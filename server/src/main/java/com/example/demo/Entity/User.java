@@ -26,3 +26,4 @@ public class User {
     private Integer companyCode;
     private String name;
 }
+
