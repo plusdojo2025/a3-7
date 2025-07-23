@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,10 @@ public class ProjectController {
         	myProjects.add(myProject);
         }
         
+
+        // completeで昇順にソート
+        myProjects.sort(Comparator.comparingInt(Project::getComplete));
+        
         return myProjects;
     
     }
@@ -96,6 +101,10 @@ public class ProjectController {
     	    throw new IllegalStateException("ユーザー情報が確認できませんでした");
     	}
     	
+    	// 新しいプロジェクトに complete = 0 をセット
+        if (newProject.getComplete() == null) {
+            newProject.setComplete(0);
+        }
     	System.out.println(newProject); 
     	System.out.println(userId); 
     	Project addedProject = projectsRepository.save(newProject);
