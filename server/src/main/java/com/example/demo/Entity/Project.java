@@ -36,4 +36,5 @@ public class Project {
 	
 	@Column(columnDefinition = "int default 0")
 	private Integer complete;
+
 }

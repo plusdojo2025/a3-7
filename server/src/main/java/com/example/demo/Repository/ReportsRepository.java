@@ -10,4 +10,6 @@ public interface ReportsRepository extends JpaRepository<Report, Integer> {
 	
 	List<Report> findByProcessId(Integer processId);
 
+//	 Optional<Report> findByDate(LocalDate createdAt);
+
 }

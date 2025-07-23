@@ -227,15 +227,17 @@ export default class Project extends React.Component{
                         )}
                     </div>
                     <div className="buttons">
-                        <button className="closeButton" onClick={this.toggleCloseProjectModal}>プロジェクトを終了する</button>
+                        <button className="closeButton" onClick={this.toggleCloseProjectModal} disabled={project.complete === 1}>プロジェクトを終了する</button>
                         <button className="button" onClick={this.editMembers}>メンバー編集</button>
                         <button className="button" onClick={this.manageEquipment}>備品管理</button>
-                        <button className="button" onClick={this.toggleAddProcessModal}>工程追加</button>
+                        <button className="button" onClick={this.toggleAddProcessModal} disabled={project.complete === 1}>工程追加</button>
                     </div>
                 </div>
-                <div className="showAlert">
-                    {/*アラート部分の画面表示*/}
-                    <p>ここに反省を表示</p>
+                <div className="alertBox">
+                    <div className="showAlert">
+                        {/*アラート部分の画面表示*/}
+                        <p>ここに反省を表示</p>
+                    </div>
                 </div>
 
                 {/* プロジェクト終了用モーダル */}

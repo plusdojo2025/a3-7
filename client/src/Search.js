@@ -97,76 +97,77 @@ class SearchComponent extends React.Component {
     render() {
         const { title, tagId, tags, projects, loading, error, searchPerformed } = this.state;
 
-        return (
-            <div className="searchMain">
-    <div className="search-controls-area"> 
-        {/* プロジェクト名入力のグループ */}
-        <div className="search-input-group"> 
-            <label htmlFor="project-name-input"></label>
-            <input
-                type="text"
-                id="project-name-input"
-                name="title"
-                value={title}
-                onChange={this.onInput}
-                onKeyDown={this.handleKeyDown}
-                placeholder="プロジェクト名を入力"
-            />
-        </div>
+            return (
+        <> 
+            <div className="search-form-section"> 
+                <div className="search-controls-area"> 
+                    {/* プロジェクト名入力のグループ */}
+                    <div className="search-input-group"> 
+                        <label htmlFor="project-name-input"></label>
+                        <input
+                            type="text"
+                            id="project-name-input"
+                            name="title"
+                            value={title}
+                            onChange={this.onInput}
+                            onKeyDown={this.handleKeyDown}
+                            placeholder="プロジェクト名を入力"
+                        />
+                    </div>
 
-        {/* タグ選択のグループ */}
-        <div className="search-input-group">
-            <label htmlFor="tag-select"></label>
-            <select id="tag-select" name="tagId" value={tagId} onChange={this.onInput}>
-                <option value="">タグを選択</option>
-                {tags.map(tag => (
-                    <option key={tag.projectTagId} value={tag.projectTagId}>
-                        {tag.projectTagName}
-                    </option>
-                ))}
-            </select>
-        </div>
+                    {/* タグ選択のグループ */}
+                    <div className="search-input-group">
+                        <label htmlFor="tag-select"></label>
+                        <select id="tag-select" name="tagId" value={tagId} onChange={this.onInput}>
+                            <option value="">タグを選択</option>
+                            {tags.map(tag => (
+                                <option key={tag.projectTagId} value={tag.projectTagId}>
+                                    {tag.projectTagName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-        {/* 検索ボタン */}
-        <button onClick={this.searchProjects} className="search-button">検索</button>
-    </div>
-
-    <hr />
-
-    {/* 検索結果のコンテナ */}
-    <div className="search-results-area">
-        <h3>検索結果</h3>
-
-        {loading && <p>検索中...</p>}
-        {error && <p className="error-message">{error}</p>}
-
-        {searchPerformed && !loading && !error && projects.length === 0 && (
-            <p>検索条件に一致するプロジェクトは見つかりませんでした。</p>
-        )}
-
-        {!loading && !error && projects.length > 0 && (
-            <div className="projectListBody">
-                <table>
-                    <tbody>
-                        {projects.map(project => (
-                            <tr key={project.projectId} className="projectrow">
-                                <td className="name">
-                                    <Link to={`/project/${project.projectId}`}>
-                                        {project.projectName}
-                                    </Link>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                    {/* 検索ボタン */}
+                    <button onClick={this.searchProjects} className="search-button">検索</button>
+                </div>
+                <hr className="section-separator" />
             </div>
-        )}
-    </div> 
-</div>
 
+            {/* --- 検索結果セクション --- */}
+            <div className="search-results-area">
+                <h3>検索結果</h3>
 
-        );
+                {loading && <p>検索中...</p>}
+                {error && <p className="error-message">{error}</p>}
+
+                {searchPerformed && !loading && !error && projects.length === 0 && (
+                    <p>検索条件に一致するプロジェクトは見つかりませんでした。</p>
+                )}
+
+                {!loading && !error && projects.length > 0 && (
+                   <div className="scrollable-results-content"> 
+                    <div className="projectListBody">
+                        <table>
+                            <tbody>
+                                {projects.map(project => (
+                                    <tr key={project.projectId} className="projectrow">
+                                        <td className="name">
+                                            <Link to={`/project/${project.projectId}`}>
+                                                {project.projectName}
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                   </div> 
+                )}
+            </div>
+        </>
+    );
+        }
     }
-}
 
 export default SearchWrapper;
