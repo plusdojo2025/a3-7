@@ -25,6 +25,9 @@ public class SerachController {
 	@Autowired
 	private ProjectTagsRepository projectTagRepository;
 	
+	// 公開ステータスの値を定数として定義
+    private static final Integer publicPrivacyStatus = 1;
+	
 	// タグ一覧API
     @GetMapping("/project-tags")
     public List<ProjectTag> getAllTags() {
@@ -37,17 +40,17 @@ public class SerachController {
             @RequestParam(value = "tagId", required = false) Integer tagId) {
 
     	//検索条件ロジック
-    	//１．titleとtagId両方
-        if (title != null && !title.isEmpty() && tagId != null) {
-            return projectsRepository.findByProjectNameContainingIgnoreCaseAndProjectTagId(title, tagId);
-        } 
-        //２．tagIdのみが指定
-        else if (tagId != null) {
-            return projectsRepository.findByProjectTagId(tagId);
-        } 
-        //３．titleのみが指定
-        else if (title != null && !title.isEmpty()) {
-            return projectsRepository.findByProjectNameContainingIgnoreCase(title);
+    	//１．titleとtagId両方かつ公開
+    	if (title != null && !title.isEmpty() && tagId != null) {
+            return projectsRepository.findByProjectNameContainingIgnoreCaseAndProjectTagIdAndPrivacy(title, tagId, publicPrivacyStatus);
+        }
+        //２．tagIdのみが指定かつ公開
+    	else if (tagId != null) {
+            return projectsRepository.findByProjectTagIdAndPrivacy(tagId,publicPrivacyStatus);
+        }
+        //３．titleのみが指定かつ公開
+    	else if (title != null && !title.isEmpty()) {
+            return projectsRepository.findByProjectNameContainingIgnoreCaseAndPrivacy(title, publicPrivacyStatus);
         } 
         //４．どちらもなし（空リスト）
         else {
