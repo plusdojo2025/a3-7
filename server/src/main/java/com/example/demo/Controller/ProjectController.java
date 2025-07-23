@@ -117,6 +117,14 @@ public class ProjectController {
     	return projectTagsRepository.findAll();
     }
     
+    //プロジェクトのパラメータを取得
+    @GetMapping("/project/{projectId}/")
+    public Project getProjectData(@PathVariable int projectId) {
+    	System.out.println("done");
+    	return projectsRepository.findByProjectId(projectId);
+    }
+    
+    
     //プロジェクトの詳細画面表示
     @GetMapping("/projectDetails/{projectId}/")
     public List<com.example.demo.Entity.Process> getProjectDtails(@PathVariable int projectId){

@@ -18,6 +18,7 @@ export default class Project extends React.Component{
 
         this.state = {
             projectId:projectId,
+            project:[],
             processes:[],
             error:"",
             reflects:[],
@@ -33,27 +34,38 @@ export default class Project extends React.Component{
         const { projectId } = this.state;
         console.log("projectId:"+projectId);
 
-        axios.get(`/api/projectDetails/${projectId}/`)
-            .then(json => {
-                console.log(json);
-                this.setState({
-                    processes:json.data
-                });
-            })
-            .catch(error => {
-                console.error("データ取得エラー:", error);
+        axios.get(`/api/project/${projectId}/`)
+        .then(json => {
+            console.log(json);
+            this.setState({
+                project:json.data
             });
+        })
+        .catch(error => {
+            console.error("データ取得エラー:", error);
+        });
+
+        axios.get(`/api/projectDetails/${projectId}/`)
+        .then(json => {
+            console.log(json);
+            this.setState({
+                processes:json.data
+            });
+        })
+        .catch(error => {
+            console.error("データ取得エラー:", error);
+        });
 
         axios.get(`/api/getReflects/${projectId}/`)
-            .then(json => {
-                console.log(json);
-                this.setState({
-                    reflects:json.data
-                });
-            })
-            .catch(error => {
-                console.error("データ取得エラー:", error);
+        .then(json => {
+            console.log(json);
+            this.setState({
+                reflects:json.data
             });
+        })
+        .catch(error => {
+            console.error("データ取得エラー:", error);
+        });
 
         this.setState({
             error:"",
@@ -169,7 +181,7 @@ export default class Project extends React.Component{
     }
     
     render(){
-        const {processes, showCloseProjectModal, showAddProcessModal, error} = this.state;
+        const {project, processes, showCloseProjectModal, showAddProcessModal, error} = this.state;
         // completeが0のプロセス
         const progressProcesses = processes.filter(p => p.complete === 0);
 
@@ -177,83 +189,95 @@ export default class Project extends React.Component{
         const closedProcesses = processes.filter(p => p.complete === 1);
         return( 
             <div className="ProjectDetails">
-                <h1>プロジェクト名</h1>
+                <h1 className="ProjectTitle">{project.projectName}</h1>
                 <p>{error}</p>
+                <div className="container">
+                    <div className="Progress">
+                        <h2>進行中の工程</h2>
+                        {progressProcesses.length === 0 ? (
+                            <p>進行中の工程がありません</p>
+                        ) : (
+                            <table>
+                                <tbody>
+                                {progressProcesses.map((process, index) =>
+                                    <tr key={index} className="ProgeressProcess">
+                                        <td className="process_name" onClick={()=> this.lookProcess(process.processId)}>
+                                            {process.processName}</td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
 
-                <div className="Progress">
-                    <h2>進行中の工程</h2>
-                    {progressProcesses.length === 0 ? (
-                        <p>進行中の工程がありません</p>
-                    ) : (
-                        <table>
-                            <tbody>
-                            {progressProcesses.map((process, index) =>
-                                <tr key={index} className="ProgeressProcess">
-                                    <td className="process_name" onClick={()=> this.lookProcess(process.processId)}>
-                                        {process.processName}</td>
-                                </tr>
-                            )}
-                            </tbody>
-                        </table>
-                    )}
+                    <div className="Closed">
+                        <h2>終了した工程</h2>
+                        {closedProcesses.length === 0 ? (
+                            <p>終了した工程がありません</p>
+                        ) : (
+                            <table>
+                                <tbody>
+                                {closedProcesses.map((process, index) =>
+                                    <tr key={index} className="ClosedProcesses">
+                                        <td className="process_name" onClick={()=> this.lookProcess(process.processId)}>
+                                            {process.processName}</td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
+                    <div className="buttons">
+                        <button className="closeButton" onClick={this.toggleCloseProjectModal}>プロジェクトを終了する</button>
+                        <button className="button" onClick={this.editMembers}>メンバー編集</button>
+                        <button className="button" onClick={this.manageEquipment}>備品管理</button>
+                        <button className="button" onClick={this.toggleAddProcessModal}>工程追加</button>
+                    </div>
                 </div>
-
-                <div className="Closed">
-                    <h2>終了した工程</h2>
-                    {closedProcesses.length === 0 ? (
-                        <p>終了した工程がありません</p>
-                    ) : (
-                        <table>
-                            <tbody>
-                            {closedProcesses.map((process, index) =>
-                                <tr key={index} className="ClosedProcesses">
-                                    <td className="process_name" onClick={()=> this.lookProcess(process.processId)}>
-                                        {process.processName}</td>
-                                </tr>
-                            )}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
-                <button onClick={this.toggleCloseProjectModal}>プロジェクトを終了する</button>
-                <button onClick={this.editMembers}>メンバー編集</button>
-                <button onClick={this.manageEquipment}>備品管理</button>
-                <button onClick={this.toggleAddProcessModal}>工程追加</button>
-
                 <div className="showAlert">
                     {/*アラート部分の画面表示*/}
+                    <p>ここに反省を表示</p>
                 </div>
 
-                {/*プロジェクト終了用モーダル*/}
-                {showCloseProjectModal &&
-                    <div id="overlayCloseProject">
-                        <div id="content">
-                            <h2>報告書登録</h2>
-                            日時
-                            <input type="date" name="date" value={this.state.date} onChange={this.onInput} /><br />
-                            コメント
-                            <input type="text" name="report" onChange={this.onInput} /><br />
-                            <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
-                            <button onClick={() => this.closeProject(1)}>はい</button>
-                            <button onClick={() => this.closeProject(0)}>いいえ</button>
-                            <button onClick={this.toggleCloseProjectModal}>キャンセル</button>
-                            
-                        </div>
+                {/* プロジェクト終了用モーダル */}
+                {showCloseProjectModal && (
+                <div id="overlayCloseProject" className="modal-overlay">
+                    <div id="contentCloseProject" className="modal-content">
+                    <h2>報告書登録</h2>
+                    <div className="inputContainer">
+                        <label>日時</label>
+                        <input type="date" name="date" value={this.state.date} onChange={this.onInput} />
                     </div>
-                }
+                    <div className="inputContainer">
+                        <label>コメント</label>
+                        <input type="text" name="report" onChange={this.onInput} />
+                    </div>
+                    <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
+                    <div className="buttonContainer">
+                        <button onClick={() => this.closeProject(1)}>はい</button>
+                        <button onClick={() => this.closeProject(0)}>いいえ</button>
+                        <button onClick={this.toggleCloseProjectModal}>キャンセル</button>
+                    </div>
+                    </div>
+                </div>
+                )}
 
-                {/*プロセス追加用モーダル*/}
-                {showAddProcessModal &&
-                    <div id="overlayAddProcess">
-                        <div id="content">
-                            <h2>工程の追加</h2>
-                            工程名：<input type="text" name="addName" value={this.state.addName} onChange={this.onInput} /><br />
-                            <button onClick={this.toggleAddProcessModal}>戻る</button>
-                            <button onClick={() => this.addProcess()}>登録</button>
-                            
-                        </div>
+                {/* プロセス追加用モーダル */}
+                {showAddProcessModal && (
+                <div id="overlayAddProcess" className="modal-overlay">
+                    <div id="contentAddProcess" className="modal-content">
+                    <h2>工程の追加</h2>
+                    <div className="inputContainer">
+                        <label>工程名</label>
+                        <input type="text" name="addName" value={this.state.addName} onChange={this.onInput} />
                     </div>
-                }
+                    <div className="buttonContainer">
+                        <button onClick={this.toggleAddProcessModal}>戻る</button>
+                        <button onClick={() => this.addProcess()}>登録</button>
+                    </div>
+                    </div>
+                </div>
+                )}
 
             </div>
         )
