@@ -233,9 +233,11 @@ export default class Project extends React.Component{
                         <button className="button" onClick={this.toggleAddProcessModal} disabled={project.complete === 1}>工程追加</button>
                     </div>
                 </div>
-                <div className="showAlert">
-                    {/*アラート部分の画面表示*/}
-                    <p>ここに反省を表示</p>
+                <div className="alertBox">
+                    <div className="showAlert">
+                        {/*アラート部分の画面表示*/}
+                        <p>ここに反省を表示</p>
+                    </div>
                 </div>
 
                 {/* プロジェクト終了用モーダル */}
