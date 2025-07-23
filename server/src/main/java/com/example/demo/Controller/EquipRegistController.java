@@ -48,12 +48,7 @@ public class EquipRegistController {
         int unit = Integer.parseInt(unitStr);
         double judge = Double.parseDouble(judgeStr);
 
-        //備品を登録
-        Equipment equipment = new Equipment();
-        equipment.setEquipName(equipName);
-        Equipment savedEquipment = equipmentRepository.save(equipment);
-
-        //詳細を登録
+        //詳細を保存して equip_detail_id を取得
         EquipDetail detail = new EquipDetail();
         detail.setLimited(java.sql.Date.valueOf(limited));
         detail.setJudge(judge);
@@ -61,15 +56,21 @@ public class EquipRegistController {
         detail.setUnit(unit);
         detail.setStorage(storage);
         detail.setRemarks(remarks);
-         
 
         if (picture != null && !picture.isEmpty()) {
             detail.setPicture(picture.getBytes());
         }
 
+        EquipDetail savedDetail = equipmentDetailRepository.save(detail);
 
+        //備品を保存（equip_detail_id、equip_kind_id、project_idも設定）
+        Equipment equipment = new Equipment();
+        equipment.setEquipName(equipName);
+        equipment.setEquipDetailId(savedDetail.getEquipDitailId());
+        equipment.setEquipKindId(0); //備品なので0、生物登録なら1にする
+        equipment.setProjectId(1);   //必要に応じて動的に変更
 
-        equipmentDetailRepository.save(detail);
+        equipmentRepository.save(equipment);
 
         return ResponseEntity.ok("登録成功");
     }

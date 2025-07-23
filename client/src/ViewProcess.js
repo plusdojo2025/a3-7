@@ -4,11 +4,12 @@ import './css/Common.css';
 import './css/ViewProcess.css';
 import { useParams, Link } from 'react-router-dom';
 
+
+// useParamsをクラスコンポーネントで使うためのラッパー
 function ViewProcessWrapper() {
     const params = useParams();
     return <ViewProcessComponent params={params} />;
 }
-
 class ViewProcessComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -22,10 +23,12 @@ class ViewProcessComponent extends React.Component {
         };
     }
 
+    // マウントされた直後に呼び出されるライフサイクルメソッド
     componentDidMount() {
         this.fetchProcessDetails();
     }
 
+    // コンポーネント更新後に呼び出されるライフサイクルメソッド
     componentDidUpdate(prevProps) {
         if (this.props.params.projectId !== prevProps.params.projectId ||
             this.props.params.processId !== prevProps.params.processId) {
@@ -33,6 +36,7 @@ class ViewProcessComponent extends React.Component {
         }
     }
 
+    // プロジェクト情報取得（非同期で取得）
     fetchProcessDetails = async () => {
         const { projectId, processId } = this.props.params;
 
@@ -75,6 +79,7 @@ class ViewProcessComponent extends React.Component {
         }
     };
 
+    // コンポーネントのUIをレンダーするライフサイクルメソッド
     render() {
         const { process, reports, reflects, loading, error } = this.state;
         const { projectId } = this.props.params;
@@ -91,6 +96,7 @@ class ViewProcessComponent extends React.Component {
             return <div className="not-found">指定された工程が見つかりませんでした。</div>;
         }
 
+        // ココから表示内容
         return (
             <div className="view-process-container">
                 <h3>{process.processName}</h3>
