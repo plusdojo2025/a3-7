@@ -1,0 +1,49 @@
+.Home {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;  /* 画面全体の高さ */
+}
+
+.project-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 横に3つ並べる */
+    gap: 20px;
+    height: 400px;  /* 高さを画面の4割に設定 */
+    overflow-y: auto;  /* 縦スクロール */
+    
+}
+
+.project-box {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    aspect-ratio: 1;  /* 正方形にする */
+    width: 130px;
+    height: 130px;  
+    overflow: hidden;  /* 内容がボックスからはみ出さないようにする */
+}
+
+.project-info {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* ボタンスタイル */
+button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* ボタンを画面中央に配置 */
+.home-button-container {
+    display: flex;
+    justify-content: center;  /* ボタンを中央に配置 */
+    margin-top: 20px;  /* ボタンとコンテンツの間隔 */
+}
