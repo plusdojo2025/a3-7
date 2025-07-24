@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; 
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './css/Common.css'; 
+import { useLocation, useNavigate } from 'react-router-dom'; 
+import './css/Common.css';
 import './css/equipment.css';
 
-export default function EquipmentPage() {
+export default function Equipment() {
   const [keyword, setKeyword] = useState('');
   const [items, setItems] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  
 
   //URLからprojectIdを取得
   const [currentProjectId, setCurrentProjectId] = useState(null);
 
   //備品を検索する非同期関数
-  //projectIdToSearchとsearchKeywordを品数で受け取れるように
-  const performSearch = async (projectIdToSearch, searchKeyword) => {
+  const performSearch = useCallback(async (projectIdToSearch, searchKeyword) => {
     setLoading(true);
-    try{
-      //projectIdToSearchがなければURLに追加、なけらば追加しない
+    try {
       const url = new URL('/api/equip/search', window.location.origin);
       if (searchKeyword) {
         url.searchParams.append('keyword', searchKeyword);
       }
-      if (projectIdToSearch) { // projectIdがあればパラメータに追加
+      if (projectIdToSearch) {
         url.searchParams.append('projectId', projectIdToSearch);
       }
 
-      const response = await axios.get(url.toString()); // URLオブジェクトを文字列に変換して使用
+      const response = await axios.get(url.toString());
       console.log('検索結果:', response.data);
       setItems(response.data);
     } catch (error) {
@@ -37,13 +37,12 @@ export default function EquipmentPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const loadAlerts = async () => {
+  // アラートをロードする非同期関数
+  const loadAlerts = async (projectIdToLoadAlerts) => { 
     try {
-      // アラート機能は後で実装
-      // const response = await axios.get('/api/alerts/project?projectId=1');
-      // setAlerts(response.data);
+      // アラート機能は後で実装。
       setAlerts([]); // 一時的に空配列をセット
     } catch (error) {
       console.error('アラート取得エラー:', error);
@@ -51,39 +50,62 @@ export default function EquipmentPage() {
     }
   };
 
-   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search); 
     const projectIdFromUrl = params.get('projectId');
-    
+
     if (projectIdFromUrl) {
-      setCurrentProjectId(projectIdFromUrl); // stateにprojectIdを保存
+      //setCurrentProjectId(projectIdFromUrl); // stateにprojectIdを保存
       console.log('useEffectでprojectIdを検出:', projectIdFromUrl);
-      
+
       // プロジェクトIDを渡して初期検索とアラートロードを行う
-      performSearch(projectIdFromUrl, ''); // 初期表示はキーワードなし
+      performSearch(projectIdFromUrl, ''); 
       loadAlerts(projectIdFromUrl);
     } else {
       // projectIdがない場合
-      console.log('projectIdが見つかりませんでした。全備品を表示します。');
-      performSearch(null, ''); // projectIdなしで全件検索（API側が対応している場合）
-      loadAlerts(null); // projectIdなしでアラートロード
+      console.log('projectIdが見つかりませんでした。');
+      setCurrentProjectId(null);
+      setItems([]); 
+      setKeyword(''); 
+      setAlerts([]); 
     }
-
-  }, []);
+  }, [location.search, performSearch]); 
 
   const handleSearchButtonClick = () => {
-    performSearch(currentProjectId, keyword); 
+
+    if (!currentProjectId) {
+      alert('プロジェクトIDが不明です。')
+      return;
+    }
+    performSearch(currentProjectId, keyword);
   };
 
-  //検索ボタンクリック時のハンドラ
+  // 備品登録ページへの遷移ハンドラに projectId を渡すロジックを追加
+  const handleNavigateToEquipmentRegist = () => {
+    if (currentProjectId) {
+      navigate(`/equipmentRegist?projectId=${currentProjectId}`);
+    } else {
+      alert('プロジェクトIDが不明なため、備品登録画面へ遷移できません。');
+    }
+  };
+
   const handleItemClick = (equipId) => {
-    navigate(`/equipmentEdit`, { state: { equipmentId: equipId } });
+    // 備品編集ページへ equipId と projectId を state として渡す
+    navigate(`/equipmentEdit`, { state: { equipmentId: equipId, projectId: currentProjectId } });
+  };
+
+  // 画像エラー時のフォールバック処理 (冗長なインラインコードを避けるため再利用)
+  const handleImageError = (e) => {
+    e.target.style.display = 'none'; // エラーになった画像を非表示に
+    if (e.target.nextElementSibling) {
+      e.target.nextElementSibling.style.display = 'block'; // 直後のフォールバック要素を表示
+    }
   };
 
   return (
     <div className="container">
-     
-      
+      <h2>備品管理</h2>
+
       {/* アラート表示エリア */}
       {alerts.length > 0 && (
         <div className="alert-area">
@@ -103,9 +125,9 @@ export default function EquipmentPage() {
 
       {/* 検索バー */}
       <div className="search-bar">
-        <input 
-          type="text" 
-          placeholder="備品名を検索" 
+        <input
+          type="text"
+          placeholder="備品名を検索"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onKeyPress={(e) => {
@@ -123,7 +145,7 @@ export default function EquipmentPage() {
       <div className="list-area">
         {loading ? (
           <p>読み込み中...</p>
-        ) : items.length === 0 ? (
+        ) : items.length === 0 && !loading ? (
           <p>該当する備品が見つかりませんでした。</p>
         ) : (
           items.map((item) => (
@@ -133,27 +155,24 @@ export default function EquipmentPage() {
               onClick={() => handleItemClick(item.equipId)}
               style={{ cursor: 'pointer' }}
             >
-              {item.imageUrl ? (
-                <img
-                  src={item.imageUrl}
-                  alt={`${item.equipName}の画像`}
-                  className="item-image"
-                  onLoad={() => console.log('画像読み込み成功:', item.imageUrl)}
-                  onError={(e) => {
-                    console.log('画像読み込み失敗:', item.imageUrl);
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'block';
-                  }}
-                />
+              {/* 画像の表示 */}
+               {item.picture ? ( // item.picture（Base64データ）が存在するかだけをチェック
+                <>
+                  <img
+                    src={`data:image/jpeg;base64,${item.picture}`} 
+                    alt={`${item.equipName}の画像`}
+                    className="item-image"
+                    onLoad={() => console.log('画像読み込み成功: Base64 image')} 
+                    onError={handleImageError} 
+                  />
+                  <div className="no-image-fallback">
+                    No image
+                  </div>
+                </>
               ) : (
+                // pictureデータがない場合に表示される「No image」
                 <div className="no-image">No image</div>
               )}
-              <div 
-                className="no-image-fallback" 
-                style={{ display: 'none' }}
-              >
-                No image
-              </div>
               <div className="item-name">{item.equipName}</div>
             </div>
           ))
@@ -163,7 +182,7 @@ export default function EquipmentPage() {
       {/* ボタンエリア */}
       <div className="button-area">
         <button onClick={() => navigate(-1)}>戻る</button>
-        <button onClick={() => navigate('/equipmentRegist')}>備品登録</button>
+        <button onClick={handleNavigateToEquipmentRegist}>備品登録</button>
         <button onClick={() => navigate('/bioRegist')}>生体登録</button>
       </div>
     </div>

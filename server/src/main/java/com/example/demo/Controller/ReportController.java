@@ -24,6 +24,7 @@ import com.example.demo.Entity.Reflect;
 import com.example.demo.Entity.ReflectTag;
 import com.example.demo.Entity.Report;
 import com.example.demo.Repository.EquipmentsRepository;
+import com.example.demo.Repository.ProcessesRepository;
 import com.example.demo.Repository.ProjectsRepository;
 import com.example.demo.Repository.ReflectTagsRepository;
 import com.example.demo.Repository.ReflectsRepository;
@@ -47,6 +48,8 @@ public class ReportController {
     private ReflectsRepository reflectRepository;
     @Autowired
     private ProjectsRepository projectRepository;
+    @Autowired
+    private ProcessesRepository processRepository;
 
     // Equipment一覧取得
     @GetMapping("/equip")
@@ -61,6 +64,7 @@ public class ReportController {
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
+  
     @GetMapping("/project")
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
@@ -122,12 +126,18 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report not found");
         }
     }
-    @GetMapping("/api/weekly-reports")
+    @GetMapping("/processes/{processId}")
+    public ResponseEntity<com.example.demo.Entity.Process> getProcess(@PathVariable Integer processId) {
+        return processRepository.findById(processId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/weekly-reports/")
     public ResponseEntity<?> getWeeklyReport(
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
             @RequestParam("processId") Integer processId) {
 
-        return reportRepository.findByProcessIdAndCreatedAt(processId, date)
+        return reportRepository.findByProcessIdAndCreatedAt(processId, createdAt)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

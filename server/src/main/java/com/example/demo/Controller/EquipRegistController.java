@@ -2,11 +2,13 @@ package com.example.demo.Controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.Entity.EquipDetail;
 import com.example.demo.Entity.Equipment;
+import com.example.demo.Entity.Unit;
 import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipmentsRepository;
+import com.example.demo.Repository.UnitsRepository;
 
 @RestController
 @RequestMapping("/api/equipment")
@@ -24,7 +28,8 @@ public class EquipRegistController {
 
     @Autowired
     private EquipmentsRepository equipmentRepository;
-    
+    @Autowired
+    private UnitsRepository unitsRepository;
     @Autowired
     private EquipDetailsRepository equipmentDetailRepository;
 
@@ -37,7 +42,8 @@ public class EquipRegistController {
         @RequestParam("unit") String unitStr,
         @RequestParam("storage") String storage,
         @RequestParam(value = "remarks", required = false) String remarks,
-        @RequestParam(value = "picture", required = false) MultipartFile picture
+        @RequestParam(value = "picture", required = false) MultipartFile picture,
+        @RequestParam("projectId") Integer projectId
     ) {
         try {
             System.out.println("=== 備品登録開始 ===");
@@ -48,6 +54,7 @@ public class EquipRegistController {
             System.out.println("unitStr: " + unitStr);
             System.out.println("storage: " + storage);
             System.out.println("remarks: " + remarks);
+            System.out.println("projectId: " + projectId);
             
             // パラメータの検証
             if (equipName == null || equipName.trim().isEmpty()) {
@@ -66,6 +73,9 @@ public class EquipRegistController {
             }
             if (judgeStr == null || judgeStr.trim().isEmpty()) {
                 judgeStr = "10"; // デフォルト値
+            }
+            if (projectId == null) {
+                return ResponseEntity.badRequest().body("プロジェクトIDが指定されていません");
             }
 
             double remaining = Double.parseDouble(remainingStr);
@@ -100,7 +110,7 @@ public class EquipRegistController {
             equipment.setEquipName(equipName);
             equipment.setEquipDetailId(savedDetail.getEquipDetailId());
             equipment.setEquipKindId(1); // 備品種類ID（data.sqlから1='道具'）
-            equipment.setProjectId(1);   // 必要に応じて動的に変更
+            equipment.setProjectId(projectId);
 
             System.out.println("Equipment保存前");
             Equipment savedEquipment = equipmentRepository.save(equipment);
@@ -121,4 +131,9 @@ public class EquipRegistController {
             return ResponseEntity.internalServerError().body("登録に失敗しました: " + e.getMessage());
         }
     }
+    @GetMapping("/get/units")
+    public List<Unit> getUnit(){
+    	return unitsRepository.findAll();
+    	}
+
 }

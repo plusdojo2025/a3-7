@@ -5,7 +5,7 @@ import './css/EquipmentEdit.css';
 
 const alertTimingOptions = ['50', '40', '30', '20', '10'];
 
-const unitMap = {
+/*const unitMap = {
   '個': 1,
   '箱': 2,
   'kg': 3,
@@ -13,9 +13,8 @@ const unitMap = {
   'mg': 5,
   'L': 6,
   'ml': 7
-};
+};*/
 
-const reverseUnitMap = Object.fromEntries(Object.entries(unitMap).map(([k, v]) => [v, k]));
 
 export default function EquipmentEdit() {
   const location = useLocation();
@@ -36,6 +35,7 @@ export default function EquipmentEdit() {
   const [newImage, setNewImage] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [unitMap,setUnitMap] = useState([]);
 
   useEffect(() => {
     if (!equipmentId) {
@@ -44,13 +44,19 @@ export default function EquipmentEdit() {
       return;
     }
 
+    axios.get("/api/equipment/edit/get/units").then(respons => {
+      setUnitMap(respons.data);
+      console.log(respons.data);
+
+    })
+
     axios.get(`/api/equipment/edit/${equipmentId}`)
       .then((res) => {
         const data = res.data;
         setForm({
           itemName: data.itemName,
           quantity: data.quantity,
-          unit: reverseUnitMap[data.unit] || '',
+          unit: data.unit || '',
           expiryDate: data.expiryDate,
           location: data.location,
           alertTiming: data.alertTiming,
@@ -94,7 +100,7 @@ export default function EquipmentEdit() {
 
       formData.append('itemName', form.itemName);
       formData.append('quantity', form.quantity);
-      formData.append('unit', unitMap[form.unit]);
+      formData.append('unit', form.unit);
       formData.append('expiryDate', form.expiryDate);
       formData.append('location', form.location);
       formData.append('alertTiming', form.alertTiming);
@@ -103,6 +109,13 @@ export default function EquipmentEdit() {
       await axios.put(`/api/equipment/edit/${equipmentId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
+
+        console.log(formData);
+
+    for(let[key,value] of formData.entries()){
+      console.log(key + value);
+    }
+
 
       alert('更新完了！');
       navigate('/equipment');
@@ -198,18 +211,11 @@ export default function EquipmentEdit() {
 
           <div className="form-group">
             <label>単位</label>
-            <select 
-              name="unit" 
-              value={form.unit} 
-              onChange={handleChange}
-              className="form-input"
-            >
-              <option value="">選択</option>
-              {Object.entries(unitMap).map(([label, value]) => (
-                <option key={value} value={label}>{label}</option>
-              ))}
-            </select>
-          </div>
+            <select name="unit" value={form.unit} onChange={handleChange}>
+          <option value="">選択</option>
+          {unitMap.map((unit, index) => <option key={index} value={unit.unitId}>{unit.unit}</option>)}
+        </select>      
+        </div>
 
           <div className="form-group">
             <label>期限</label>

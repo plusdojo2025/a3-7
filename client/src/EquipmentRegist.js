@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './css/EquipmentRegist.css';
 
-const unitMap = {
+/*const unitMap = {
   '個': 1,
   '箱': 2,
   'kg': 3,
@@ -10,11 +11,17 @@ const unitMap = {
   'mg': 5,
   'L': 6,
   'ml': 7
-};
+};*/
+
+
 
 const judgeOptions = ['50', '40', '30', '20', '10'];
 
 export default function EquipmentRegist() {
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     equipName: '',
     limited: '',
@@ -23,11 +30,37 @@ export default function EquipmentRegist() {
     storage: '',
     judge: '',
     remarks: '',
-    equipKindId: '0',  //備品:0、生物:1
-    projectId: '1',     //ここ保留
   });
   const [image, setImage] = useState(null);
   const [error, setError] = useState('');
+  const [projectIdForRegistration, setProjectIdForRegistration] = useState(null);
+  const [unitMap,setUnitMap] = useState([]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const projectIdFromUrl = params.get('projectId');
+    
+   
+
+    axios.get("/api/equipment/get/units").then(respons => {
+      setUnitMap(respons.data);
+      console.log(respons.data);
+
+    })
+    .catch(error => {
+      console.error('データの取得に失敗しました',error);
+    },[]);
+    
+
+    if (projectIdFromUrl) {
+      setProjectIdForRegistration(projectIdFromUrl);
+      console.log('備品登録画面でプロジェクトID検出：',projectIdFromUrl);
+    }
+    else {
+      setError('登録失敗：プロジェクトIDが取得できませんでした。');
+      console.error('プロジェクトIDが見つかりませんでした。')
+    }
+  }, [location.search]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +85,7 @@ export default function EquipmentRegist() {
     formData.append('equipName', form.equipName);
     formData.append('limited', form.limited);
     formData.append('remaining', form.remaining);
-    formData.append('unit', unitMap[form.unit]);
+    formData.append('unit', form.unit);
     formData.append('storage', form.storage);
     formData.append('judge', form.judge);
     formData.append('remarks', form.remarks || '');
@@ -60,6 +93,14 @@ export default function EquipmentRegist() {
       formData.append('picture', image);
     }
     
+    formData.append('projectId', projectIdForRegistration);
+
+    console.log(formData);
+
+    for(let[key,value] of formData.entries()){
+      console.log(key + value);
+    }
+
 
     try {
       const res = await axios.post(
@@ -68,6 +109,7 @@ export default function EquipmentRegist() {
       );
       alert('登録成功');
       console.log(res.data);
+      navigate(`/equipment?projectId=${projectIdForRegistration}`);
 
       //フォームと画像をクリア
       setForm({
@@ -81,12 +123,18 @@ export default function EquipmentRegist() {
       });
       setImage(null);
       setError('');
+      
     } catch (err) {
       console.error('登録失敗:', err);
       alert('登録に失敗しました。');
     }
+
+
   };
 
+
+
+  
   return (
     <form onSubmit={handleSubmit}>
       <h2>備品登録</h2>
@@ -97,7 +145,7 @@ export default function EquipmentRegist() {
       <label>単位:
         <select name="unit" value={form.unit} onChange={handleChange}>
           <option value="">選択</option>
-          {Object.keys(unitMap).map(u => <option key={u} value={u}>{u}</option>)}
+          {unitMap.map((unit, index) => <option key={index} value={unit.unitId}>{unit.unit}</option>)}
         </select>
       </label><br />
       <label>保管場所: <input name="storage" value={form.storage} onChange={handleChange} /></label><br />

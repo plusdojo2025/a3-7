@@ -1,3 +1,6 @@
+--写真おっきく
+ALTER TABLE equip_details MODIFY COLUMN picture LONGBLOB;
+
 --ユーザーリスト
 INSERT INTO users (email, password, name) VALUES ('yazawa@hisao.com', 'ninnkikoushi', '矢沢　久雄');
 INSERT INTO users (email, password, name) VALUES ('ex@exam.com', 'pass1234', '山田 太郎');
@@ -19,15 +22,15 @@ INSERT INTO project_tags (project_tag_name) VALUES ('植物分子学');
 
 --プロジェクトリスト
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('熱帯雨林におけるハナアブの生態', 1, 1);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病1', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病2', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病3', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病4', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病5', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病6', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病7', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病8', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病9', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('個体老化における細胞応答メカニズムの解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('ゲノム編集による植物耐乾燥性の向上', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('疾患モデルマウスを用いた中枢神経の構造解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('タンパク質フォールディング異常と疾患発症の相関研究', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('幹細胞分化におけるエピゲノム制御因子の機能解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('光合成効率を高める葉緑体遺伝子の機能解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('遺伝子発現プロファイルによるがん予後予測モデルの構築', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('神経伝達物質の動態に関するマルチスケール解析', 0, 2);
 
 --メンバーリスト
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(1, 1, 3, 1);
@@ -43,9 +46,12 @@ INSERT INTO members (project_id, user_id, authority, attend) VALUES(10, 2, 2, 1)
 --備品種類
 INSERT INTO equip_kinds (equip_kind_name) VALUES ('道具');
 INSERT INTO equip_kinds (equip_kind_name) VALUES ('昆虫');
+INSERT INTO equip_kinds (equip_kind_name) VALUES ('果物');
+
 
 --備品
 INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('虫あみ', 1, 1, 1);
+INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('バナナ', 3, 2, 2);
 
 --生体
 
@@ -54,6 +60,7 @@ INSERT INTO biology_details (kind, gender, age, process_id, remarks, picture) VA
 
 --備品詳細
 INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-04-28', 10.0, '倉庫', '所々穴が開いている。', 1, null);
+INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-07-25', 10.0, 'キッチン', '特売', 2, null);
 
 --単位
 INSERT INTO units (unit) VALUES ('本'),('個'),('箱'),('kg'),('g'),('mg'),('L'),('ml');
