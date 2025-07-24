@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import './css/report.css';
+import "./css/report.css";
 
 export default function Report() {
   const { projectId, processId } = useParams();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     createdAt: "",
@@ -22,20 +23,14 @@ export default function Report() {
     if (projectId) {
       axios.get(`/api/project/${projectId}`)
         .then(res => setProjectName(res.data.projectName))
-        .catch(err => {
-          console.error("プロジェクト名取得エラー:", err);
-          setProjectName("（取得失敗）");
-        });
+        .catch(() => setProjectName("（取得失敗）"));
     }
   }, [projectId]);
 
   useEffect(() => {
     axios.get("/api/equip")
       .then(res => setEquipmentList(res.data))
-      .catch(err => {
-        console.error("備品取得エラー:", err);
-        setError("備品リストの取得に失敗しました");
-      });
+      .catch(() => setError("備品リストの取得に失敗しました"));
   }, []);
 
   const handleChange = (e) => {
@@ -60,89 +55,85 @@ export default function Report() {
     axios.post("/api/report", payload)
       .then(() => {
         alert("登録成功！");
-        setForm({
-          createdAt: "",
-          processId: processId || "",
-          comment: "",
-          equipId: "",
-          usageAmount: ""
-        });
-        setError("");
+        navigate(`/project/${projectId}/process/${processId}`); 
       })
-      .catch((err) => {
-        console.error("登録失敗:", err);
-        alert("登録失敗");
-      });
+      .catch(() => alert("登録失敗"));
   };
 
   return (
-     
-    <div >
-     <h2>日報登録</h2>
-     <div className="report-container">
-      {error && <p className="error-text">{error}</p>}
+    <div>
+      <h2>日報登録</h2>
 
-      <form onSubmit={handleSubmit}>
-        <input type="hidden" name="projectId" value={projectId} />
-        <input type="hidden" name="processId" value={form.processId} />
+   
 
-        <div className="form-group">
-          <label>日付:<input
-            type="date"
-            name="createdAt"
-            value={form.createdAt}
-            onChange={handleChange}
-            required
-          /></label>
-        </div>
+      <div className="report-container">
+        {error && <p className="error-text">{error}</p>}
 
-        <div className="form-group">
-          <label>研修タイトル: <input type="text" value={projectName} readOnly /></label>
-         
-        </div>
-
-        <div className="form-group">
-          <label>備品名:<select name="equipId" value={form.equipId} onChange={handleChange} required>
-            <option value="">選択してください</option>
-            {equipmentList.map(equip => (
-              <option key={equip.equipId} value={equip.equipId}>
-                {equip.equipName}
-              </option>
-            ))}
-          </select></label>
-          
-        </div>
-
-        <div className="form-group">
-          <label>使用量:<input
-            type="text"
-            name="usageAmount"
-            value={form.usageAmount}
-            onChange={handleChange}
-          /></label>
-          
-        </div>
-
-        <div className="form-group">
-          <label>コメント:    <textarea
-            name="comment"
-            value={form.comment}
-            onChange={handleChange}
-          /></label>
-          
-        </div>
-
-        <div className="button-group">
-          <button type="button" className="back-button" onClick={() => window.history.back()}>
-            戻る
-          </button>
-          <button type="submit" className="submit-button">
-            登録
-          </button>
-        </div>
-      </form>
-     </div>
+        <form onSubmit={handleSubmit}>
       
+
+          <div className="form-group">
+            <label>日付:
+              <input
+                type="date"
+                name="createdAt"
+                value={form.createdAt}
+                onChange={handleChange}
+                required
+              />
+            </label>
+          </div>
+
+          <div className="form-group">
+            <label>研修タイトル:
+              <input type="text" value={projectName} readOnly />
+            </label>
+          </div>
+
+          <div className="form-group">
+            <label>備品名:
+              <select name="equipId" value={form.equipId} onChange={handleChange} required>
+                <option value="">選択してください</option>
+                {equipmentList.map(equip => (
+                  <option key={equip.equipId} value={equip.equipId}>
+                    {equip.equipName}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="form-group">
+            <label>使用量:
+              <input
+                type="text"
+                name="usageAmount"
+                value={form.usageAmount}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <div className="form-group">
+            <label>コメント:
+              <textarea
+                name="comment"
+                value={form.comment}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <div className="button-group">
+            <button type="button" className="back-button" onClick={() => navigate(-1)}>
+              戻る
+            </button>
+            <button type="submit" className="submit-button">
+              登録
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
