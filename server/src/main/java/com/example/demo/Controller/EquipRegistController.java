@@ -2,11 +2,13 @@ package com.example.demo.Controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.Entity.EquipDetail;
 import com.example.demo.Entity.Equipment;
+import com.example.demo.Entity.Unit;
 import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipmentsRepository;
+import com.example.demo.Repository.UnitsRepository;
 
 @RestController
 @RequestMapping("/api/equipment")
@@ -24,7 +28,8 @@ public class EquipRegistController {
 
     @Autowired
     private EquipmentsRepository equipmentRepository;
-    
+    @Autowired
+    private UnitsRepository unitsRepository;
     @Autowired
     private EquipDetailsRepository equipmentDetailRepository;
 
@@ -126,4 +131,9 @@ public class EquipRegistController {
             return ResponseEntity.internalServerError().body("登録に失敗しました: " + e.getMessage());
         }
     }
+    @GetMapping("/get/units")
+    public List<Unit> getUnit(){
+    	return unitsRepository.findAll();
+    	}
+
 }

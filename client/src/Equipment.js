@@ -11,9 +11,10 @@ export default function Equipment() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const currentProjectId = 2;
 
   //URLからprojectIdを取得
-  const [currentProjectId, setCurrentProjectId] = useState(null);
+  //const [currentProjectId, setCurrentProjectId] = useState(null);
 
   //備品を検索する非同期関数
   const performSearch = useCallback(async (projectIdToSearch, searchKeyword) => {
@@ -54,7 +55,7 @@ export default function Equipment() {
     const projectIdFromUrl = params.get('projectId');
 
     if (projectIdFromUrl) {
-      setCurrentProjectId(projectIdFromUrl); // stateにprojectIdを保存
+      //setCurrentProjectId(projectIdFromUrl); // stateにprojectIdを保存
       console.log('useEffectでprojectIdを検出:', projectIdFromUrl);
 
       // プロジェクトIDを渡して初期検索とアラートロードを行う
@@ -63,7 +64,7 @@ export default function Equipment() {
     } else {
       // projectIdがない場合
       console.log('projectIdが見つかりませんでした。');
-      setCurrentProjectId(null);
+    //  setCurrentProjectId(null);
       setItems([]); 
       setKeyword(''); 
       setAlerts([]); 
