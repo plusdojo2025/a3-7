@@ -9,6 +9,7 @@ export default function EquipmentPage() {
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+ 
 
   const handleSearch = async () => {
     setLoading(true);
