@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './css/Common.css'; 
 import './css/equipment.css';
 
 export default function EquipmentPage() {
@@ -10,10 +11,24 @@ export default function EquipmentPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = async () => {
+  //URLからprojectIdを取得
+  const [currentProjectId, setCurrentProjectId] = useState(null);
+
+  //備品を検索する非同期関数
+  //projectIdToSearchとsearchKeywordを品数で受け取れるように
+  const performSearch = async (projectIdToSearch, searchKeyword) => {
     setLoading(true);
-    try {
-      const response = await axios.get(`/api/equip/search?keyword=${encodeURIComponent(keyword)}`);
+    try{
+      //projectIdToSearchがなければURLに追加、なけらば追加しない
+      const url = new URL('/api/equip/search', window.location.origin);
+      if (searchKeyword) {
+        url.searchParams.append('keyword', searchKeyword);
+      }
+      if (projectIdToSearch) { // projectIdがあればパラメータに追加
+        url.searchParams.append('projectId', projectIdToSearch);
+      }
+
+      const response = await axios.get(url.toString()); // URLオブジェクトを文字列に変換して使用
       console.log('検索結果:', response.data);
       setItems(response.data);
     } catch (error) {
@@ -36,18 +51,38 @@ export default function EquipmentPage() {
     }
   };
 
+   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const projectIdFromUrl = params.get('projectId');
+    
+    if (projectIdFromUrl) {
+      setCurrentProjectId(projectIdFromUrl); // stateにprojectIdを保存
+      console.log('useEffectでprojectIdを検出:', projectIdFromUrl);
+      
+      // プロジェクトIDを渡して初期検索とアラートロードを行う
+      performSearch(projectIdFromUrl, ''); // 初期表示はキーワードなし
+      loadAlerts(projectIdFromUrl);
+    } else {
+      // projectIdがない場合
+      console.log('projectIdが見つかりませんでした。全備品を表示します。');
+      performSearch(null, ''); // projectIdなしで全件検索（API側が対応している場合）
+      loadAlerts(null); // projectIdなしでアラートロード
+    }
+
+  }, []);
+
+  const handleSearchButtonClick = () => {
+    performSearch(currentProjectId, keyword); 
+  };
+
+  //検索ボタンクリック時のハンドラ
   const handleItemClick = (equipId) => {
     navigate(`/equipmentEdit`, { state: { equipmentId: equipId } });
   };
 
-  useEffect(() => {
-    handleSearch(); // 初期読み込み時に全件表示
-    loadAlerts();   // アラート情報を取得
-  }, []);
-
   return (
     <div className="container">
-      <h2>備品管理</h2>
+     
       
       {/* アラート表示エリア */}
       {alerts.length > 0 && (
@@ -75,11 +110,11 @@ export default function EquipmentPage() {
           onChange={(e) => setKeyword(e.target.value)}
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
-              handleSearch();
+              handleSearchButtonClick();
             }
           }}
         />
-        <button onClick={handleSearch} disabled={loading}>
+        <button onClick={handleSearchButtonClick} disabled={loading}>
           {loading ? '検索中...' : '検索'}
         </button>
       </div>

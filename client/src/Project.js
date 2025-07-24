@@ -29,6 +29,8 @@ export default class Project extends React.Component{
             date:defaultDate,
             report:"",
         }
+        //バインド追加
+        this.manageEquipment = this.manageEquipment.bind(this);
     }
 
     componentDidMount() {
@@ -137,7 +139,8 @@ export default class Project extends React.Component{
 
     //備品の管理をする
     manageEquipment(){
-        window.alert("ここに処理を実装");
+        const {projectId} = this.state;
+        window.location.href = `/equipment?projectId=${projectId}`;
     }
 
     //工程を追加する
