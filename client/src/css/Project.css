@@ -67,6 +67,11 @@
     text-align: center;
 }
 
+span{
+    color: red;
+    font-size: 1.2;
+}
+
 .showAlert{
     background-color: #009900;
     padding: 10px 50px;
@@ -81,6 +86,33 @@
     justify-content: center;  /* 水平方向に中央に配置 */
     align-items: center;      /* 垂直方向に中央に配置 */
     text-align: center;
+}
+
+.someReflects {
+  /* flexはカードのコンテナだけに */
+  margin-top: 12px;
+}
+
+/* .reflectカードの親だけをflexにするためのクラスを追加 */
+.someReflectsCards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.reflect {
+display: inline-block;   /* 横並び */
+  vertical-align: top;
+  width: 30%;
+  height: 30%;
+  margin: 5px 20px;
+  box-sizing: border-box;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #fafafa;
+  aspect-ratio: 2 / 1 ;
 }
 
 /* モーダル背景 (オーバーレイ) */
