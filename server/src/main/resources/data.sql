@@ -1,3 +1,6 @@
+--写真おっきく
+ALTER TABLE equip_details MODIFY COLUMN picture LONGBLOB;
+
 --ユーザーリスト
 INSERT INTO users (email, password, name) VALUES ('yazawa@hisao.com', 'ninnkikoushi', '矢沢　久雄');
 INSERT INTO users (email, password, name) VALUES ('ex@exam.com', 'pass1234', '山田 太郎');

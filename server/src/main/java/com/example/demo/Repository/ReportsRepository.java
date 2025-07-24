@@ -11,7 +11,8 @@ import com.example.demo.Entity.Report;
 public interface ReportsRepository extends JpaRepository<Report, Integer> {
 	
 	List<Report> findByProcessId(Integer processId);
-
+	
 	Optional<Report> findByProcessIdAndCreatedAt(Integer processId, LocalDate createdAt);
+	
 
 }

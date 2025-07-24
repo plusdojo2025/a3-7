@@ -22,6 +22,9 @@ import Reflect from './Reflect';
 import ViewProjectWrapper from './ViewProject';
 import ViewProcessWrapper from './ViewProcess';
 import ViewTextWrapper from './ViewText';
+import WeeklyReport from './WeeklyReport';
+
+
 
 
 
@@ -59,6 +62,9 @@ function App() {
               <Route path="report/project/:projectId/process/:processId" element={<Report />} />
               <Route path="reflect/project/:projectId/process/:processId" element={<Reflect />} />
               <Route path="reportEdit/" element={<ReportEdit />} />
+              <Route path="project/:projectId/processes/:processId" element={<WeeklyReport />} />
+              
+             
 
             </Routes>
           </Common>
