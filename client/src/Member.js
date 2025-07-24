@@ -6,21 +6,23 @@ import axios from "axios";
 export default class Member extends React.Component {
   constructor(props) {
     super(props);
-    this.projectId = 1;
+    //ここを意図するプロジェクトに飛ぶように変える
+    const params = new URLSearchParams(window.location.search);
+  this.projectId = params.get("projectId"); // ← URLから取得
 
-    this.state = {
-      email: '',
-      name: '',
-      isInviteModalOpen: false,
-      isDeleteModalOpen: false,
-      userId: null,
-      approvedMembers: [],
-      selectedMemberId: null,
-      currentUserId: null,
-      currentUserAuthority: null,
-      updatedAuthorities: {},
-    };
-  }
+  this.state = {
+    email: '',
+    name: '',
+    isInviteModalOpen: false,
+    isDeleteModalOpen: false,
+    userId: null,
+    approvedMembers: [],
+    selectedMemberId: null,
+    currentUserId: null,
+    currentUserAuthority: null,
+    updatedAuthorities: {},
+  };
+}
 
   componentDidMount() {
     axios.get("http://localhost:8080/getCurrentUser", { withCredentials: true })
@@ -146,7 +148,7 @@ export default class Member extends React.Component {
           userId: Number(userId),
           projectId: this.projectId,
           authority: Number(authority),
-        },{withCredentials: true})
+        }, { withCredentials: true })
       )
     )
       .then(() => {
@@ -173,22 +175,25 @@ export default class Member extends React.Component {
         <h1>プロジェクトメンバー編集</h1>
 
         {this.state.currentUserAuthority === 3 && (
-          <div className="input-wrapper">
-            <input
-              type="text"
-              name="mail"
-              value={this.state.email}
-              onChange={this.handleChange}
-              placeholder="招待したい方のメールアドレスを入力してください"
-            />
-            <input
-              className="sub_botun"
-              type="button"
-              value="検索"
-              onClick={this.handleSearch}
-            />
+          <div>
+            <div className="input-wrapper">
+              <div className="search_container">
+                <input
+                  type="text"
+                  name="mail"
+                  value={this.state.email}
+                  onChange={this.handleChange}
+                  placeholder="招待したい方のメールアドレスを入力してください"
+                />
+                <input
+                  type="submit"   // ← "button" ではなく "submit" か "input[type='submit']" に合わせる
+                  value="検索"       // ← FontAwesomeの検索アイコンコード（任意）
+                  onClick={this.handleSearch}
+                />
+              </div>
+            </div>
 
-            <div className="welcome-container">
+            <div className="member-container">
               <div className="result">
                 <p className="user-name-display">一致した名前：{this.state.name}</p>
                 {this.state.userId && this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
@@ -214,7 +219,7 @@ export default class Member extends React.Component {
           </div>
         )}
 
-        <div>
+        <div className="member-container">
           <table>
             <thead>
               <tr>
@@ -239,7 +244,6 @@ export default class Member extends React.Component {
                           onChange={() => this.handleAuthorityChange(member.userId, auth)}
                           disabled={this.state.currentUserAuthority !== 3}
                         />
-                        {auth === 1 ? "閲覧" : auth === 2 ? "編集" : "管理"}
                       </label>
                     </td>
                   ))}
@@ -273,9 +277,17 @@ export default class Member extends React.Component {
 
           {this.state.currentUserAuthority === 3 && (
             <button className="sub_botun" onClick={this.handleUpdateAuthorities}>
-              権限を保存
+              更新
             </button>
           )}
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <button
+            className="sub_botun"
+            onClick={() => window.location.href = `/project?id=${this.projectId}`}
+          >
+            戻る
+          </button>
         </div>
       </>
     );

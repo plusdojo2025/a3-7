@@ -3,66 +3,78 @@ import axios from "axios";
 import './css/Common.css';
 import './css/Project.css';
 
-export default class Project extends React.Component{
-    constructor(props){
+export default class Project extends React.Component {
+    constructor(props) {
         super(props);
 
         //表示するプロジェクトのidを取得
         const params = new URLSearchParams(window.location.search);
         const projectId = params.get('id');
-  
+
+        this.editMembers = this.editMembers.bind(this);
+
         //今日の日付を取得
         const currentDate = new Date();
         const defaultDate = currentDate.toISOString().slice(0, 10);
 
 
         this.state = {
-            projectId:projectId,
-            project:[],
-            processes:[],
-            error:"",
-            reflects:[],
-            reflectTags:[],
-            showCloseProjectModal:false,
-            showAddProcessModal:false,
-            addName:"",
-            date:defaultDate,
-            report:"",
+            projectId: projectId,
+            project: [],
+            processes: [],
+            error: "",
+            reflects: [],
+            showCloseProjectModal: false,
+            showAddProcessModal: false,
+            addName: "",
+            date: defaultDate,
+            report: "",
         }
-        //バインド追加
-        this.manageEquipment = this.manageEquipment.bind(this);
     }
 
     componentDidMount() {
         const { projectId } = this.state;
-        console.log("projectId:"+projectId);
+        console.log("projectId:" + projectId);
 
-        Promise.all([
-            axios.get(`/api/project/${projectId}/`),
-            axios.get(`/api/projectDetails/${projectId}/`),
-            axios.get(`/api/reflectSummary/${projectId}/`),
-            axios.get(`/api/reflectTags/`)
-        ])
-        .then(([projectRes, detailsRes, summaryRes, tagsRes]) => {
-            this.setState({
-                project: projectRes.data,
-                processes: detailsRes.data,
-                reflects: summaryRes.data,
-                reflectTags: tagsRes.data
+        axios.get(`/api/project/${projectId}/`)
+            .then(json => {
+                console.log(json);
+                this.setState({
+                    project: json.data
+                });
+            })
+            .catch(error => {
+                console.error("データ取得エラー:", error);
             });
-        console.log('すべてのデータを取得しました');
-        })
-        .catch(error => {
-        console.error('データ取得中にエラーが発生しました:', error);
-        });
 
+        axios.get(`/api/projectDetails/${projectId}/`)
+            .then(json => {
+                console.log(json);
+                this.setState({
+                    processes: json.data
+                });
+            })
+            .catch(error => {
+                console.error("データ取得エラー:", error);
+            });
+
+        axios.get(`/api/getReflects/${projectId}/`)
+            .then(json => {
+                console.log(json);
+                this.setState({
+                    reflects: json.data
+                });
+            })
+            .catch(error => {
+                console.error("データ取得エラー:", error);
+            });
 
         this.setState({
-            error:"",
-            showCloseProjectModal:false,
-            showAddProcessModal:false,
-            addName:"",
-            report:"",
+            error: "",
+            showCloseProjectModal: false,
+            showAddProcessModal: false,
+            addName: "",
+            report: "",
         });
     }
 
@@ -71,7 +83,7 @@ export default class Project extends React.Component{
         this.setState({
             [name]: e.target.value
         });
-    }  
+    }
 
     //プロセスの詳細ページに遷移するための関数
     lookProcess(processId) {
@@ -80,21 +92,21 @@ export default class Project extends React.Component{
 
     //モーダルウィンドウの表示切り替え
     toggleCloseProjectModal = () => {
-        const{showCloseProjectModal} = this.state;
+        const { showCloseProjectModal } = this.state;
         this.setState({
             showCloseProjectModal: !showCloseProjectModal
         });
     }
     toggleAddProcessModal = () => {
-        const{showAddProcessModal} = this.state;
+        const { showAddProcessModal } = this.state;
         this.setState({
             showAddProcessModal: !showAddProcessModal
         });
     }
 
     //プロジェクトを終了する
-    closeProject(close){
-        const{date, report, projectId} = this.state;
+    closeProject(close) {
+        const { date, report, projectId } = this.state;
 
         //入力チェック
         if (!date) {
@@ -106,46 +118,50 @@ export default class Project extends React.Component{
             return;
         }
 
-        const data = {projectReportId:null, createdAt:date, report:report, projectId:projectId};
+        const data = { projectReportId: null, createdAt: date, report: report, projectId: projectId };
         console.log(data);
 
-        if(close === 1){
+        if (close === 1) {
             axios.post(`/api/closePublicProject/${projectId}/`, data)
-            .then(json =>{
-                this.toggleCloseProjectModal();
-                this.componentDidMount();
-            })
-            .catch(error => {
-                console.error("登録時にエラーが発生しました:", error);
-            });
+                .then(json => {
+                    this.toggleCloseProjectModal();
+                    this.componentDidMount();
+                })
+                .catch(error => {
+                    console.error("登録時にエラーが発生しました:", error);
+                });
         }
-        else{
-            axios.post(`/api/closeUnpublishProject/${projectId}/`,data)
-            .then(json =>{
-                this.toggleCloseProjectModal();
-                this.componentDidMount();
-            })
-            .catch(error => {
-                console.error("登録時にエラーが発生しました:", error);
-            });
+        else {
+            axios.post(`/api/closeUnpublishProject/${projectId}/`, data)
+                .then(json => {
+                    this.toggleCloseProjectModal();
+                    this.componentDidMount();
+                })
+                .catch(error => {
+                    console.error("登録時にエラーが発生しました:", error);
+                });
         }
-        
+
+
+
+
+
     }
 
     //メンバー編集をする
-    editMembers(){
-        window.alert("ここに処理を実装");
+    editMembers() {
+        const { projectId } = this.state;
+        window.location.href = `/member?projectId=${projectId}`;
     }
 
     //備品の管理をする
-    manageEquipment(){
-        const {projectId} = this.state;
-        window.location.href = `/equipment?projectId=${projectId}`;
+    manageEquipment() {
+        window.alert("ここに処理を実装");
     }
 
     //工程を追加する
-    addProcess(){
-        const{addName, projectId} = this.state;
+    addProcess() {
+        const { addName, projectId } = this.state;
 
         //入力チェック
         if (!addName) {
@@ -153,37 +169,27 @@ export default class Project extends React.Component{
             return;
         }
 
-        const data = {processtId:null, processName:addName, projectId:projectId, complete:0};
+        const data = { processtId: null, processName: addName, projectId: projectId, complete: 0 };
         console.log(data);
         axios.post(`/api/addProcess/${projectId}/`, data)
-        .then(json =>{
-            this.toggleAddProcessModal();
-            this.componentDidMount();
-            
-        })
-        .catch(error => {
+            .then(json => {
+                this.toggleAddProcessModal();
+                this.componentDidMount();
+
+            })
+            .catch(error => {
                 console.error("登録時にエラーが発生しました:", error);
-        });
-    }
-    
-    // 反省タグを取得する
-    getReflectTagName(tagId) {
-        const { reflectTags } = this.state;
-        const tag = reflectTags.find(tag => tag.reflectTagId === tagId);
-        return tag ? tag.reflectName : "不明なタグ";
+            });
     }
 
-    render(){
-        const {project, processes, reflects, showCloseProjectModal, showAddProcessModal, error} = this.state;
+    render() {
+        const { project, processes, showCloseProjectModal, showAddProcessModal, error } = this.state;
         // completeが0のプロセス
         const progressProcesses = processes.filter(p => p.complete === 0);
 
         // completeが1のプロセス
         const closedProcesses = processes.filter(p => p.complete === 1);
-
-        const reflect = reflects[0];
-
-        return( 
+        return (
             <div className="ProjectDetails">
                 <h1 className="ProjectTitle">{project.projectName}</h1>
                 <p>{error}</p>
@@ -195,12 +201,12 @@ export default class Project extends React.Component{
                         ) : (
                             <table>
                                 <tbody>
-                                {progressProcesses.map((process, index) =>
-                                    <tr key={index} className="ProgeressProcess">
-                                        <td className="process_name" onClick={()=> this.lookProcess(process.processId)}>
-                                            {process.processName}</td>
-                                    </tr>
-                                )}
+                                    {progressProcesses.map((process, index) =>
+                                        <tr key={index} className="ProgeressProcess">
+                                            <td className="process_name" onClick={() => this.lookProcess(process.processId)}>
+                                                {process.processName}</td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         )}
@@ -213,12 +219,12 @@ export default class Project extends React.Component{
                         ) : (
                             <table>
                                 <tbody>
-                                {closedProcesses.map((process, index) =>
-                                    <tr key={index} className="ClosedProcesses">
-                                        <td className="process_name" onClick={()=> this.lookProcess(process.processId)}>
-                                            {process.processName}</td>
-                                    </tr>
-                                )}
+                                    {closedProcesses.map((process, index) =>
+                                        <tr key={index} className="ClosedProcesses">
+                                            <td className="process_name" onClick={() => this.lookProcess(process.processId)}>
+                                                {process.processName}</td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         )}
@@ -233,79 +239,51 @@ export default class Project extends React.Component{
                 <div className="alertBox">
                     <div className="showAlert">
                         {/*アラート部分の画面表示*/}
-                        {reflects.length === 0 ? (
-                            <p>反省が登録されていません</p>
-                        ) : (
-                            <div className="reflectAnnounce">
-                                <div className="summary">
-                                    <span>「{this.getReflectTagName(reflect.reflectTagId)}」</span>タグの反省が最も多く登録されています
-                                </div>
-                                最近作成された内容
-                                <div className="someReflects">
-                                    
-                                    <div className="reflect">
-                                        {reflects[reflects.length - 1].createdAt}
-                                        <br />--------------------<br />
-                                        {reflects[reflects.length - 1].comment}
-                                    </div>
-                                    {reflects.length >= 2 && (
-                                        <div className="reflect">
-                                            {reflects[reflects.length - 2]?.createdAt}
-                                            <br />--------------------<br />
-                                            {reflects[reflects.length - 2]?.comment}
-                                        </div>
-                                    )}
-
-                                </div>
-                            </div>
-                        )}
+                        <p>ここに反省を表示</p>
                     </div>
                 </div>
 
                 {/* プロジェクト終了用モーダル */}
                 {showCloseProjectModal && (
-                <div id="overlayCloseProject" className="modal-overlay">
-                    <div id="contentCloseProject" className="modal-content">
-                        <h2>報告書登録</h2>
-                        <div className="inputContainer">
-                            <label>日時</label>
-                            <input type="date" name="date" value={this.state.date} onChange={this.onInput} />
-                        </div>
-                        <div className="inputContainer">
-                            <label>コメント</label>
-                            <input type="text" name="report" onChange={this.onInput} />
-                        </div>
-                        <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
-                        <div className="buttonContainer">
-                            <button onClick={() => this.closeProject(1)}>はい</button>
-                            <button onClick={() => this.closeProject(0)}>いいえ</button>
-                            <button onClick={this.toggleCloseProjectModal}>キャンセル</button>
+                    <div id="overlayCloseProject" className="modal-overlay">
+                        <div id="contentCloseProject" className="modal-content">
+                            <h2>報告書登録</h2>
+                            <div className="inputContainer">
+                                <label>日時</label>
+                                <input type="date" name="date" value={this.state.date} onChange={this.onInput} />
+                            </div>
+                            <div className="inputContainer">
+                                <label>コメント</label>
+                                <input type="text" name="report" onChange={this.onInput} />
+                            </div>
+                            <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
+                            <div className="buttonContainer">
+                                <button onClick={() => this.closeProject(1)}>はい</button>
+                                <button onClick={() => this.closeProject(0)}>いいえ</button>
+                                <button onClick={this.toggleCloseProjectModal}>キャンセル</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 )}
 
                 {/* プロセス追加用モーダル */}
                 {showAddProcessModal && (
-                <div id="overlayAddProcess" className="modal-overlay">
-                    <div id="contentAddProcess" className="modal-content">
-                        <h2>工程の追加</h2>
-                        <div className="inputContainer">
-                            <label>工程名</label>
-                            <input type="text" name="addName" value={this.state.addName} onChange={this.onInput} />
-                        </div>
-                        <div className="buttonContainer">
-                            <button onClick={this.toggleAddProcessModal}>戻る</button>
-                            <button onClick={() => this.addProcess()}>登録</button>
+                    <div id="overlayAddProcess" className="modal-overlay">
+                        <div id="contentAddProcess" className="modal-content">
+                            <h2>工程の追加</h2>
+                            <div className="inputContainer">
+                                <label>工程名</label>
+                                <input type="text" name="addName" value={this.state.addName} onChange={this.onInput} />
+                            </div>
+                            <div className="buttonContainer">
+                                <button onClick={this.toggleAddProcessModal}>戻る</button>
+                                <button onClick={() => this.addProcess()}>登録</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 )}
 
             </div>
         )
     };
-
 }
-
-
