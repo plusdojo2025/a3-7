@@ -19,15 +19,15 @@ INSERT INTO project_tags (project_tag_name) VALUES ('植物分子学');
 
 --プロジェクトリスト
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('熱帯雨林におけるハナアブの生態', 1, 1);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病1', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('個体老化における細胞応答メカニズムの解析', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('ゲノム編集による植物耐乾燥性の向上', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('疾患モデルマウスを用いた中枢神経の構造解析', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('タンパク質フォールディング異常と疾患発症の相関研究', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('幹細胞分化におけるエピゲノム制御因子の機能解析', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('光合成効率を高める葉緑体遺伝子の機能解析', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('遺伝子発現プロファイルによるがん予後予測モデルの構築', 1, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('神経伝達物質の動態に関するマルチスケール解析', 1, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('バナナの品種改良と疫病', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('個体老化における細胞応答メカニズムの解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('ゲノム編集による植物耐乾燥性の向上', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('疾患モデルマウスを用いた中枢神経の構造解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('タンパク質フォールディング異常と疾患発症の相関研究', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('幹細胞分化におけるエピゲノム制御因子の機能解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('光合成効率を高める葉緑体遺伝子の機能解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('遺伝子発現プロファイルによるがん予後予測モデルの構築', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('神経伝達物質の動態に関するマルチスケール解析', 0, 2);
 
 --メンバーリスト
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(1, 1, 3, 1);
