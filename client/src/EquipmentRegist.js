@@ -30,7 +30,6 @@ export default function EquipmentRegist() {
     storage: '',
     judge: '',
     remarks: '',
-   // projectId: '1',     //ここ保留
   });
   const [image, setImage] = useState(null);
   const [error, setError] = useState('');
@@ -86,7 +85,7 @@ export default function EquipmentRegist() {
     formData.append('equipName', form.equipName);
     formData.append('limited', form.limited);
     formData.append('remaining', form.remaining);
-    formData.append('unit', form.unit-1);
+    formData.append('unit', form.unit);
     formData.append('storage', form.storage);
     formData.append('judge', form.judge);
     formData.append('remarks', form.remarks || '');
