@@ -13,6 +13,7 @@ import com.example.demo.Entity.Equipment;
 import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipmentsRepository;
 
+
 @RestController
 @RequestMapping("/api/equip")
 public class EquipSearchController {
@@ -24,39 +25,34 @@ public class EquipSearchController {
     private EquipDetailsRepository detailsRepo;
 
     @GetMapping("/search")
-    public List<EquipmentSearchResponse> searchEquipments(@RequestParam("keyword") String keyword) {
-//        List<Equipment> list = equipmentsRepo.findByEquipNameContaining(keyword);
-    	List<Equipment> list;
+    public List<EquipmentSearchResponse> searchEquipments(
+            @RequestParam(name = "keyword", required = false) String keyword, // keywordをオプションに
+            @RequestParam(name = "projectId", required = false) Integer projectId) { // projectIdをオプションで追加
         
-        if (keyword == null || keyword.trim().isEmpty()) {
-            // キーワードが空の場合は全件取得
-            list = equipmentsRepo.findAll();
+        List<Equipment> list;
+        
+        // projectId が指定されている場合のフィルタリングロジック
+        if (projectId != null) {
+            // Equipmentエンティティに直接projectIdフィールドが存在する場合の処理
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                // projectIdとkeywordの両方で検索
+                list = equipmentsRepo.findByProjectIdAndEquipNameContaining(projectId, keyword);
+            } else {
+                // projectIdのみで検索（キーワードなし）
+                list = equipmentsRepo.findByProjectId(projectId);
+            }
         } else {
-            // キーワード検索
-            list = equipmentsRepo.findByEquipNameContaining(keyword);
+            // 全件またはキーワード検索
+            if (keyword == null || keyword.trim().isEmpty()) {
+                // キーワードが空の場合は全件取得
+                list = equipmentsRepo.findAll();
+            } else {
+                // キーワード検索（projectIdなし）
+                list = equipmentsRepo.findByEquipNameContaining(keyword);
+            }
         }
 
-//        return list.stream().peek(e -> {
-//            e.setName(e.getEquipName());
-//            e.setType("equip");
-//
-//            if (e.getEquipDetailId() != null) {
-//                detailsRepo.findById(e.getEquipDetailId()).ifPresent(detail -> {
-//                    byte[] imgBytes = detail.getPicture();
-//                    if (imgBytes != null && imgBytes.length > 0) {
-//                        String base64 = Base64.getEncoder().encodeToString(imgBytes);
-//                        e.setImage(base64);
-//                    } else {
-//                        e.setImage("");
-//                    }
-//                });
-//            } else {
-//                e.setImage("");
-//            }
-//
-//        }).collect(Collectors.toList());
-//    }
-    	
+        // 検索結果をレスポンス用DTOにマッピング
         return list.stream().map(equipment -> {
             EquipmentSearchResponse response = new EquipmentSearchResponse();
             response.equipId = equipment.getEquipId();
@@ -78,7 +74,8 @@ public class EquipSearchController {
 
     @GetMapping("/all")
     public List<EquipmentSearchResponse> getAllEquipments() {
-        return searchEquipments(""); // 全件取得
+
+        return searchEquipments(null, null); 
     }
 
     /** レスポンス用DTOクラス */
@@ -86,6 +83,8 @@ public class EquipSearchController {
         public Integer equipId;
         public String equipName;
         public String type;
-        public String imageUrl;
+        public String imageUrl; // 画像URLを保持するフィールド
     }
 }
+
+
