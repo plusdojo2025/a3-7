@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './css/EquipmentRegist.css';
 
 const unitMap = {
@@ -15,6 +16,10 @@ const unitMap = {
 const judgeOptions = ['50', '40', '30', '20', '10'];
 
 export default function EquipmentRegist() {
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     equipName: '',
     limited: '',
@@ -23,11 +28,26 @@ export default function EquipmentRegist() {
     storage: '',
     judge: '',
     remarks: '',
-    equipKindId: '0',  //備品:0、生物:1
-    projectId: '1',     //ここ保留
+   // equipKindId: '0',  //備品:0、生物:1
+   // projectId: '1',     //ここ保留
   });
   const [image, setImage] = useState(null);
   const [error, setError] = useState('');
+  const [projectIdForRegistration, setProjectIdForRegistration] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const projectIdFromUrl = params.get('projectId');
+
+    if (projectIdFromUrl) {
+      setProjectIdForRegistration(projectIdFromUrl);
+      console.log('備品登録画面でプロジェクトID検出：',projectIdFromUrl);
+    }
+    else {
+      setError('登録失敗：プロジェクトIDが取得できませんでした。');
+      console.error('プロジェクトIDが見つかりませんでした。')
+    }
+  }, [location.search]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,6 +80,7 @@ export default function EquipmentRegist() {
       formData.append('picture', image);
     }
     
+    formData.append('projectId', projectIdForRegistration);
 
     try {
       const res = await axios.post(
@@ -68,6 +89,7 @@ export default function EquipmentRegist() {
       );
       alert('登録成功');
       console.log(res.data);
+      navigate(`/equipment?projectId=${projectIdForRegistration}`);
 
       //フォームと画像をクリア
       setForm({
