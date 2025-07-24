@@ -43,9 +43,12 @@ INSERT INTO members (project_id, user_id, authority, attend) VALUES(10, 2, 2, 1)
 --備品種類
 INSERT INTO equip_kinds (equip_kind_name) VALUES ('道具');
 INSERT INTO equip_kinds (equip_kind_name) VALUES ('昆虫');
+INSERT INTO equip_kinds (equip_kind_name) VALUES ('果物');
+
 
 --備品
 INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('虫あみ', 1, 1, 1);
+INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('バナナ', 3, 2, 2);
 
 --生体
 
@@ -54,6 +57,7 @@ INSERT INTO biology_details (kind, gender, age, process_id, remarks, picture) VA
 
 --備品詳細
 INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-04-28', 10.0, '倉庫', '所々穴が開いている。', 1, null);
+INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-07-25', 10.0, 'キッチン', '特売', 2, null);
 
 --単位
 INSERT INTO units (unit) VALUES ('本'),('個'),('箱'),('kg'),('g'),('mg'),('L'),('ml');

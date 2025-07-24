@@ -23,6 +23,15 @@ export default function EquipmentPage() {
     }
   };
 
+  const handleNavigateToEquipmentRegist = () => {
+    if (currentProjectId) {
+      navigate(`/equipmentRegist?projectId=${currentProjectId}`);
+    }
+    else {
+      alert('プロジェクトIDが不明のため、備品登録画面へ遷移できません。');
+    }
+  }
+
   const loadAlerts = async () => {
     try {
       // アラート機能は後で実装
@@ -124,7 +133,7 @@ export default function EquipmentPage() {
       {/* ボタンエリア */}
       <div className="button-area">
         <button onClick={() => navigate(-1)}>戻る</button>
-        <button onClick={() => navigate('/equipmentRegist')}>備品登録</button>
+        <button onClick={handleNavigateToEquipmentRegist}>備品登録</button>
         <button onClick={() => navigate('/bioRegist')}>生体登録</button>
       </div>
     </div>

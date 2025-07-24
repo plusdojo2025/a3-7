@@ -37,7 +37,8 @@ public class EquipRegistController {
         @RequestParam("unit") String unitStr,
         @RequestParam("storage") String storage,
         @RequestParam(value = "remarks", required = false) String remarks,
-        @RequestParam(value = "picture", required = false) MultipartFile picture
+        @RequestParam(value = "picture", required = false) MultipartFile picture,
+        @RequestParam("projectId") Integer projectId
     ) {
         try {
             System.out.println("=== 備品登録開始 ===");
@@ -48,6 +49,7 @@ public class EquipRegistController {
             System.out.println("unitStr: " + unitStr);
             System.out.println("storage: " + storage);
             System.out.println("remarks: " + remarks);
+            System.out.println("projectId: " + projectId);
             
             // パラメータの検証
             if (equipName == null || equipName.trim().isEmpty()) {
@@ -66,6 +68,9 @@ public class EquipRegistController {
             }
             if (judgeStr == null || judgeStr.trim().isEmpty()) {
                 judgeStr = "10"; // デフォルト値
+            }
+            if (projectId == null) {
+                return ResponseEntity.badRequest().body("プロジェクトIDが指定されていません");
             }
 
             double remaining = Double.parseDouble(remainingStr);
@@ -100,7 +105,7 @@ public class EquipRegistController {
             equipment.setEquipName(equipName);
             equipment.setEquipDetailId(savedDetail.getEquipDetailId());
             equipment.setEquipKindId(1); // 備品種類ID（data.sqlから1='道具'）
-            equipment.setProjectId(1);   // 必要に応じて動的に変更
+            equipment.setProjectId(projectId);
 
             System.out.println("Equipment保存前");
             Equipment savedEquipment = equipmentRepository.save(equipment);
