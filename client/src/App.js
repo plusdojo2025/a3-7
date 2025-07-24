@@ -24,6 +24,7 @@ import ViewProcessWrapper from './ViewProcess';
 import ViewTextWrapper from './ViewText';
 
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -55,9 +56,10 @@ function App() {
               <Route path="bioRegist" element={<BioRegist />} />
               <Route path="equipmentEdit" element={<EquipmentEdit />} />
               <Route path="bioEdit" element={<BioEdit />} />
-              <Route path="report/:project/:projectId/process/:processId" element={<Report />} />
-              <Route path="reflect/:project/:projectId/process/:processId" element={<Reflect />} />
+              <Route path="report/project/:projectId/process/:processId" element={<Report />} />
+              <Route path="reflect/project/:projectId/process/:processId" element={<Reflect />} />
               <Route path="reportEdit/" element={<ReportEdit />} />
+
             </Routes>
           </Common>
         } />

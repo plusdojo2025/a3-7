@@ -119,17 +119,5 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Report not found");
         }
     }
-//    @GetMapping("/weekly-reports")
-//    public Report getReportByDate(@RequestParam String createdAt) {
-//        try {
-//            LocalDate localDate = LocalDate.parse(createdAt); 
-//            Optional<Report> optionalReport = reportRepository.findByDate(localDate);
-//            return optionalReport.orElseThrow(() ->
-//                new RuntimeException("No report found for date: " + createdAt)
-//            );
-//        } catch (DateTimeParseException e) {
-//            throw new RuntimeException("Invalid date format. Expected yyyy-MM-dd");
-//        }
-//    }
-    }
 
+}

@@ -10,7 +10,7 @@ export default class Project extends React.Component{
         //表示するプロジェクトのidを取得
         const params = new URLSearchParams(window.location.search);
         const projectId = params.get('id');
-
+  
         //今日の日付を取得
         const currentDate = new Date();
         const defaultDate = currentDate.toISOString().slice(0, 10);
