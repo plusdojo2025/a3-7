@@ -1,19 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; 
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom'; 
+import './css/Common.css';
 import './css/equipment.css';
 
-export default function EquipmentPage() {
+export default function Equipment() {
   const [keyword, setKeyword] = useState('');
   const [items, setItems] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSearch = async () => {
+  //URLからprojectIdを取得
+  const [currentProjectId, setCurrentProjectId] = useState(null);
+
+  //備品を検索する非同期関数
+  const performSearch = useCallback(async (projectIdToSearch, searchKeyword) => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/equip/search?keyword=${encodeURIComponent(keyword)}`);
+      const url = new URL('/api/equip/search', window.location.origin);
+      if (searchKeyword) {
+        url.searchParams.append('keyword', searchKeyword);
+      }
+      if (projectIdToSearch) {
+        url.searchParams.append('projectId', projectIdToSearch);
+      }
+
+      const response = await axios.get(url.toString());
+      console.log('検索結果:', response.data);
       setItems(response.data);
     } catch (error) {
       console.error('検索エラー:', error);
@@ -21,20 +36,12 @@ export default function EquipmentPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const handleNavigateToEquipmentRegist = () => {
-    if (currentProjectId) {
-      navigate(`/equipmentRegist?projectId=${currentProjectId}`);
-    }
-    else {
-      alert('プロジェクトIDが不明のため、備品登録画面へ遷移できません。');
-    }
-  }
-
-  const loadAlerts = async () => {
+  // アラートをロードする非同期関数
+  const loadAlerts = async (projectIdToLoadAlerts) => { 
     try {
-      // アラート機能は後で実装
+      // アラート機能は後で実装。
       setAlerts([]); // 一時的に空配列をセット
     } catch (error) {
       console.error('アラート取得エラー:', error);
@@ -42,19 +49,57 @@ export default function EquipmentPage() {
     }
   };
 
-  const handleItemClick = (equipId) => {
-    navigate(`/equipmentEdit`, { state: { equipmentId: equipId } });
-  };
-
-  const handleImageError = (e) => {
-    e.target.style.display = 'none';
-    e.target.nextSibling.style.display = 'block';
-  };
-
   useEffect(() => {
-    handleSearch(); // 初期読み込み時に全件表示
-    loadAlerts();   // アラート情報を取得
-  }, []);
+    const params = new URLSearchParams(location.search); 
+    const projectIdFromUrl = params.get('projectId');
+
+    if (projectIdFromUrl) {
+      setCurrentProjectId(projectIdFromUrl); // stateにprojectIdを保存
+      console.log('useEffectでprojectIdを検出:', projectIdFromUrl);
+
+      // プロジェクトIDを渡して初期検索とアラートロードを行う
+      performSearch(projectIdFromUrl, ''); 
+      loadAlerts(projectIdFromUrl);
+    } else {
+      // projectIdがない場合
+      console.log('projectIdが見つかりませんでした。');
+      setCurrentProjectId(null);
+      setItems([]); 
+      setKeyword(''); 
+      setAlerts([]); 
+    }
+  }, [location.search, performSearch]); 
+
+  const handleSearchButtonClick = () => {
+
+    if (!currentProjectId) {
+      alert('プロジェクトIDが不明です。')
+      return;
+    }
+    performSearch(currentProjectId, keyword);
+  };
+
+  // 備品登録ページへの遷移ハンドラに projectId を渡すロジックを追加
+  const handleNavigateToEquipmentRegist = () => {
+    if (currentProjectId) {
+      navigate(`/equipmentRegist?projectId=${currentProjectId}`);
+    } else {
+      alert('プロジェクトIDが不明なため、備品登録画面へ遷移できません。');
+    }
+  };
+
+  const handleItemClick = (equipId) => {
+    // 備品編集ページへ equipId と projectId を state として渡す
+    navigate(`/equipmentEdit`, { state: { equipmentId: equipId, projectId: currentProjectId } });
+  };
+
+  // 画像エラー時のフォールバック処理 (冗長なインラインコードを避けるため再利用)
+  const handleImageError = (e) => {
+    e.target.style.display = 'none'; // エラーになった画像を非表示に
+    if (e.target.nextElementSibling) {
+      e.target.nextElementSibling.style.display = 'block'; // 直後のフォールバック要素を表示
+    }
+  };
 
   return (
     <div className="container">
@@ -79,18 +124,18 @@ export default function EquipmentPage() {
 
       {/* 検索バー */}
       <div className="search-bar">
-        <input 
-          type="text" 
-          placeholder="備品名を検索" 
+        <input
+          type="text"
+          placeholder="備品名を検索"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
-              handleSearch();
+              handleSearchButtonClick();
             }
           }}
         />
-        <button onClick={handleSearch} disabled={loading}>
+        <button onClick={handleSearchButtonClick} disabled={loading}>
           {loading ? '検索中...' : '検索'}
         </button>
       </div>
@@ -99,7 +144,7 @@ export default function EquipmentPage() {
       <div className="list-area">
         {loading ? (
           <p>読み込み中...</p>
-        ) : items.length === 0 ? (
+        ) : items.length === 0 && !loading ? (
           <p>該当する備品が見つかりませんでした。</p>
         ) : (
           items.map((item) => (
@@ -107,24 +152,31 @@ export default function EquipmentPage() {
               className="item-card"
               key={item.equipId}
               onClick={() => handleItemClick(item.equipId)}
+              style={{ cursor: 'pointer' }}
             >
-              {item.imageUrl ? (
-                <img
-                  src={item.imageUrl}
-                  alt={`${item.equipName}の画像`}
-                  className="item-image"
-                  onError={handleImageError}
-                />
+              {/* 画像の表示ロジックを整理 */}
+              {item.imageUrl || item.picture ? ( // imageUrlまたはpictureがあれば画像をレンダリング
+                <> {/* 複数の要素を返す場合はFragmentで囲む */}
+                  <img
+                    src={item.imageUrl || `data:image/jpeg;base64,${item.picture}`}
+                    alt={`${item.equipName}の画像`}
+                    className="item-image"
+                    onLoad={() => console.log('画像読み込み成功:', item.imageUrl || 'Base64 image')}
+                    onError={handleImageError} 
+                  />
+                  <div
+                    className="no-image-fallback"
+                    style={{ display: 'none' }} /* デフォルトで非表示 */
+                  >
+                    No image
+                  </div>
+                </>
               ) : (
+                // imageUrlもpictureもない場合に表示
                 <div className="no-image">No image</div>
               )}
-              <div 
-                className="no-image-fallback" 
-                style={{ display: 'none' }}
-              >
-                No image
-              </div>
               <div className="item-name">{item.equipName}</div>
+             
             </div>
           ))
         )}
