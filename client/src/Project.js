@@ -29,6 +29,8 @@ export default class Project extends React.Component{
             date:defaultDate,
             report:"",
         }
+        //バインド追加
+        this.manageEquipment = this.manageEquipment.bind(this);
     }
 
     componentDidMount() {
@@ -128,10 +130,6 @@ export default class Project extends React.Component{
             });
         }
         
-
-        
-        
-        
     }
 
     //メンバー編集をする
@@ -141,7 +139,8 @@ export default class Project extends React.Component{
 
     //備品の管理をする
     manageEquipment(){
-        window.alert("ここに処理を実装");
+        const {projectId} = this.state;
+        window.location.href = `/equipment?projectId=${projectId}`;
     }
 
     //工程を追加する
@@ -167,13 +166,23 @@ export default class Project extends React.Component{
         });
     }
     
+    // 反省タグを取得する
+    getReflectTagName(tagId) {
+        const { reflectTags } = this.state;
+        const tag = reflectTags.find(tag => tag.reflectTagId === tagId);
+        return tag ? tag.reflectName : "不明なタグ";
+    }
+
     render(){
-        const {project, processes, showCloseProjectModal, showAddProcessModal, error} = this.state;
+        const {project, processes, reflects, showCloseProjectModal, showAddProcessModal, error} = this.state;
         // completeが0のプロセス
         const progressProcesses = processes.filter(p => p.complete === 0);
 
         // completeが1のプロセス
         const closedProcesses = processes.filter(p => p.complete === 1);
+
+        const reflect = reflects[0];
+
         return( 
             <div className="ProjectDetails">
                 <h1 className="ProjectTitle">{project.projectName}</h1>
@@ -224,7 +233,32 @@ export default class Project extends React.Component{
                 <div className="alertBox">
                     <div className="showAlert">
                         {/*アラート部分の画面表示*/}
-                        <p>ここに反省を表示</p>
+                        {reflects.length === 0 ? (
+                            <p>反省が登録されていません</p>
+                        ) : (
+                            <div className="reflectAnnounce">
+                                <div className="summary">
+                                    <span>「{this.getReflectTagName(reflect.reflectTagId)}」</span>タグの反省が最も多く登録されています
+                                </div>
+                                最近作成された内容
+                                <div className="someReflects">
+                                    
+                                    <div className="reflect">
+                                        {reflects[reflects.length - 1].createdAt}
+                                        <br />--------------------<br />
+                                        {reflects[reflects.length - 1].comment}
+                                    </div>
+                                    {reflects.length >= 2 && (
+                                        <div className="reflect">
+                                            {reflects[reflects.length - 2]?.createdAt}
+                                            <br />--------------------<br />
+                                            {reflects[reflects.length - 2]?.comment}
+                                        </div>
+                                    )}
+
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -271,4 +305,7 @@ export default class Project extends React.Component{
             </div>
         )
     };
+
 }
+
+
