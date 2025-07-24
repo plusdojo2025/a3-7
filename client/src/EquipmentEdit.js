@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './css/EquipmentEdit.css';
 
 const alertTimingOptions = ['50', '40', '30', '20', '10'];
@@ -16,7 +17,11 @@ const unitMap = {
 
 const reverseUnitMap = Object.fromEntries(Object.entries(unitMap).map(([k, v]) => [v, k]));
 
-export default function EquipmentEdit({ equipmentId }) {
+export default function EquipmentEdit() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const equipmentId = location.state?.equipmentId;
+
   const [form, setForm] = useState({
     itemName: '',
     quantity: '',
@@ -30,25 +35,34 @@ export default function EquipmentEdit({ equipmentId }) {
   const [currentImageUrl, setCurrentImageUrl] = useState('');
   const [newImage, setNewImage] = useState(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`/equipment/details/equip/${equipmentId}`)
+    if (!equipmentId) {
+      setError('備品IDが指定されていません');
+      setLoading(false);
+      return;
+    }
+
+    axios.get(`/api/equipment/edit/${equipmentId}`)
       .then((res) => {
         const data = res.data;
         setForm({
           itemName: data.itemName,
           quantity: data.quantity,
-          unit: reverseUnitMap[data.unit],
+          unit: reverseUnitMap[data.unit] || '',
           expiryDate: data.expiryDate,
           location: data.location,
           alertTiming: data.alertTiming,
-          note: data.note
+          note: data.note || ''
         });
         setCurrentImageUrl(data.imageUrl);
+        setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
+        console.error('データ取得エラー:', err);
         setError('データ取得に失敗しました');
+        setLoading(false);
       });
   }, [equipmentId]);
 
@@ -80,20 +94,20 @@ export default function EquipmentEdit({ equipmentId }) {
 
       formData.append('itemName', form.itemName);
       formData.append('quantity', form.quantity);
-      formData.append('unit', unitMap[form.unit]); // ← ここがポイント！
+      formData.append('unit', unitMap[form.unit]);
       formData.append('expiryDate', form.expiryDate);
       formData.append('location', form.location);
       formData.append('alertTiming', form.alertTiming);
       formData.append('note', form.note);
 
-      await axios.put(`/equipment/details/equip/${equipmentId}`, formData, {
+      await axios.put(`/api/equipment/edit/${equipmentId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
       alert('更新完了！');
-      window.history.back();
+      navigate('/equipment');
     } catch (err) {
-      console.error(err);
+      console.error('更新エラー:', err);
       setError('更新に失敗しました');
     }
   };
@@ -101,58 +115,95 @@ export default function EquipmentEdit({ equipmentId }) {
   const handleDelete = async () => {
     if (!window.confirm('本当に削除しますか？')) return;
     try {
-      await axios.delete(`/equipment/details/equip/${equipmentId}`);
+      await axios.delete(`/api/equipment/edit/${equipmentId}`);
       alert('削除完了！');
-      window.history.back();
+      navigate('/equipment');
     } catch (err) {
-      console.error(err);
+      console.error('削除エラー:', err);
       setError('削除に失敗しました');
     }
   };
 
+  if (loading) {
+    return <div>読み込み中...</div>;
+  }
+
+  if (!equipmentId) {
+    return (
+      <div className='equipmentEdit-card'>
+        <h2>エラー</h2>
+        <p>備品IDが指定されていません</p>
+        <button onClick={() => navigate('/equipment')}>戻る</button>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', padding: 20, border: '1px solid #ccc', borderRadius: 10 }} 
-     className='equipmentEdit-card'>
+    <div className='equipmentEdit-card'>
       <h2>備品の詳細</h2>
-      <form onSubmit={handleUpdate} encType="multipart/form-data" style={{ display: 'flex', gap: 20 }}>
+      <form onSubmit={handleUpdate} encType="multipart/form-data" className="edit-form">
         {/* 左側 画像表示エリア */}
-        <div style={{ flex: 1, textAlign: 'center', border: '1px solid #ccc', padding: 10 }}>
-          <div>画像</div>
+        <div className="image-section">
+          <div className="image-label">画像</div>
           {newImage ? (
             <img
               src={URL.createObjectURL(newImage)}
               alt="新しい画像プレビュー"
-              style={{ maxWidth: '100%', maxHeight: 300 }}
+              className="preview-image"
+            />
+          ) : currentImageUrl ? (
+            <img
+              src={currentImageUrl}
+              alt="登録済み画像"
+              className="preview-image"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'block';
+              }}
             />
           ) : (
-            currentImageUrl && (
-              <img
-                src={currentImageUrl}
-                alt="登録済み画像"
-                style={{ maxWidth: '100%', maxHeight: 300 }}
-              />
-            )
+            <div className="no-image-placeholder">
+              画像なし
+            </div>
           )}
-          <div style={{ marginTop: 10 }}>
+          <div className="image-error-message">画像の読み込みに失敗しました</div>
+          <div className="file-input-container">
             <input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
         </div>
 
         {/* 右側 フォーム入力エリア */}
-        <div style={{ flex: 1 }}>
-          <div>
-            <label>備品名</label><br/>
-            <input type="text" name="itemName" value={form.itemName} onChange={handleChange} />
+        <div className="form-section">
+          <div className="form-group">
+            <label>備品名</label>
+            <input 
+              type="text" 
+              name="itemName" 
+              value={form.itemName} 
+              onChange={handleChange}
+              className="form-input"
+            />
           </div>
 
-          <div style={{ marginTop: 10 }}>
-            <label>残量</label><br/>
-            <input type="number" name="quantity" value={form.quantity} onChange={handleChange} />
+          <div className="form-group">
+            <label>残量</label>
+            <input 
+              type="number" 
+              name="quantity" 
+              value={form.quantity} 
+              onChange={handleChange}
+              className="form-input"
+            />
           </div>
 
-          <div style={{ marginTop: 10 }}>
-            <label>単位</label><br/>
-            <select name="unit" value={form.unit} onChange={handleChange}>
+          <div className="form-group">
+            <label>単位</label>
+            <select 
+              name="unit" 
+              value={form.unit} 
+              onChange={handleChange}
+              className="form-input"
+            >
               <option value="">選択</option>
               {Object.entries(unitMap).map(([label, value]) => (
                 <option key={value} value={label}>{label}</option>
@@ -160,19 +211,36 @@ export default function EquipmentEdit({ equipmentId }) {
             </select>
           </div>
 
-          <div style={{ marginTop: 10 }}>
-            <label>期限</label><br/>
-            <input type="date" name="expiryDate" value={form.expiryDate} onChange={handleChange} />
+          <div className="form-group">
+            <label>期限</label>
+            <input 
+              type="date" 
+              name="expiryDate" 
+              value={form.expiryDate} 
+              onChange={handleChange}
+              className="form-input"
+            />
           </div>
 
-          <div style={{ marginTop: 10 }}>
-            <label>保管場所</label><br/>
-            <input type="text" name="location" value={form.location} onChange={handleChange} />
+          <div className="form-group">
+            <label>保管場所</label>
+            <input 
+              type="text" 
+              name="location" 
+              value={form.location} 
+              onChange={handleChange}
+              className="form-input"
+            />
           </div>
 
-          <div style={{ marginTop: 10 }}>
-            <label>アラートのタイミング</label><br/>
-            <select name="alertTiming" value={form.alertTiming} onChange={handleChange}>
+          <div className="form-group">
+            <label>アラートのタイミング</label>
+            <select 
+              name="alertTiming" 
+              value={form.alertTiming} 
+              onChange={handleChange}
+              className="form-input"
+            >
               <option value="">選択</option>
               {alertTimingOptions.map((a) => (
                 <option key={a} value={a}>{a}%</option>
@@ -180,28 +248,39 @@ export default function EquipmentEdit({ equipmentId }) {
             </select>
           </div>
 
-          <div style={{ marginTop: 10 }}>
-            <label>備考</label><br/>
-            <input type="text" name="note" value={form.note} onChange={handleChange} />
+          <div className="form-group">
+            <label>備考</label>
+            <input 
+              type="text" 
+              name="note" 
+              value={form.note} 
+              onChange={handleChange}
+              className="form-input"
+            />
           </div>
         </div>
       </form>
 
-      {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
+      {error && <div className="error-message">{error}</div>}
 
-      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between' }}>
-        <button type="button" onClick={() => window.history.back()}>戻る</button>
+      <div className="button-group">
+        <button 
+          type="button" 
+          onClick={() => navigate('/equipment')}
+          className="button-back"
+        >
+          戻る
+        </button>
         <button
           type="button"
-          style={{ backgroundColor: '#f88', border: '1px solid #c00', padding: '5px 10px' }}
+          className="button-delete"
           onClick={handleDelete}
         >
           削除
         </button>
         <button
           type="submit"
-          form="editForm"
-          style={{ backgroundColor: '#cfc', border: '1px solid #9c9', padding: '5px 10px' }}
+          className="button-update"
           onClick={handleUpdate}
         >
           更新

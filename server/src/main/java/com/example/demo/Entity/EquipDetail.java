@@ -2,6 +2,7 @@ package com.example.demo.Entity;
 
 import java.sql.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,14 +22,29 @@ public class EquipDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer equipDitailId;
-    private Date limited;
+    @Column(name = "equip_detail_id")
+    private Integer equipDetailId;
+    
+    @Column(name = "remaining")
     private Double remaining;
-    private Integer unit;
-    private String remarks;
-    private String storage;
+    
+    @Column(name = "limited")
+    private Date limited;
+    
+    @Column(name = "judge")
     private Double judge;
+    
+    @Column(name = "storage")
+    private String storage;
+    
+    @Column(name = "remarks")
+    private String remarks;
+    
+    @Column(name = "unit")
+    private Integer unit;
+    
     @Lob
+    @Column(name = "picture")
     private byte[] picture;
 
 }

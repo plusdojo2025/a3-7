@@ -20,7 +20,8 @@ import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipmentsRepository;
 
 @RestController
-@RequestMapping("/equipment/details/equip/")
+//@RequestMapping("/equipment/details/equip/")
+@RequestMapping("/api/equipment/edit")
 public class EquipEditController {
 
     @Autowired
@@ -58,7 +59,7 @@ public class EquipEditController {
             // Equipmentエンティティを作成
             Equipment equipment = new Equipment();
             equipment.setEquipName(itemName);
-            equipment.setEquipDetailId(detail.getEquipDitailId());
+            equipment.setEquipDetailId(detail.getEquipDetailId());
             equipmentsRepository.save(equipment);
 
             return "登録成功";
@@ -82,6 +83,12 @@ public class EquipEditController {
             throw new RuntimeException("EquipDetail not found");
         }
         EquipDetail detail = detailOpt.get();
+        
+        // 画像URLを生成（画像が存在する場合のみ）
+        String imageUrl = null;
+        if (detail.getPicture() != null) {
+            imageUrl = "/api/images/equipment/" + detail.getEquipDetailId();
+        }
 
         // 画像はURLなどで配信する運用を想定
         return new EquipmentDetailResponse(
@@ -93,7 +100,8 @@ public class EquipEditController {
                 detail.getStorage(),
                 detail.getJudge(),
                 detail.getRemarks(),
-                null // 画像URLは別途設計
+//                null // 画像URLは別途設計
+                imageUrl
         );
     }
 
