@@ -21,10 +21,10 @@ import com.example.demo.Repository.EquipmentsRepository;
 public class BioRegistController {
 
     @Autowired
-    private EquipmentsRepository EquipmentsRepository;
-    @Autowired
-    private BiologyDetailsRepository BiologyDetailsRepository;
+    private EquipmentsRepository equipmentsRepository;
 
+    @Autowired
+    private BiologyDetailsRepository biologyDetailsRepository;
 
     @PostMapping("/")
     public ResponseEntity<?> registerBiology(
@@ -45,30 +45,28 @@ public class BioRegistController {
             bio.setAge(age);
             bio.setProcessId(projectProcess);
             bio.setRemarks(note);
+            bio.setEquipId(1); //生物なので1を明示的にセット
 
             if (image != null && !image.isEmpty()) {
                 bio.setPicture(image.getBytes());
             }
 
-            //生物詳細を保存
-            BiologyDetail savedBio = BiologyDetailsRepository.save(bio);
+            // 生物詳細を保存
+            BiologyDetail savedBio = biologyDetailsRepository.save(bio);
 
-            //equipmentsにも登録
+            // equipments にも登録
             Equipment equipment = new Equipment();
             equipment.setEquipName(name);
-            equipment.setEquipId(1); //生物だから1、備品は0
             equipment.setEquipDetailId(savedBio.getBiologyDetailId());
             equipment.setProjectId(projectId);
-
-            EquipmentsRepository.save(equipment);
+            equipmentsRepository.save(equipment);
 
             return ResponseEntity.ok("登録完了！");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("画像の読み込みに失敗しました");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("登録に失敗しました");
         }
     }
-           
-    
 }

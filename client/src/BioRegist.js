@@ -83,9 +83,15 @@ export default function BioRegist() {
         <label>画像<input type="file" accept="image/*" onChange={handleImageChange} /></label>
         <label>種類<input type="text" name="kind" value={form.kind} onChange={handleChange} /></label>
         <label>名前<input type="text" name="name" value={form.name} onChange={handleChange} /></label>
-        <label>性別<input type="text" name="gender" value={form.gender} onChange={handleChange} /></label>
+        <label>性別
+          <select name="gender" value={form.gender} onChange={handleChange}>
+            <option value="">選択してください</option>
+            <option value="0">オス</option>
+            <option value="1">メス</option>
+          </select>
+        </label>
         <label>年齢<input type="number" name="age" value={form.age} onChange={handleChange} /></label>
-        <label>対象の実験工程<input type="text" name="projectProcess" value={form.projectProcess} onChange={handleChange} /></label>
+        <label>対象の実験工程<input type="number" name="projectProcess" value={form.projectProcess} onChange={handleChange} /></label>
         <label>備考<input type="text" name="note" value={form.note} onChange={handleChange} /></label>
 
         {error && <p className="error-message">{error}</p>}

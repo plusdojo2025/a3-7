@@ -3,7 +3,160 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
+  max-width: 800px;
   margin: 40px auto;
   border: 1px solid #ddd;
+}
+
+.edit-form {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* 画像セクション */
+.image-section {
+  flex: 1;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.image-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.no-image-placeholder {
+  width: 100%;
+  height: 200px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.image-error-message {
+  display: none;
+  color: #999;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.file-input-container {
+  margin-top: 10px;
+}
+
+/* フォームセクション */
+.form-section {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* エラーメッセージ */
+.error-message {
+  color: red;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+/* ボタングループ */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.button-group button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button-back {
+  background-color: #ddd;
+  border: 1px solid #999;
+  color: #333;
+}
+
+.button-back:hover {
+  background-color: #ccc;
+}
+
+.button-delete {
+  background-color: #f88;
+  border: 1px solid #c00;
+  color: #000;
+}
+
+.button-delete:hover {
+  background-color: #e77;
+}
+
+.button-update {
+  background-color: #cfc;
+  border: 1px solid #9c9;
+  color: #000;
+}
+
+.button-update:hover {
+  background-color: #beb;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .edit-form {
+    flex-direction: column;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .button-group button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

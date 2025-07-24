@@ -27,7 +27,7 @@
   border-radius: 20px;
   padding: 10px 80px;
   width: 200px;
-  height: 300px;
+  height: 390px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -36,4 +36,28 @@
   text-align: left;          /* ラベルやプレースホルダ用に必要なら left に */
 }
 
+.Button {
+  background-color: red;
+  border-radius: 8px;          /* 丸角の長方形にするなら8px前後が自然 */
+  padding: 8px 20px;           /* 上下8px、左右20px */
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
 
+.inputBox {
+  width: 100%;            /* 親要素の幅に合わせる */
+  max-width: 400px;       /* 必要に応じて最大幅を制限 */
+  padding: 10px;
+  box-sizing: border-box; /* paddingを含めてサイズ計算 */
+  margin: auto;           /* 中央寄せ（必要に応じて） */
+}
+
+.inputBox input {
+  width: 100%;            /* ボックスの幅にフィットさせる */
+  padding: 8px;
+  box-sizing: border-box; /* padding込みで幅を維持 */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
