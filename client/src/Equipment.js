@@ -154,29 +154,25 @@ export default function Equipment() {
               onClick={() => handleItemClick(item.equipId)}
               style={{ cursor: 'pointer' }}
             >
-              {/* 画像の表示ロジックを整理 */}
-              {item.imageUrl || item.picture ? ( // imageUrlまたはpictureがあれば画像をレンダリング
-                <> {/* 複数の要素を返す場合はFragmentで囲む */}
+              {/* 画像の表示 */}
+               {item.picture ? ( // item.picture（Base64データ）が存在するかだけをチェック
+                <>
                   <img
-                    src={item.imageUrl || `data:image/jpeg;base64,${item.picture}`}
+                    src={`data:image/jpeg;base64,${item.picture}`} 
                     alt={`${item.equipName}の画像`}
                     className="item-image"
-                    onLoad={() => console.log('画像読み込み成功:', item.imageUrl || 'Base64 image')}
+                    onLoad={() => console.log('画像読み込み成功: Base64 image')} 
                     onError={handleImageError} 
                   />
-                  <div
-                    className="no-image-fallback"
-                    style={{ display: 'none' }} /* デフォルトで非表示 */
-                  >
+                  <div className="no-image-fallback">
                     No image
                   </div>
                 </>
               ) : (
-                // imageUrlもpictureもない場合に表示
+                // pictureデータがない場合に表示される「No image」
                 <div className="no-image">No image</div>
               )}
               <div className="item-name">{item.equipName}</div>
-             
             </div>
           ))
         )}
