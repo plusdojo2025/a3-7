@@ -49,6 +49,13 @@ body {
     border-bottom: 2px solid #f0f0f0;
 }
 
+/* リストカード内のスクロール可能コンテンツ */
+.scrollable-list-content {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
 /* リストアイテムのスタイル（工程、報告書） */
 .process-list li,
 .project-report-list li {

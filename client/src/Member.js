@@ -146,7 +146,7 @@ export default class Member extends React.Component {
           userId: Number(userId),
           projectId: this.projectId,
           authority: Number(authority),
-        })
+        },{withCredentials: true})
       )
     )
       .then(() => {

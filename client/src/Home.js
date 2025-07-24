@@ -14,27 +14,20 @@ export default class Home extends React.Component{
             }
 
     componentDidMount() {
-        axios.get("/api/projects/")
-            .then(json => {
-                console.log(json);
-                this.setState({
-                    projects:json.data
-                })
-            })
-            .catch(error => {
-                console.error("データ取得エラー:", error);
+        Promise.all([
+            axios.get("/api/projects/"),
+            axios.get("/api/projectTags/")
+        ])
+        .then(([projectsRes, tagsRes]) => {
+            this.setState({
+                projects: projectsRes.data,
+                projectTags: tagsRes.data
             });
-
-        axios.get("/api/projectTags/")
-            .then(json => {
-                console.log(json);
-                this.setState({
-                    projectTags:json.data
-                })
-            })
-            .catch(error => {
-                console.error("データ取得エラー:", error);
-            });
+           console.log('すべてのデータを取得しました');
+        })
+        .catch(error => {
+        console.error('データ取得中にエラーが発生しました:', error);
+        });
 
         this.setState({
             addName:"",

@@ -25,6 +25,7 @@ public class Member {
 	private Integer projectId;
 	@Column(name = "user_id")
 	private Integer userId;
+	@Column(name = "authority")
 	private Integer authority;
 	private Integer attend;
 }

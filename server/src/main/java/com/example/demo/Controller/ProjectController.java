@@ -1,13 +1,16 @@
 package com.example.demo.Controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +26,7 @@ import com.example.demo.Entity.Project;
 import com.example.demo.Entity.ProjectReport;
 import com.example.demo.Entity.ProjectTag;
 import com.example.demo.Entity.Reflect;
+import com.example.demo.Entity.ReflectTag;
 import com.example.demo.Entity.User;
 import com.example.demo.Repository.MembersRepository;
 import com.example.demo.Repository.ProcessesRepository;
@@ -59,6 +63,8 @@ public class ProjectController {
     private ProcessesRepository processRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ReflectTagsRepository reflectTagsRepository;
 	
     
     @GetMapping("/projects/")
@@ -126,6 +132,11 @@ public class ProjectController {
     	return projectTagsRepository.findAll();
     }
     
+    //reflectTag
+    @GetMapping("/reflectTags/")
+    public List<ReflectTag> getRefrectTags(){
+		return reflectTagsRepository.findAll();
+    }
     //プロジェクトのパラメータを取得
     @GetMapping("/project/{projectId}/")
     public Project getProjectData(@PathVariable int projectId) {
@@ -175,6 +186,34 @@ public class ProjectController {
     	return;
     }
     
+    //プロジェクト画面で反省の情報を一部表示
+    @GetMapping("/reflectSummary/{projectId}/")
+    public List<Reflect> getReflectSummary(@PathVariable int projectId){
+    	List<Reflect> allList = reflectRepository.findByProjectId(projectId);
+    	
+    	if (allList.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // reflectTagIdごとに件数をカウント
+        Map<Integer, Long> countMap = allList.stream()
+            .collect(Collectors.groupingBy(Reflect::getReflectTagId, Collectors.counting()));
+
+        // 件数が最大のreflectTagIdを取得
+        long maxCount = Collections.max(countMap.values());
+        List<Integer> maxTagIds = countMap.entrySet().stream()
+            .filter(entry -> entry.getValue() == maxCount)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+
+        // 最大数のreflectTagIdに一致するReflectだけ抽出
+        List<Reflect> result = allList.stream()
+            .filter(reflect -> maxTagIds.contains(reflect.getReflectTagId()))
+            .collect(Collectors.toList());
+
+        return result;
+    }
+    
     //IDを使ってプロセスの情報を取得
     @GetMapping("/process/{processId}/")
     public Process getProcess(@PathVariable int processId) {
@@ -194,14 +233,20 @@ public class ProjectController {
 	    System.out.println("📩 承認リクエスト: userId=" + member.getUserId() + ", projectId=" + member.getProjectId());
 	    
 	    Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
-	    
+
 	    if (m != null) {
 	        m.setAttend(1); // 承認済み
+
+	        // 権限がまだ未設定の場合は閲覧（1）にする
+	        if (m.getAuthority() == null || m.getAuthority() == 0) {
+	            m.setAuthority(1); // 閲覧権限をデフォルトで付与
+	        }
+
 	        membersRepository.save(m);
 	        return "参加承認しました";
 	    } else {
 	        System.err.println("❌ 該当メンバーが見つかりません");
-	        throw new IllegalStateException("該当メンバーが見つかりません"); // または 404を返す処理に変更
+	        throw new IllegalStateException("該当メンバーが見つかりません");
 	    }
 	}
 	
@@ -248,12 +293,14 @@ public class ProjectController {
 	    }
 	}
 	
+	@Transactional
 	@PostMapping("/members/updateAuthority")
 	public String updateMemberAuthority(@RequestBody Map<String, Object> payload, HttpSession session) {
-	    System.out.println("🔧 受信したpayload: " + payload);
+	    System.out.println("\n🔧 [updateAuthority] 受信した payload: " + payload);
 
 	    Object obj = session.getAttribute("user");
 	    if (!(obj instanceof User)) {
+	        System.out.println("⚠️ セッションにユーザー情報が存在しません");
 	        return "ログイン情報が見つかりません";
 	    }
 
@@ -261,26 +308,57 @@ public class ProjectController {
 	    Integer projectId = (Integer) payload.get("projectId");
 	    Integer authority = (Integer) payload.get("authority");
 
-	    System.out.println("🔍 更新対象 userId=" + userId + ", projectId=" + projectId + ", authority=" + authority);
+	    System.out.println("🧩 対象メンバー userId: " + userId);
+	    System.out.println("🧩 対象プロジェクト projectId: " + projectId);
+	    System.out.println("🧩 設定する authority: " + authority);
 
 	    User currentUser = (User) obj;
+	    System.out.println("👤 操作ユーザー: userId = " + currentUser.getUserId());
+
 	    Member operator = membersRepository.findByUserIdAndProjectId(currentUser.getUserId(), projectId);
 
-	    if (operator == null || operator.getAuthority() != 3) {
-	        System.out.println("⚠️ 操作者の権限が不正");
+	    if (operator == null) {
+	        System.out.println("❌ 操作ユーザーがプロジェクトメンバーではありません");
+	        return "操作ユーザーがプロジェクトメンバーではありません";
+	    }
+
+	    System.out.println("✅ 操作ユーザーの権限: " + operator.getAuthority());
+
+	    if (operator.getAuthority() != 3) {
+	        System.out.println("❌ 操作ユーザーに管理権限がありません");
 	        return "権限がありません";
 	    }
 
 	    Member target = membersRepository.findByUserIdAndProjectId(userId, projectId);
-	    if (target != null && target.getAttend() == 1) {
-	        System.out.println("✅ 権限を更新する対象メンバー: memberId=" + target.getMemberId());
+
+	    if (target == null) {
+	        System.out.println("❌ 権限変更対象のメンバーが見つかりません");
+	        return "対象メンバーが見つかりません";
+	    }
+
+	    if (target.getAttend() != 1) {
+	        System.out.println("❌ 対象メンバーは未承認です（attend=" + target.getAttend() + "）");
+	        return "対象メンバーは未承認です";
+	    }
+
+	    try {
+	        System.out.println("🔄 JPQL による updateAuthority を実行します...");
+	        membersRepository.updateAuthority(projectId, userId, authority);
+	        System.out.println("✅ JPQL による authority 更新成功");
+	    } catch (Exception e) {
+	        System.err.println("⚠️ JPQL updateAuthority に失敗: " + e.getMessage());
+	        System.out.println("💡 save によるフォールバックを実行します");
+
 	        target.setAuthority(authority);
 	        membersRepository.save(target);
-	        return "権限を更新しました";
-	    } else {
-	        System.out.println("❌ 対象メンバーが null または未承認: " + target);
-	        return "対象メンバーが見つかりません、または未承認です";
+
+	        System.out.println("✅ save による authority 更新成功");
 	    }
+
+	    System.out.println("🎉 権限更新処理が完了しました");
+	    return "権限を更新しました";
 	}
+
+
 
 }

@@ -22,6 +22,7 @@ export default class Project extends React.Component{
             processes:[],
             error:"",
             reflects:[],
+            reflectTags:[],
             showCloseProjectModal:false,
             showAddProcessModal:false,
             addName:"",
@@ -34,38 +35,25 @@ export default class Project extends React.Component{
         const { projectId } = this.state;
         console.log("projectId:"+projectId);
 
-        axios.get(`/api/project/${projectId}/`)
-        .then(json => {
-            console.log(json);
+        Promise.all([
+            axios.get(`/api/project/${projectId}/`),
+            axios.get(`/api/projectDetails/${projectId}/`),
+            axios.get(`/api/reflectSummary/${projectId}/`),
+            axios.get(`/api/reflectTags/`)
+        ])
+        .then(([projectRes, detailsRes, summaryRes, tagsRes]) => {
             this.setState({
-                project:json.data
+                project: projectRes.data,
+                processes: detailsRes.data,
+                reflects: summaryRes.data,
+                reflectTags: tagsRes.data
             });
+        console.log('すべてのデータを取得しました');
         })
         .catch(error => {
-            console.error("データ取得エラー:", error);
+        console.error('データ取得中にエラーが発生しました:', error);
         });
 
-        axios.get(`/api/projectDetails/${projectId}/`)
-        .then(json => {
-            console.log(json);
-            this.setState({
-                processes:json.data
-            });
-        })
-        .catch(error => {
-            console.error("データ取得エラー:", error);
-        });
-
-        axios.get(`/api/getReflects/${projectId}/`)
-        .then(json => {
-            console.log(json);
-            this.setState({
-                reflects:json.data
-            });
-        })
-        .catch(error => {
-            console.error("データ取得エラー:", error);
-        });
 
         this.setState({
             error:"",

@@ -107,7 +107,8 @@ class ViewProjectComponent extends React.Component {
 
                 {/* --- 工程一覧 --- */}
                 <div className="section-card process-section">
-                    <h3>工程一覧</h3>
+                    <h3>工程</h3>
+                 <div className='scrollable-list-content'>
                     {processes.length > 0 ? (
                         <ul className="process-list">
                             {processes.map(process => (
@@ -121,6 +122,7 @@ class ViewProjectComponent extends React.Component {
                     ) : (
                         <p>このプロジェクトには工程が登録されていません。</p>
                     )}
+                 </div>
                 </div>
 
                 {/* --- プロジェクト報告書一覧 --- */}
