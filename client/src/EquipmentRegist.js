@@ -85,8 +85,13 @@ export default function EquipmentRegist() {
       console.error('登録失敗:', err);
       alert('登録に失敗しました。');
     }
+
+        window.history.back();
   };
 
+
+
+  
   return (
     <form onSubmit={handleSubmit}>
       <h2>備品登録</h2>
