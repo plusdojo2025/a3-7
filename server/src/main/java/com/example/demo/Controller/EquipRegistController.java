@@ -30,7 +30,6 @@ public class EquipRegistController {
     private EquipmentsRepository equipmentRepository;
     @Autowired
     private UnitsRepository unitsRepository;
-    
     @Autowired
     private EquipDetailsRepository equipmentDetailRepository;
 
@@ -132,10 +131,9 @@ public class EquipRegistController {
             return ResponseEntity.internalServerError().body("登録に失敗しました: " + e.getMessage());
         }
     }
-    
     @GetMapping("/get/units")
     public List<Unit> getUnit(){
     	return unitsRepository.findAll();
     	}
-    
+
 }

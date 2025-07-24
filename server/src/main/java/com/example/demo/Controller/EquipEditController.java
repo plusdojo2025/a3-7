@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.Entity.EquipDetail;
 import com.example.demo.Entity.Equipment;
+import com.example.demo.Entity.Unit;
 import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipmentsRepository;
+import com.example.demo.Repository.UnitsRepository;
 
 @RestController
 //@RequestMapping("/equipment/details/equip/")
@@ -26,7 +29,8 @@ public class EquipEditController {
 
     @Autowired
     private EquipDetailsRepository equipDetailsRepository;
-
+    @Autowired
+    private UnitsRepository unitsRepository;
     @Autowired
     private EquipmentsRepository equipmentsRepository;
 
@@ -190,4 +194,8 @@ public class EquipEditController {
             this.imageUrl = imageUrl;
         }
     }
+    @GetMapping("/get/units")
+    public List<Unit> getUnit(){
+    	return unitsRepository.findAll();
+    	}
 }
