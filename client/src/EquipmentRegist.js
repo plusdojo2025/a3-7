@@ -23,7 +23,7 @@ export default function EquipmentRegist() {
     storage: '',
     judge: '',
     remarks: '',
-    equipKindId: '0',  //備品:0、生物:1（初期値0）
+    equipKindId: '0',  //備品:0、生物:1
     projectId: '1',     //ここ保留
   });
   const [image, setImage] = useState(null);
