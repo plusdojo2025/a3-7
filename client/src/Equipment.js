@@ -10,6 +10,13 @@ export default function EquipmentPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  //alert用
+  const [alertList, setAlertList] = useState([]);
+  const [allList, setAllList] = useState([]);
+  //種類は備品で固定
+  const kindId = 1;
+  const currentProjectId = 2;
+
   const handleSearch = async () => {
     setLoading(true);
     try {
@@ -32,13 +39,36 @@ export default function EquipmentPage() {
     }
   }
 
-  const loadAlerts = async () => {
-    try {
-      // アラート機能は後で実装
-      setAlerts([]); // 一時的に空配列をセット
-    } catch (error) {
-      console.error('アラート取得エラー:', error);
-      setAlerts([]); // エラー時も空配列をセット
+  const loadAlerts = async (projectId, equipKindId) => {
+  try {
+    // 2つのAPIを並列で呼び出し、両方完了まで待つ
+    const [alertRes, equipRes] = await Promise.all([
+      axios.get('/api/equip/alert/detail/'),
+      axios.get(`/api/equip/${projectId}/${equipKindId}/`)
+    ]);
+
+    // 両方のデータを取得
+    const alertData = alertRes.data;
+    console.log(alertData);
+    const equipData = equipRes.data;
+    console.log(equipData);
+
+    // 取得できてからフィルタ処理をする
+    const validIds = new Set(equipData.map(item => item.equipDetailId));
+    const filteredAlerts = alertData.filter(alert =>
+      validIds.has(alert.equipDetailId)
+    );
+
+    // 状態をまとめて更新
+    setAlertList(alertData);
+    setAllList(equipData);
+    setAlerts(filteredAlerts);
+
+  } catch (error) {
+      console.error('データ取得エラー:', error);
+      setAlertList([]);
+      setAllList([]);
+      setAlerts([]);
     }
   };
 
@@ -53,7 +83,7 @@ export default function EquipmentPage() {
 
   useEffect(() => {
     handleSearch(); // 初期読み込み時に全件表示
-    loadAlerts();   // アラート情報を取得
+    loadAlerts(currentProjectId, kindId);   // アラート情報を取得
   }, []);
 
   return (
@@ -138,4 +168,6 @@ export default function EquipmentPage() {
       </div>
     </div>
   );
+
+
 }
