@@ -24,8 +24,6 @@ public class BiologyDetail {
 
     private String kind;
 
-    private String name; // Reactのnameと対応
-
     private Integer gender;
 
     private Integer age;

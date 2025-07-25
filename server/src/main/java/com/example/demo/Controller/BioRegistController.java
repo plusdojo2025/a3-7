@@ -60,7 +60,6 @@ public class BioRegistController {
         try {
             BiologyDetail bio = new BiologyDetail();
             bio.setKind(kind);
-            bio.setName(name);
             bio.setGender(gender);
             bio.setAge(age);
             bio.setProcessId(projectProcess);
@@ -79,7 +78,11 @@ public class BioRegistController {
             equipment.setEquipDetailId(savedBio.getBiologyDetailId());
             equipment.setProjectId(projectId);
             equipmentsRepository.save(equipment);
+            
+            equipment.setEquipKindId(Integer.parseInt(kind));
 
+            equipmentsRepository.save(equipment);
+            
             return ResponseEntity.ok("登録完了！");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("画像の読み込みに失敗しました");

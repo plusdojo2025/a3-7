@@ -122,7 +122,6 @@ export default function BioRegist() {
       <h2>生物の登録</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label>画像<input type="file" accept="image/*" onChange={handleImageChange} /></label>
-        <label>種類<input type="text" name="kind" value={form.kind} onChange={handleChange} /></label>
         <label>名前<input type="text" name="name" value={form.name} onChange={handleChange} /></label>
         <label>性別
           <select name="gender" value={form.gender} onChange={handleChange}>
