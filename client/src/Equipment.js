@@ -271,7 +271,7 @@ export default function Equipment() {
       <h2>備品・生物管理</h2>
 
       {/* アラート表示エリア */}
-      {alerts.length > 0 && (
+      {/* {alerts.length > 0 && (
         <div className="equipment-alert-area">
           <h3 className="alert-title">⚠️ アラート ({alerts.length}件)</h3>
           {alerts.slice(0, 3).map((alert, index) => (
@@ -285,7 +285,7 @@ export default function Equipment() {
             </div>
           )}
         </div>
-      )}
+      )} */}
 
       {/* 備品・生物一覧と検索バー統合エリア */}
       <div className="equipment-list-area">
