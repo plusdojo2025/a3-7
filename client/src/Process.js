@@ -23,7 +23,8 @@ const Process = () => {
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const processId = params.get("id");
-  const [projectId, setProjectId] = useState(params.get("projectId")); // ここをステートに
+  const [projectId, setProjectId] = useState(params.get("projectId"));
+  // ここをステートに
    
 
 
@@ -105,7 +106,7 @@ const Process = () => {
     if (reflect) {
        
       axios
-        .get(`/api/reflectTag/${reflect.reflectTagId}`)
+        .get(`/api/reflect/${reflect.reflectTagId}`)
         .then((res) => setReflectName(res.data.reflectName))
         .catch(() => setReflectName("不明"));
     } else {
