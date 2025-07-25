@@ -333,8 +333,8 @@ export default function Equipment() {
           </div>
         ) : items.length === 0 ? (
           <div className="equipment-empty-state">
-            <p>該当する備品・生物が見つかりませんでした。</p>
-            <p>検索条件を変更するか、新しいアイテムを登録してください。</p>
+            <p>該当するもの見つかりませんでした。</p>
+            <p>検索条件を変更するか、新しく登録してください。</p>
           </div>
         ) : (
           <div className="equipment-grid">
