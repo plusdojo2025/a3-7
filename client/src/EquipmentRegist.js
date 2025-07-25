@@ -161,7 +161,7 @@ export default function EquipmentRegist() {
       
       {error && <p style={{ color: 'red' }}>{error}</p>}
         <div className="button-group">
-          <button type="button" onClick={() => window.history.back()}>戻る</button>
+          <button type="button" onClick={() => navigate(`/equipment?projectId=${projectIdForRegistration}`)}>戻る</button>
           <button type="submit">登録</button>
         </div>
     </form>
