@@ -21,12 +21,14 @@ export default function Equipment() {
   // URLからprojectIdを取得
   const [currentProjectId, setCurrentProjectId] = useState(null);
   
+  //alert用
+  const [alertList, setAlertList] = useState([]);
+  const [allList, setAllList] = useState([]);
 
-  //種類は備品で固定
-  const kindId = 1;
-   //備品・生物検索実行処理
-   //キーワード、種類、プロジェクトIDで検索
-    
+  /**
+   * 備品・生物検索実行処理
+   * キーワード、種類、プロジェクトIDで検索
+   */
   const performSearch = useCallback(async (projectIdToSearch, searchKeyword, searchType) => {
     setLoading(true);
     console.log('備品・生物検索開始:', { projectIdToSearch, searchKeyword, searchType });
@@ -128,16 +130,18 @@ export default function Equipment() {
         validIds.has(alert.equipDetailId)
       );
 
+      // 状態をまとめて更新
+      setAlertList(alertData);
+      setAllList(equipData);
+      setAlerts(filteredAlerts);
+      console.log(alertList);
+      console.log(allList);
+      console.log(alerts);
 
-      
-      
-    // 状態を更新
-    setAlerts(filteredAlerts);
-    console.log(filteredAlerts);
-
-    
     } catch (error) {
       console.error('データ取得エラー:', error);
+      setAlertList([]);
+      setAllList([]);
       setAlerts([]);
     }
   };
@@ -177,9 +181,8 @@ export default function Equipment() {
       console.log('プロジェクトID検出:', projectIdFromUrl);
 
       // 初期検索とアラート読み込み実行
-      performSearch(projectIdFromUrl, ''); 
-      loadAlerts(projectIdFromUrl, projectIdFromUrl, kindId);
-
+      performSearch(projectIdFromUrl, '', ''); 
+      loadAlerts(projectIdFromUrl, projectIdFromUrl, 1); // 1は備品のkindId
     } else {
       console.log('プロジェクトIDが見つかりません');
       setCurrentProjectId(null);
@@ -383,7 +386,10 @@ export default function Equipment() {
 
       {/* 操作ボタンエリア */}
       <div className="equipment-button-area">
-        <button onClick={() => navigate(-1)}>
+        <button 
+          onClick={() => navigate(-1)}
+          className="equipment-back-button"
+        >
           戻る
         </button>
         <button onClick={handleNavigateToEquipmentRegist}>
