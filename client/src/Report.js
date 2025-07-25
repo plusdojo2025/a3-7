@@ -18,17 +18,20 @@ export default function Report() {
   const [equipForms, setEquipForms] = useState([{ equipId: "", usageAmount: "" }]);
 
   const [projectName, setProjectName] = useState("");
+  const [processName, setProcessName] = useState("");
   const [equipmentList, setEquipmentList] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
     Promise.all([
       axios.get(`/api/project/${projectId}`),
-      axios.get(`/api/equip/${projectId}/${equipKindId}/`)
+      axios.get(`/api/equip/${projectId}/${equipKindId}/`),
+      axios.get(`/api/process/${processId}/`)
     ])
-      .then(([projectNameRes, equipListRes]) => {
+      .then(([projectNameRes, equipListRes, processNameRes]) => {
         setProjectName(projectNameRes.data.projectName);
         setEquipmentList(equipListRes.data);
+        setProcessName(processNameRes.data.processName);
       })
       .catch(error => {
         console.error("データ取得エラー:", error);
@@ -54,6 +57,12 @@ export default function Report() {
   const addEquipField = () => {
     setEquipForms([...equipForms, { equipId: "", usageAmount: "" }]);
   };
+
+  const handleEquipRemove = (index) => {
+  const updated = [...equipForms];
+  updated.splice(index, 1);
+  setEquipForms(updated);
+};
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,6 +91,7 @@ export default function Report() {
   return (
     <div>
       <h2>日報登録 - {projectName}</h2>
+      <h3>{processName}</h3>
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit} className="report-form">
@@ -131,6 +141,11 @@ export default function Report() {
               onChange={(e) => handleEquipChange(index, e)}
               placeholder="使用量"
             />
+            
+            {/* 削除ボタン */}
+            <button type="button" onClick={() => handleEquipRemove(index)}>
+              削除
+            </button>
           </div>
         ))}
 
