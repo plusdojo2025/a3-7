@@ -32,8 +32,10 @@ export default function BioRegist() {
   const fetchProcess = async (currentProjectId) => {
     try {
       const response = await axios.get(`/api/biology/processes/${currentProjectId}`);
-      setProcess(response.data);
-      console.log('工程：', response.data);
+      const activeProcesses = response.data.filter(p => p.complete === 0);
+      setProcess(activeProcesses);
+      console.log('全工程：', response.data); //一応残す
+      console.log('表示される工程（未完了)：', activeProcesses);
     }
     catch (err) {
       console.error('工程の取得に失敗しました。', err);
