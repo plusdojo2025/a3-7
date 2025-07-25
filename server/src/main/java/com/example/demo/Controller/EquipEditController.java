@@ -194,8 +194,14 @@ public class EquipEditController {
             this.imageUrl = imageUrl;
         }
     }
+    
     @GetMapping("/get/units")
     public List<Unit> getUnit(){
     	return unitsRepository.findAll();
-    	}
+    }
+    
+    @GetMapping("/get/allDetails")
+    public List<EquipDetail> getAllDetails(){
+    	return equipDetailsRepository.findAll();
+    }
 }

@@ -19,19 +19,25 @@ export default function Report() {
 
   const [projectName, setProjectName] = useState("");
   const [processName, setProcessName] = useState("");
-  const [equipmentList, setEquipmentList] = useState([]);
   const [error, setError] = useState("");
+  const [equipmentList, setEquipmentList] = useState([]);
+  const [units, setUnits] = useState([]);
+  const [equipDetails, setEquipDetails] = useState([]);
 
   useEffect(() => {
     Promise.all([
       axios.get(`/api/project/${projectId}`),
       axios.get(`/api/equip/${projectId}/${equipKindId}/`),
-      axios.get(`/api/process/${processId}/`)
+      axios.get(`/api/process/${processId}/`),
+      axios.get("/api/equipment/edit/get/units"),
+      axios.get("/api/equipment/edit/get/allDetails")
     ])
-      .then(([projectNameRes, equipListRes, processNameRes]) => {
+      .then(([projectNameRes, equipListRes, processNameRes, unitsRes, detailsRes]) => {
         setProjectName(projectNameRes.data.projectName);
         setEquipmentList(equipListRes.data);
         setProcessName(processNameRes.data.processName);
+        setUnits(unitsRes.data);
+        setEquipDetails(detailsRes.data);
       })
       .catch(error => {
         console.error("データ取得エラー:", error);
@@ -62,7 +68,20 @@ export default function Report() {
   const updated = [...equipForms];
   updated.splice(index, 1);
   setEquipForms(updated);
-};
+  };
+
+  const getUnitLabel = (equipId) => {
+    const equip = equipmentList.find(e => e.equipId === parseInt(equipId));
+    if (!equip) return "";
+
+    const detail = equipDetails.find(d => d.equipDetailId === equip.equipDetailId);
+    if (!detail) return "";
+
+    const unit = units.find(u => u.unitId === detail.unit);
+    return unit ? unit.unit : "";
+  };
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -118,36 +137,43 @@ export default function Report() {
         </div>
 
         <h3>使用した備品</h3>
-        {equipForms.map((equip, index) => (
-          <div key={index} className="equip-row">
-            <select
-              name="equipId"
-              value={equip.equipId}
-              onChange={(e) => handleEquipChange(index, e)}
-              required
-            >
-              <option value="">選択してください</option>
-              {equipmentList.map(item => (
-                <option key={item.equipId} value={item.equipId}>
-                  {item.equipName}
-                </option>
-              ))}
-            </select>
+        {equipForms.map((equip, index) => {
+          const unitLabel = getUnitLabel(equip.equipId); // 単位を取得
 
-            <input
-              type="text"
-              name="usageAmount"
-              value={equip.usageAmount}
-              onChange={(e) => handleEquipChange(index, e)}
-              placeholder="使用量"
-            />
-            
-            {/* 削除ボタン */}
-            <button type="button" onClick={() => handleEquipRemove(index)}>
-              削除
-            </button>
-          </div>
-        ))}
+          return ( //map処理に対するreturnとなっている
+            <div key={index} className="equip-row">
+              <select
+                name="equipId"
+                value={equip.equipId}
+                onChange={(e) => handleEquipChange(index, e)}
+                required
+              >
+                <option value="">選択してください</option>
+                {equipmentList.map(item => (
+                  <option key={item.equipId} value={item.equipId}>
+                    {item.equipName}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                type="text"
+                name="usageAmount"
+                value={equip.usageAmount}
+                onChange={(e) => handleEquipChange(index, e)}
+                placeholder="使用量"
+              />
+
+              {/* 単位ラベルの表示 */}
+              <span className="unit-label">{unitLabel}</span>
+
+              <button type="button" onClick={() => handleEquipRemove(index)}>
+                削除
+              </button>
+            </div>
+          );
+        })}
+
 
         <button type="button" onClick={addEquipField}>
           備品を追加
