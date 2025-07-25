@@ -2,8 +2,10 @@ import React from "react";
 import './css/Common.css';
 import './css/Member.css';
 import axios from "axios";
+import { AlertContext } from "./AlertContext";
 
 export default class Member extends React.Component {
+  static contextType =AlertContext;
   constructor(props) {
     super(props);
     const params = new URLSearchParams(window.location.search);
@@ -92,12 +94,12 @@ export default class Member extends React.Component {
       projectId: this.projectId
     })
       .then(() => {
-        alert("招待を送信しました");
+        this.context.showAlert("成功","招待を送信しました");
         this.setState({ isInviteModalOpen: false });
       })
       .catch((err) => {
         console.error("招待の送信に失敗", err);
-        alert("招待に失敗しました。");
+        this.context.showAlert("エラー", "招待に失敗しました。");
       });
   };
 
@@ -110,7 +112,7 @@ export default class Member extends React.Component {
       projectId: this.projectId
     })
       .then(() => {
-        alert("メンバーを削除しました");
+        this.context.showAlert("成功","メンバーの削除に成功しました")
         this.setState((prevState) => ({
           approvedMembers: prevState.approvedMembers.filter(
             (m) => m.userId !== selectedMemberId
@@ -121,7 +123,7 @@ export default class Member extends React.Component {
       })
       .catch((err) => {
         console.error("削除に失敗しました:", err);
-        alert("削除に失敗しました。");
+        this.context.showAlert("失敗","削除に失敗しました。");
       });
   };
 
@@ -137,7 +139,7 @@ export default class Member extends React.Component {
   handleUpdateAuthorities = () => {
     const updates = Object.entries(this.state.updatedAuthorities);
     if (updates.length === 0) {
-      alert("変更された権限はありません。");
+      this.context.showAlert("変更なし","変更された権限はありません。");
       return;
     }
 
@@ -160,11 +162,11 @@ export default class Member extends React.Component {
           approvedMembers: res.data,
           updatedAuthorities: {},
         });
-        alert("権限を更新しました");
+        this.context.showAlert("成功","権限を更新しました");
       })
       .catch((err) => {
         console.error("権限更新エラー", err);
-        alert("更新に失敗しました。");
+        this.context.showAlert("失敗","更新に失敗しました。");
       });
   };
 
