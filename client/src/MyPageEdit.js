@@ -48,6 +48,16 @@ export default class MyPageEdit extends React.Component {
     }
 
     /**
+     * ページトップに移動する処理
+     */
+    scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    /**
      * ユーザーデータ読み込み処理
      * セッションから現在のユーザー情報を取得
      */
@@ -185,6 +195,7 @@ export default class MyPageEdit extends React.Component {
         // バリデーション実行
         if (!this.validateForm()) {
             this.setState({ errorMessage: "入力内容を確認してください。" });
+            this.scrollToTop();
             return;
         }
 
@@ -229,6 +240,9 @@ export default class MyPageEdit extends React.Component {
                     },
                 });
                 
+                // ページトップに
+                this.scrollToTop();
+                
                 // 3秒後にメッセージを消去
                 setTimeout(() => {
                     this.setState({ successMessage: "" });
@@ -240,6 +254,9 @@ export default class MyPageEdit extends React.Component {
                     updating: false,
                     errorMessage: "現在のパスワードが正しくありません。",
                 });
+                
+                // ページトップに
+                this.scrollToTop();
             }
         } catch (error) {
             console.error("ユーザー情報更新エラー:", error);
@@ -247,6 +264,9 @@ export default class MyPageEdit extends React.Component {
                 updating: false,
                 errorMessage: "更新に失敗しました。ネットワーク接続を確認してください。",
             });
+            
+            // ページトップに
+            this.scrollToTop();
         }
     };
 
