@@ -56,6 +56,13 @@ public class ReportController {
     public List<Equipment> getAllEquipment() {
         return equipmentsRepository.findAll();
     }
+    //get equip id
+    @GetMapping("/equip/{equipId}")
+    public ResponseEntity<Equipment> getEquipProject(@PathVariable Integer equipId) {
+        return equipmentsRepository.findById(equipId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
  // Project一覧取得
 
     @GetMapping("/project/{projectId}")
@@ -93,7 +100,14 @@ public class ReportController {
     public ReflectTag saveReflectTag(@RequestBody ReflectTag reflectTag) {
         return reflectTagRepository.save(reflectTag);
     }
-
+    //reflect tag id
+    //get equip id
+    @GetMapping("/reflect/{reflectTagId}")
+    public ResponseEntity<ReflectTag> getreflectProject(@PathVariable Integer reflectTagId) {
+        return reflectTagRepository.findById(reflectTagId)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+    }
     // Reflect登録
     @PostMapping("/reflect")
     public Reflect addReflect(@RequestBody Reflect reflect) {
@@ -132,7 +146,7 @@ public class ReportController {
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
-    @GetMapping("/weekly-reports/")
+    @GetMapping("/weekly-reports/createdAt")
     public ResponseEntity<?> getWeeklyReport(
             @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
             @RequestParam("processId") Integer processId) {
@@ -141,5 +155,22 @@ public class ReportController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/reflect/createdAt")
+    public ResponseEntity<?> getWeeklyReflect(
+            @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
+            @RequestParam("processId") Integer processId) {
 
+        return reflectRepository.findByProcessIdAndCreatedAt(processId, createdAt)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+//    @GetMapping("/reflectTag/createdAt")
+//    public ResponseEntity<?> getWeeklyReflectTag(
+//            @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
+//            @RequestParam("processId") Integer processId) {
+//
+//        return reflectTagRepository.findByProcessIdAndCreatedAt(processId, createdAt)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
 }

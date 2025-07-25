@@ -20,6 +20,8 @@ export default function ReportEdit() {
   const [projectName, setProjectName] = useState('');
   const [equipmentList, setEquipmentList] = useState([]);
   const [error, setError] = useState('');
+ 
+ 
 
   // 初期データ取得
   useEffect(() => {
