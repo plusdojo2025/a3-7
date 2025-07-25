@@ -83,28 +83,45 @@ export default function Report() {
 
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 備品使用データまとめ
-    const equipmentUsage = equipForms.map(item => ({
-      equipId: parseInt(item.equipId, 10),
-      usageAmount: parseFloat(item.usageAmount) || 0
-    }));
+    try {
+      // まず日報を送信
+      const payload = {
+        ...form,
+        projectId: parseInt(projectId, 10),
+        processId: parseInt(processId, 10),
+        // 備品使用は別で処理するためここには含めない
+      };
 
-    const payload = {
-      ...form,
-      projectId: parseInt(projectId, 10),
-      processId: parseInt(processId, 10),
-      equipmentUsage
-    };
+      await axios.post("/api/report", payload);
+      alert("日報登録成功！");
 
-    axios.post("/api/report", payload)
-      .then(() => {
-        alert("登録成功！");
-        navigate(`/project/${projectId}/process/${processId}`);
-      })
-      .catch(() => alert("登録失敗"));
+      // 続けて備品残量更新を1つずつ送る
+      for (const equip of equipForms) {
+        const equipId = parseInt(equip.equipId, 10);
+        const usageAmount = parseFloat(equip.usageAmount);
+
+        if (!equipId || !usageAmount) continue;
+
+        // equipIdからequipDetailIdを探す
+        const equipment = equipmentList.find(e => e.equipId === equipId);
+        if (!equipment) continue;
+
+        const equipDetailId = equipment.equipDetailId;
+        if (!equipDetailId) continue;
+
+        // 残量更新APIにリクエスト送信
+        await axios.post(`/api/equipment/edit/${equipDetailId}/${usageAmount}`);
+      }
+
+      navigate(`process?id=${processId}`);
+
+    } catch (error) {
+      alert("登録か更新に失敗しました");
+      console.error(error);
+    }
   };
 
   return (

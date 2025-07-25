@@ -128,7 +128,6 @@ public class ReportController {
         Optional<Report> optionalReport = reportRepository.findById(reportId);
         if (optionalReport.isPresent()) {
             Report report = optionalReport.get();
-            report.setEquipId(updatedReport.getEquipId());
             report.setProjectId(updatedReport.getProjectId());
             report.setProcessId(updatedReport.getProcessId());
             report.setCreatedAt(updatedReport.getCreatedAt());

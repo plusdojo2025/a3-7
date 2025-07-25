@@ -11,4 +11,7 @@ public interface EquipDetailsRepository extends JpaRepository<EquipDetail, Integ
 
 	@Query("SELECT e FROM EquipDetail e WHERE e.judge >= e.remaining OR e.limited < CURRENT_DATE")
     List<EquipDetail> findByJudgeGreaterThanEqualRemainingOrLimitedBeforeToday();
+	
+	EquipDetail findByequipDetailId(int id);
+	
 }
