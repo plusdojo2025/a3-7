@@ -82,7 +82,7 @@ class ViewProcessComponent extends React.Component {
     // コンポーネントのUIをレンダーするライフサイクルメソッド
     render() {
         const { process, reports, reflects, loading, error } = this.state;
-        const { projectId } = this.props.params;
+        const { projectId, processId } = this.props.params;
 
         if (loading) {
             return <div className="loading">工程情報を読み込み中...</div>;
@@ -113,7 +113,7 @@ class ViewProcessComponent extends React.Component {
                         <ul className="report-list">
                             {reports.map(report => (
                                 <li key={report.reportId}>
-                                    <Link to={`/view-text/report/${report.reportId}`}>
+                                    <Link to={`/view-text/report/${report.reportId}?projectId=${projectId}&processId=${processId}`}>
                                         {new Date(report.createdAt).toLocaleDateString()}
                                     </Link>
                                 </li>
@@ -133,7 +133,7 @@ class ViewProcessComponent extends React.Component {
                         <ul className="reflect-list">
                             {reflects.map(reflect => (
                                 <li key={reflect.reflectId}>
-                                    <Link to={`/view-text/reflect/${reflect.reflectId}`}>
+                                    <Link to={`/view-text/reflect/${reflect.reflectId}?projectId=${projectId}&processId=${processId}`}>
                                         {/* 日付形式の調整が必要であればここで */}
                                         {new Date(reflect.createdAt).toLocaleDateString()}
                                     </Link>
@@ -150,7 +150,7 @@ class ViewProcessComponent extends React.Component {
 
             {/* --- 「前のページに戻る」リンク --- */}
             <div className="back-link-container">
-                <Link to={projectId ? `/project/${projectId}` : -1} className="back-link">戻る</Link>
+                <Link to={projectId ? `/project/${projectId}` : '/'} className="back-link">戻る</Link>
             </div>
         </>
     );
