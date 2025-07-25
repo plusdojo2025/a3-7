@@ -2,12 +2,13 @@ import React from 'react';
 import axios from 'axios';
 import './css/Common.css';
 import './css/ViewText.css';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 
 // useParams をクラスコンポーネントで使うためのラッパー
 function ViewTextWrapper() {
     const params = useParams();
-    return <ViewTextComponent params={params} />;
+    const location = useLocation();
+    return <ViewTextComponent params={params} location={location} />;
 }
 class ViewTextComponent extends React.Component {
     constructor(props) {
@@ -18,21 +19,48 @@ class ViewTextComponent extends React.Component {
             error: null,
             titleFieldName: '',
             contentFieldName: '',
+            projectId: null,
+            processId: null,
         };
     }
 
     // マウント直後
     componentDidMount() {
+        this.extractQueryParams();
         this.fetchTextDetails();
     }
 
     // 更新後
     componentDidUpdate(prevProps) {
-        if (this.props.params.type !== prevProps.params.type ||
-            this.props.params.id !== prevProps.params.id) {
+        // URLパラメータ（type, id）が変更された場合
+        const { type, id } = this.props.params;
+        const { type: prevType, id: prevId } = prevProps.params;
+
+        // URLのクエリパラメータ（projectId, processId）が変更された場合
+        const prevSearchParams = new URLSearchParams(prevProps.location.search);
+        const currentSearchParams = new URLSearchParams(this.props.location.search);
+        
+        const prevProjectId = prevSearchParams.get('projectId');
+        const prevProcessId = prevSearchParams.get('processId');
+        const currentProjectId = currentSearchParams.get('projectId');
+        const currentProcessId = currentSearchParams.get('processId');
+
+        if (type !== prevType || id !== prevId ||
+            currentProjectId !== prevProjectId || currentProcessId !== prevProcessId) {
+            this.extractQueryParams(); 
             this.fetchTextDetails();
         }
     }
+
+    //URLからクエリパラメータを抽出
+    extractQueryParams = () => {
+        const params = new URLSearchParams(this.props.location.search);
+        const projectId = params.get('projectId');
+        const processId = params.get('processId');
+        
+        console.log(`Extracted from URL: projectId=${projectId}, processId=${processId}`);
+        this.setState({ projectId, processId });
+    };
 
     // テキスト詳細データ取得（非同期）
     fetchTextDetails = async () => {
@@ -118,7 +146,7 @@ class ViewTextComponent extends React.Component {
     };
 
     render() {
-        const { textData, loading, error, titleFieldName, contentFieldName } = this.state;
+        const { textData, loading, error, titleFieldName, contentFieldName, projectId, processId } = this.state;
         const { type, id } = this.props.params;
 
         if (loading) {
@@ -138,6 +166,14 @@ class ViewTextComponent extends React.Component {
         const title = textData[titleFieldName] || textData.title || `タイトルなし`;
         const content = textData[contentFieldName] || textData.content || '内容なし';
 
+        let backLinkPath = '/';
+
+        if (type === 'project-report' && projectId) {
+            backLinkPath = `/project/${projectId}`; // プロジェクト報告書の場合はViewProjectに戻る
+        } else if ((type === 'report' || type === 'reflect') && projectId && processId) {
+             backLinkPath = `/project/${projectId}/processes/${processId}`;  // 日報・反省の場合はViewProcessに戻る
+        }
+
         return (
             <div className="view-text-container">
                 <h2>{title}</h2>
@@ -145,7 +181,7 @@ class ViewTextComponent extends React.Component {
                     <p>{content}</p>
                 </div>
                 <hr />
-                <Link to={-1} className='back-link'>戻る</Link>
+                <Link to={backLinkPath} className='back-link'>戻る</Link>
             </div>
         );
     }
