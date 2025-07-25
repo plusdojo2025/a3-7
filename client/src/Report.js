@@ -6,6 +6,7 @@ import "./css/report.css";
 export default function Report() {
   const { projectId, processId } = useParams();
   const navigate = useNavigate();
+  const equipKindId = 1;
 
   const [form, setForm] = useState({
     createdAt: "",
@@ -20,18 +21,23 @@ export default function Report() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (projectId) {
-      axios.get(`/api/project/${projectId}`)
-        .then(res => setProjectName(res.data.projectName))
-        .catch(() => setProjectName("（取得失敗）"));
-    }
-  }, [projectId]);
+    Promise.all([
+            axios.get(`/api/project/${projectId}`),
+            axios.get(`/api/equip/${projectId}/${equipKindId}/`)
+        ])
+        .then(([projectNameRes, equipListRes]) => {
 
-  useEffect(() => {
-    axios.get("/api/equip")
-      .then(res => setEquipmentList(res.data))
-      .catch(() => setError("備品リストの取得に失敗しました"));
-  }, []);
+          setProjectName(projectNameRes.data.projectName);
+          setEquipmentList(equipListRes.data);
+          console.log('すべてのデータを取得しました');
+          console.log(equipListRes.data);
+        })
+        .catch(error => {
+          console.error("データ取得エラー:", error);
+          setError('データ取得中にエラーが発生しました');
+        });
+    
+  }, [projectId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
