@@ -100,7 +100,7 @@ export default function EquipmentRegist() {
         'http://localhost:8080/api/equipment/regist',
         formData
       );
-      alert('登録成功');
+      alert('登録成功!');
       console.log(res.data);
       navigate(`/equipment?projectId=${projectIdForRegistration}`);
 

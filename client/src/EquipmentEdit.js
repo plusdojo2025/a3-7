@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './css/EquipmentEdit.css';
 
-const alertTimingOptions = ['50', '40', '30', '20', '10'];
+const judgeOptions = ['50', '40', '30', '20', '10'];
 
 export default function EquipmentEdit() {
   const location = useLocation();
@@ -17,7 +17,7 @@ export default function EquipmentEdit() {
     unit: '',
     expiryDate: '',
     location: '',
-    alertTiming: '',
+    judge: '',
     note: ''
   });
 
@@ -62,7 +62,7 @@ export default function EquipmentEdit() {
           unit: data.unit || '',
           expiryDate: data.expiryDate,
           location: data.location,
-          alertTiming: data.alertTiming,
+          judge: data.judge,
           note: data.note || ''
         });
         setCurrentImageUrl(data.imageUrl);
@@ -92,7 +92,7 @@ export default function EquipmentEdit() {
     return;
   }
 
-  if (!form.itemName || !form.quantity || !form.unit || !form.expiryDate || !form.location || !form.alertTiming) {
+  if (!form.itemName || !form.quantity || !form.unit || !form.expiryDate || !form.location || !form.judge) {
     setError('入力されていない項目があります');
     return;
   }
@@ -111,7 +111,7 @@ export default function EquipmentEdit() {
     formData.append('unit', form.unit);
     formData.append('expiryDate', form.expiryDate);
     formData.append('location', form.location);
-    formData.append('alertTiming', form.alertTiming);
+    formData.append('judge', form.judge);
     formData.append('note', form.note);
     formData.append('projectId', projectId);
 
@@ -200,9 +200,9 @@ export default function EquipmentEdit() {
           </div>
           <div className="form-group">
             <label>アラートのタイミング</label>
-            <select name="alertTiming" value={form.alertTiming} onChange={handleChange}>
+            <select name="judge" value={form.judge} onChange={handleChange}>
               <option value="">選択</option>
-              {alertTimingOptions.map(a => (
+              {judgeOptions.map(a => (
                 <option key={a} value={a}>{a}%</option>
               ))}
             </select>
