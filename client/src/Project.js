@@ -17,6 +17,9 @@ export default class Project extends React.Component {
         const currentDate = new Date();
         const defaultDate = currentDate.toISOString().slice(0, 10);
 
+        //備品で固定
+        const kindId = 1;
+
 
         this.state = {
             projectId: projectId,
@@ -30,27 +33,38 @@ export default class Project extends React.Component {
             addName: "",
             date: defaultDate,
             report: "",
+            equipKindId:kindId,
+            alertList:[]
         }
         this.manageEquipment = this.manageEquipment.bind(this);
     }
 
     componentDidMount() {
-        const { projectId } = this.state;
+        const { projectId, equipKindId} = this.state;
         console.log("projectId:" + projectId);
           Promise.all([
             axios.get(`/api/project/${projectId}/`),
             axios.get(`/api/projectDetails/${projectId}/`),
             axios.get(`/api/reflectSummary/${projectId}/`),
-            axios.get(`/api/reflectTags/`)
+            axios.get(`/api/reflectTags/`),
+            axios.get('/api/equip/alert/detail/'),
+            axios.get(`/api/equip/${projectId}/${equipKindId}/`)
         ])
-        .then(([projectRes, detailsRes, summaryRes, tagsRes]) => {
+        .then(([projectRes, detailsRes, summaryRes, tagsRes, alertRes, equipRes]) => {
             this.setState({
                 project: projectRes.data,
                 processes: detailsRes.data,
                 reflects: summaryRes.data,
-                reflectTags: tagsRes.data
+                reflectTags: tagsRes.data,
             });
-        console.log('すべてのデータを取得しました');
+            console.log('すべてのデータを取得しました');
+            console.log(alertRes.data);
+            const validIds = new Set(alertRes.data.map(item => item.equipDetailId));
+            const filteredAlerts = equipRes.data.filter(alert =>
+                validIds.has(alert.equipDetailId)
+            );
+            this.setState({alertList:filteredAlerts});
+            console.log(filteredAlerts);
         })
         .catch(error => {
             console.error("データ取得エラー:", error);
@@ -171,7 +185,7 @@ export default class Project extends React.Component {
     }
 
     render() {
-        const { project, processes, reflects, showCloseProjectModal, showAddProcessModal, error } = this.state;
+        const { project, processes, reflects, alertList, showCloseProjectModal, showAddProcessModal, error } = this.state;
         // completeが0のプロセス
         const progressProcesses = processes.filter(p => p.complete === 0);
 
@@ -255,6 +269,28 @@ export default class Project extends React.Component {
                                 </div>
                             </div>
                         )}
+                    
+                        -----------------------------------------------
+                        <div className="equipAlertContainer">
+                            <div className="equipAlert">
+                                {alertList.length === 0 ? (
+                                    <p>備品の問題はありません</p>
+                                ) : (
+                                    <div className="equipAnnounce">
+                                        <p>以下の備品を確認してください</p>
+                                        <div className="someEquips">
+
+                                            {alertList.map((equip, index) =>
+                                                <div key={index} className="equip">
+                                                    {equip.equipName}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 

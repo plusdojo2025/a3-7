@@ -1,5 +1,6 @@
 --写真おっきく
 ALTER TABLE equip_details MODIFY COLUMN picture LONGBLOB;
+ALTER TABLE biology_details MODIFY COLUMN picture LONGBLOB;
 
 --ユーザーリスト
 INSERT INTO users (email, password, name) VALUES ('yazawa@hisao.com', 'ninnkikoushi', '矢沢　久雄');
@@ -52,15 +53,18 @@ INSERT INTO equip_kinds (equip_kind_name) VALUES ('生物'); --2
 --備品
 INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('虫あみ', 1, 1, 1); --1なので備品
 INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('バナナ', 1, 2, 2); --1なので備品
+INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('薬品1', 1, 3, 2); --1なので備品
+INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('薬品2', 1, 4, 2); --1なので備品
 INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('鶏', 2, 1, 1);   --2なので生体
 
 --生体詳細
-INSERT INTO biology_details (kind, gender, age, process_id, remarks, picture) VALUE (2, 1, 23, 2, '片翼', null);
+INSERT INTO biology_details (kind, gender, age, process_id, remarks, picture) VALUE ('虻', 1, 23, 2, '片翼', null);
 
 --備品詳細
 INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-04-28', 10.0, '倉庫', '所々穴が開いている。', 1, null);
-INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-07-25', 10.0, 'キッチン', '特売', 2, null);
-
+INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-07-22', 10.0, 'キッチン', '特売', 2, null);
+INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (5.2, '2025-07-26', 9.9, '薬棚A', 'よく使う', 6, null);
+INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-08-25', 10.0, '薬棚B', '冷暗所で保存', 6, null);
 --単位
 INSERT INTO units (unit) VALUES ('本'),('個'),('箱'),('kg'),('g'),('mg'),('L'),('ml');
 
