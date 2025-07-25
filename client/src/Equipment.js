@@ -375,7 +375,7 @@ export default function Equipment() {
       {/* 操作ボタンエリア */}
       <div className="equipment-button-area">
         <button 
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(`/project?id=${currentProjectId}`)}
           className="equipment-back-button"
         >
           戻る
