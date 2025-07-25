@@ -47,10 +47,11 @@ export default function EquipmentEdit() {
     }
 
     // 単位の取得
-    axios.get("/api/equipment/edit/get/units")
-      .then(res => setUnitMap(res.data))
-      .catch(err => console.error('単位データ取得エラー:', err));
+    axios.get("/api/equipment/edit/get/units").then(respons => {
+      setUnitMap(respons.data);
+      console.log(respons.data);
 
+    })
     // 備品データの取得
     axios.get(`/api/equipment/edit/${equipmentId}`)
       .then(res => {
@@ -84,42 +85,47 @@ export default function EquipmentEdit() {
   };
 
   const handleUpdate = async (e) => {
-    e.preventDefault();
-    setError('');
+  e?.preventDefault();
 
-    if (!projectId) {
-      setError('projectIdが取得できていません');
-      return;
+  if (!projectId) {
+    setError('projectIdが取得できていません');
+    return;
+  }
+
+  if (!form.itemName || !form.quantity || !form.unit || !form.expiryDate || !form.location || !form.alertTiming) {
+    setError('入力されていない項目があります');
+    return;
+  }
+
+  setError('');
+
+  try {
+    const formData = new FormData();
+
+    if (newImage) {
+      formData.append('image', newImage);
     }
 
-    if (!form.itemName || !form.quantity || !form.unit || !form.expiryDate || !form.location || !form.alertTiming) {
-      setError('入力されていない項目があります');
-      return;
-    }
+    formData.append('itemName', form.itemName);
+    formData.append('quantity', form.quantity);
+    formData.append('unit', form.unit);
+    formData.append('expiryDate', form.expiryDate);
+    formData.append('location', form.location);
+    formData.append('alertTiming', form.alertTiming);
+    formData.append('note', form.note);
+    formData.append('projectId', projectId);
 
-    try {
-      const formData = new FormData();
-      if (newImage) {
-        formData.append('image', newImage);
-      }
+    await axios.put(`/api/equipment/edit/${equipmentId}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
 
-      Object.entries(form).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      formData.append('projectId', projectId);
-
-      await axios.put(`/api/equipment/edit/${equipmentId}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
-      alert('更新完了！');
-      navigate(`/equipment?projectId=${projectId}`);
-    } catch (err) {
-      console.error('更新エラー:', err);
-      setError('更新に失敗しました');
-    }
-  };
+    alert('更新完了！');
+    navigate(`/equipment?projectId=${projectId}`);
+  } catch (err) {
+    console.error('更新エラー:', err);
+    setError('更新に失敗しました');
+  }
+};
 
   const handleDelete = async () => {
     if (!projectId) {
@@ -178,12 +184,10 @@ export default function EquipmentEdit() {
             <input type="number" name="quantity" value={form.quantity} onChange={handleChange} />
           </div>
           <div className="form-group">
-            <label>単位</label>
+           <label>単位</label>
             <select name="unit" value={form.unit} onChange={handleChange}>
-              <option value="">選択</option>
-              {unitMap.map((u) => (
-                <option key={u.unitId} value={u.unitId}>{u.unit}</option>
-              ))}
+          <option value="">選択</option>
+          {unitMap.map((unit, index) => <option key={index} value={unit.unitId}>{unit.unit}</option>)}
             </select>
           </div>
           <div className="form-group">
@@ -212,7 +216,7 @@ export default function EquipmentEdit() {
         {error && <div className="error-message">{error}</div>}
       </form>
 
-    {/* ← フォームの外に配置する */}
+
   <div className="button-group">
     <button type="button" onClick={() => navigate(`/equipment?projectId=${projectId}`)} className="button-back">
       戻る
@@ -220,7 +224,7 @@ export default function EquipmentEdit() {
     <button type="button" onClick={handleDelete} className="button-delete">
       削除
     </button>
-    <button type="button" onClick={() => navigate(`/equipment?projectId=${projectId}`)} form="equipment-edit-form" className="button-update">
+    <button type="submit" onClick={handleUpdate} form="equipment-edit-form" className="button-update">
       更新
     </button>
   </div>
