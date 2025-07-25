@@ -116,7 +116,7 @@ export default function Report() {
         await axios.post(`/api/equipment/edit/${equipDetailId}/${usageAmount}`);
       }
 
-      navigate(`process?id=${processId}`);
+      navigate(`/process?id=${processId}`);
 
     } catch (error) {
       alert("登録か更新に失敗しました");

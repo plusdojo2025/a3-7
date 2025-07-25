@@ -210,7 +210,6 @@ public class EquipEditController {
     	EquipDetail target = equipDetailsRepository.findByequipDetailId(equipDetailId);
     	// 更新
         target.setRemaining(target.getRemaining() - used);
-        // EntityManagerやRepositoryを使ってDB更新
         equipDetailsRepository.save(target);
     }
 }
