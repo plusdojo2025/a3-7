@@ -110,6 +110,7 @@ export default function BioRegist() {
       setImage(null);
 
       alert('登録完了！');
+      navigate(`/equipment?projectId=${projectId}`);
     } catch (err) {
       console.error(err);
       setError('登録に失敗しました');
@@ -159,7 +160,7 @@ export default function BioRegist() {
         {error && <p className="error-message">{error}</p>}
 
         <div className="button-group">
-          <button type="button" onClick={() => window.history.back()}>戻る</button>
+          <button type="button" onClick={() => navigate(`/equipment?projectId=${projectId}`)}>戻る</button>
           <button type="submit">登録</button>
         </div>
       </form>
