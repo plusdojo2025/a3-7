@@ -5,7 +5,7 @@ import axios from "axios";
 import { AlertContext } from "./AlertContext";
 
 export default class Member extends React.Component {
-  static contextType =AlertContext;
+  static contextType = AlertContext;
   constructor(props) {
     super(props);
     const params = new URLSearchParams(window.location.search);
@@ -18,6 +18,7 @@ export default class Member extends React.Component {
       isDeleteModalOpen: false,
       userId: null,
       approvedMembers: [],
+      pendingMembers: [],
       selectedMemberId: null,
       currentUserId: null,
       currentUserAuthority: null,
@@ -31,6 +32,7 @@ export default class Member extends React.Component {
         const userId = res.data.userId;
         this.setState({ currentUserId: userId });
 
+        //承認済みメンバー取得
         return axios.get(`http://localhost:8080/api/members/approved?projectId=${this.projectId}`, {
           withCredentials: true
         });
@@ -41,8 +43,14 @@ export default class Member extends React.Component {
 
         this.setState({
           approvedMembers,
-          currentUserAuthority: currentMember ? currentMember.authority : null,
+          currentUserAuthority: currentMember?.authority
         });
+
+        //招待中のメンバーの取得
+        return axios.get(`http://localhost:8080/api/members/pending?userId=${this.state.currentUserId}`);
+      })
+      .then((res) => {
+        this.setState({ pendingMembers: res.data });
       })
       .catch((err) => {
         console.error("初期データの取得に失敗:", err);
@@ -63,10 +71,21 @@ export default class Member extends React.Component {
     axios.get(`http://localhost:8080/getUserNameByEmail?email=${encodeURIComponent(email)}`)
       .then((res) => {
         if (res.data) {
-          this.setState({
-            name: res.data.name,
-            userId: res.data.userId,
-          });
+          const { userId, name } = res.data;
+
+          const isAlreadyApproved = this.state.approvedMembers.some(m => m.userId === userId);
+          const isAlreadyInvited = this.state.pendingMembers.some(m => m.userId === userId);
+
+          if (isAlreadyApproved) {
+            this.context.showAlert("警告", "このユーザーはすでに参加しています。");
+            this.setState({ name: "このユーザーはすでにプロジェクトに参加しています", userId: null });
+          } else if (isAlreadyInvited) {
+            this.context.showAlert("警告", "このユーザーにはすでに招待メールが送られています。");
+            this.setState({ name: "すでに招待メールを送信済みのユーザーです", userId: null });
+          } else {
+            this.setState({ name, userId });
+          }
+
         } else {
           this.setState({ name: "該当するユーザーが見つかりません。" });
         }
@@ -94,7 +113,7 @@ export default class Member extends React.Component {
       projectId: this.projectId
     })
       .then(() => {
-        this.context.showAlert("成功","招待を送信しました");
+        this.context.showAlert("成功", "招待を送信しました");
         this.setState({ isInviteModalOpen: false });
       })
       .catch((err) => {
@@ -112,7 +131,7 @@ export default class Member extends React.Component {
       projectId: this.projectId
     })
       .then(() => {
-        this.context.showAlert("成功","メンバーの削除に成功しました")
+        this.context.showAlert("成功", "メンバーの削除に成功しました")
         this.setState((prevState) => ({
           approvedMembers: prevState.approvedMembers.filter(
             (m) => m.userId !== selectedMemberId
@@ -123,7 +142,7 @@ export default class Member extends React.Component {
       })
       .catch((err) => {
         console.error("削除に失敗しました:", err);
-        this.context.showAlert("失敗","削除に失敗しました。");
+        this.context.showAlert("失敗", "削除に失敗しました。");
       });
   };
 
@@ -139,7 +158,7 @@ export default class Member extends React.Component {
   handleUpdateAuthorities = () => {
     const updates = Object.entries(this.state.updatedAuthorities);
     if (updates.length === 0) {
-      this.context.showAlert("変更なし","変更された権限はありません。");
+      this.context.showAlert("変更なし", "変更された権限はありません。");
       return;
     }
 
@@ -162,11 +181,11 @@ export default class Member extends React.Component {
           approvedMembers: res.data,
           updatedAuthorities: {},
         });
-        this.context.showAlert("成功","権限を更新しました");
+        this.context.showAlert("成功", "権限を更新しました");
       })
       .catch((err) => {
         console.error("権限更新エラー", err);
-        this.context.showAlert("失敗","更新に失敗しました。");
+        this.context.showAlert("失敗", "更新に失敗しました。");
       });
   };
 
@@ -198,17 +217,18 @@ export default class Member extends React.Component {
               <div className="result">
                 <div className="name-and-button">
                   <p className="user-name-display">一致した名前：{this.state.name}</p>
-                  {this.state.userId && this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
-                    <button onClick={this.openInviteModal} className="invite-mail-button" align="right">招待メール送信</button>
+                  {this.state.userId && this.state.name && !this.state.name.includes("すでに") && (
+                    <button onClick={this.openInviteModal} className="invite-mail-button">招待メール送信</button>
                   )}
+
                 </div>
                 {this.state.isInviteModalOpen && (
                   <div className="modal-overlay">
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                       <h2>この方をプロジェクトに招待しますか？</h2>
                       <div className="invite-check">
-                      <button onClick={this.closeInviteModal}>いいえ</button>
-                      <button className="sub_botun" onClick={this.inviteUser}>はい</button>
+                        <button onClick={this.closeInviteModal}>いいえ</button>
+                        <button className="sub_botun" onClick={this.inviteUser}>はい</button>
                       </div>
                     </div>
                   </div>
@@ -267,8 +287,8 @@ export default class Member extends React.Component {
               <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <h2>このメンバーをプロジェクトから削除してもよろしいですか？</h2>
                 <div className="delete-check">
-                <button onClick={this.closeDeleteModal}>いいえ</button>
-                <button className="sub_botun" onClick={this.handleDeleteMember}>はい</button>
+                  <button onClick={this.closeDeleteModal}>いいえ</button>
+                  <button className="sub_botun" onClick={this.handleDeleteMember}>はい</button>
                 </div>
               </div>
             </div>
@@ -291,8 +311,8 @@ export default class Member extends React.Component {
           </button>
         </div>
 
-        
-       
+
+
       </>
     );
   }
