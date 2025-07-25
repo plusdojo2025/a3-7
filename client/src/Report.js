@@ -8,13 +8,14 @@ export default function Report() {
   const navigate = useNavigate();
   const equipKindId = 1;
 
+  // 日付とコメントだけ管理
   const [form, setForm] = useState({
     createdAt: "",
-    processId: processId || "",
     comment: "",
-    equipId: "",
-    usageAmount: ""
   });
+
+  // 備品使用入力複数管理
+  const [equipForms, setEquipForms] = useState([{ equipId: "", usageAmount: "" }]);
 
   const [projectName, setProjectName] = useState("");
   const [equipmentList, setEquipmentList] = useState([]);
@@ -22,21 +23,17 @@ export default function Report() {
 
   useEffect(() => {
     Promise.all([
-            axios.get(`/api/project/${projectId}`),
-            axios.get(`/api/equip/${projectId}/${equipKindId}/`)
-        ])
-        .then(([projectNameRes, equipListRes]) => {
-
-          setProjectName(projectNameRes.data.projectName);
-          setEquipmentList(equipListRes.data);
-          console.log('すべてのデータを取得しました');
-          console.log(equipListRes.data);
-        })
-        .catch(error => {
-          console.error("データ取得エラー:", error);
-          setError('データ取得中にエラーが発生しました');
-        });
-    
+      axios.get(`/api/project/${projectId}`),
+      axios.get(`/api/equip/${projectId}/${equipKindId}/`)
+    ])
+      .then(([projectNameRes, equipListRes]) => {
+        setProjectName(projectNameRes.data.projectName);
+        setEquipmentList(equipListRes.data);
+      })
+      .catch(error => {
+        console.error("データ取得エラー:", error);
+        setError("データ取得中にエラーが発生しました");
+      });
   }, [projectId]);
 
   const handleChange = (e) => {
@@ -47,99 +44,105 @@ export default function Report() {
     }));
   };
 
+  const handleEquipChange = (index, e) => {
+    const { name, value } = e.target;
+    const updated = [...equipForms];
+    updated[index][name] = value;
+    setEquipForms(updated);
+  };
+
+  const addEquipField = () => {
+    setEquipForms([...equipForms, { equipId: "", usageAmount: "" }]);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // 備品使用データまとめ
+    const equipmentUsage = equipForms.map(item => ({
+      equipId: parseInt(item.equipId, 10),
+      usageAmount: parseFloat(item.usageAmount) || 0
+    }));
 
     const payload = {
       ...form,
       projectId: parseInt(projectId, 10),
-      processId: parseInt(form.processId, 10),
-      equipId: parseInt(form.equipId, 10),
-      usageAmount: parseFloat(form.usageAmount) || 0
+      processId: parseInt(processId, 10),
+      equipmentUsage
     };
 
     axios.post("/api/report", payload)
       .then(() => {
         alert("登録成功！");
-        navigate(`/project/${projectId}/process/${processId}`); 
+        navigate(`/project/${projectId}/process/${processId}`);
       })
       .catch(() => alert("登録失敗"));
   };
 
   return (
     <div>
-      <h2>日報登録</h2>
+      <h2>日報登録 - {projectName}</h2>
+      {error && <p className="error">{error}</p>}
 
-   
+      <form onSubmit={handleSubmit} className="report-form">
+        <div className="form-group">
+          <label>日付：
+            <input
+              type="date"
+              name="createdAt"
+              value={form.createdAt}
+              onChange={handleChange}
+              required
+            />
+          </label>
+        </div>
 
-      <div className="report-container">
-        {error && <p className="error-text">{error}</p>}
+        <div className="form-group">
+          <label>コメント：
+            <textarea
+              name="comment"
+              value={form.comment}
+              onChange={handleChange}
+            />
+          </label>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-      
+        <h3>使用した備品</h3>
+        {equipForms.map((equip, index) => (
+          <div key={index} className="equip-row">
+            <select
+              name="equipId"
+              value={equip.equipId}
+              onChange={(e) => handleEquipChange(index, e)}
+              required
+            >
+              <option value="">選択してください</option>
+              {equipmentList.map(item => (
+                <option key={item.equipId} value={item.equipId}>
+                  {item.equipName}
+                </option>
+              ))}
+            </select>
 
-          <div className="form-group">
-            <label>日付:
-              <input
-                type="date"
-                name="createdAt"
-                value={form.createdAt}
-                onChange={handleChange}
-                required
-              />
-            </label>
+            <input
+              type="text"
+              name="usageAmount"
+              value={equip.usageAmount}
+              onChange={(e) => handleEquipChange(index, e)}
+              placeholder="使用量"
+            />
           </div>
+        ))}
 
-          <div className="form-group">
-            <label>研修タイトル:
-              <input type="text" value={projectName} readOnly />
-            </label>
-          </div>
+        <button type="button" onClick={addEquipField}>
+          備品を追加
+        </button>
 
-          <div className="form-group">
-            <label>備品名:
-              <select name="equipId" value={form.equipId} onChange={handleChange} required>
-                <option value="">選択してください</option>
-                {equipmentList.map(equip => (
-                  <option key={equip.equipId} value={equip.equipId}>
-                    {equip.equipName}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div className="form-group">
-            <label>使用量:
-              <input
-                type="text"
-                name="usageAmount"
-                value={form.usageAmount}
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-
-          <div className="form-group">
-            <label>コメント:
-              <textarea
-                name="comment"
-                value={form.comment}
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-
-          <div className="button-group">
-            <button type="button" className="back-button" onClick={() => navigate(`/process?id=${processId}`)}>
-              戻る
-            </button>
-            <button type="submit" className="submit-button">
-              登録
-            </button>
-          </div>
-        </form>
-      </div>
+        <div>
+          <button type="submit">登録</button>
+        </div>
+      </form>
     </div>
   );
 }
+
