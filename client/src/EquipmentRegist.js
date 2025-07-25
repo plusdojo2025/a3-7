@@ -74,44 +74,6 @@ export default function EquipmentRegist() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  // 入力バリデーション
-  const { equipName, limited, remaining, unit, storage } = this.state.form;
-
-if (!equipName || equipName.trim() === "") {
-  this.setState({ error: "備品名は必須です。" });
-  return;
-}
-if (equipName.length > 100) {
-  this.setState({ error: "備品名は100文字以内で入力してください。" });
-  return;
-}
-
-
-if (remaining === "" || isNaN(remaining) || Number(remaining) < 0) {
-  this.setState({ error: "残数は0以上の数値で入力してください。" });
-  return;
-}
-
-if (storage && storage.length > 100) {
-  this.setState({ error: "保管場所は100文字以内で入力してください。" });
-  return;
-}
-
-  if (!equipName || !limited || !remaining || !unit || !storage) {
-      setError('すべての必須項目を入力してください。');
-      return;
-    }
-
-// バリデーション通過
-this.setState({ error: null });
-
-
-
-
-
-
-  
-
     const formData = new FormData();
     formData.append('equipName', form.equipName);
     formData.append('limited', form.limited);
