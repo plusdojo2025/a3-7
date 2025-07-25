@@ -83,6 +83,8 @@ export default function Equipment() {
     setAlertList(alertData);
     setAllList(equipData);
     setAlerts(filteredAlerts);
+    console.log(alertList);
+    console.log(allList);
     console.log(alerts);
 
   } catch (error) {
@@ -113,7 +115,7 @@ export default function Equipment() {
       setKeyword(''); 
       setAlerts([]); 
     }
-  }, [location.search, performSearch]); 
+  }, [location.search, performSearch]);  //警告出てる
 
   /**
    * 検索ボタンクリック処理
