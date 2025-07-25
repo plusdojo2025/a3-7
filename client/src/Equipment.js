@@ -185,7 +185,7 @@ export default function Equipment() {
       setCurrentProjectId(projectIdFromUrl);
       console.log('プロジェクトID検出:', projectIdFromUrl);
 
-      // 初期検索で備品一覧を表示
+      // 初期検索で備品一覧を表示（equipmentTypeのデフォルト'1'を使用）
       performSearch(projectIdFromUrl, '', '1'); 
       loadAlerts(projectIdFromUrl, projectIdFromUrl, 1); // 1は備品のkindId
     } else {
@@ -240,20 +240,44 @@ export default function Equipment() {
    */
   const handleItemClick = (item) => {
     console.log('アイテム詳細画面遷移:', item);
+    console.log('アイテム詳細データ:', {
+      equipId: item.equipId,
+      equipDetailId: item.equipDetailId,
+      type: item.type,
+      projectId: currentProjectId
+    });
     
     if (item.type === "生物") {
-      // 生物の場合
-      navigate(`/bioEdit`, { 
+      // 生物の場合 - 既存のルート設定に合わせてクエリパラメータ形式で遷移
+      console.log('生物詳細画面への遷移開始');
+      console.log('渡すパラメータ:', {
+        equipId: item.equipId,
+        biologyId: item.equipId,
+        id: item.equipId,
+        projectId: currentProjectId
+      });
+      
+      // 既存のルート設定に合わせて、equipmentIdをクエリパラメータとして渡す
+      navigate(`/bioEdit?equipmentId=${item.equipId}&projectId=${currentProjectId}`, { 
         state: { 
-          equipmentId: item.equipId, 
-          projectId: currentProjectId 
+          // 追加のパラメータもstateで渡す
+          biologyId: item.equipId,
+          equipmentId: item.equipId,
+          equipId: item.equipId,
+          equipDetailId: item.equipDetailId,
+          id: item.equipId,
+          projectId: currentProjectId,
+          biologyData: item
         } 
       });
     } else {
       // 備品の場合
       navigate(`/equipmentEdit`, { 
         state: { 
-          equipmentId: item.equipId, 
+          equipmentId: item.equipId,
+          equipId: item.equipId,
+          equipDetailId: item.equipDetailId,
+          id: item.equipId, // 汎用的なidパラメータ
           projectId: currentProjectId 
         } 
       });

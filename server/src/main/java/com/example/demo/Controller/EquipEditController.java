@@ -42,7 +42,7 @@ public class EquipEditController {
             @RequestParam("unit") String unit,
             @RequestParam("expiryDate") String expiryDate,
             @RequestParam("location") String location,
-            @RequestParam("alertTiming") String alertTiming,
+            @RequestParam("judge") String judge,
             @RequestParam("note") String note,
             @RequestParam(value = "image", required = false) MultipartFile image
     ) {
@@ -53,7 +53,7 @@ public class EquipEditController {
             detail.setUnit(Integer.parseInt(unit));
             detail.setLimited(Date.valueOf(expiryDate));
             detail.setStorage(location);
-            detail.setJudge(Double.parseDouble(alertTiming));
+            detail.setJudge(Double.parseDouble(judge));
             detail.setRemarks(note);
             if (image != null && !image.isEmpty()) {
                 detail.setPicture(image.getBytes());
@@ -118,7 +118,7 @@ public class EquipEditController {
             @RequestParam("unit") String unit,
             @RequestParam("expiryDate") String expiryDate,
             @RequestParam("location") String location,
-            @RequestParam("alertTiming") String alertTiming,
+            @RequestParam("judge") String judge,
             @RequestParam("note") String note,
             @RequestParam(value = "image", required = false) MultipartFile image
     ) {
@@ -136,7 +136,7 @@ public class EquipEditController {
             detail.setUnit(Integer.parseInt(unit));
             detail.setLimited(Date.valueOf(expiryDate));
             detail.setStorage(location);
-            detail.setJudge(Double.parseDouble(alertTiming));
+            detail.setJudge(Double.parseDouble(judge));
             detail.setRemarks(note);
             if (image != null && !image.isEmpty()) {
                 detail.setPicture(image.getBytes());
@@ -177,19 +177,19 @@ public class EquipEditController {
         public int unit;
         public String expiryDate;
         public String location;
-        public double alertTiming;
+        public double judge;
         public String note;
         public String imageUrl;
 
         public EquipmentDetailResponse(Integer id, String itemName, double quantity, int unit, String expiryDate,
-                                       String location, double alertTiming, String note, String imageUrl) {
+                                       String location, double judge, String note, String imageUrl) {
             this.id = id;
             this.itemName = itemName;
             this.quantity = quantity;
             this.unit = unit;
             this.expiryDate = expiryDate;
             this.location = location;
-            this.alertTiming = alertTiming;
+            this.judge = judge;
             this.note = note;
             this.imageUrl = imageUrl;
         }
