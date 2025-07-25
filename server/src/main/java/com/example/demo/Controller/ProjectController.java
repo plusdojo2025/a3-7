@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -221,11 +223,40 @@ public class ProjectController {
     }
    
 	// メンバー招待（承認待ちで保存）
-	@PostMapping("/members/invite")
-	public Member inviteMember(@RequestBody Member member) {
-		member.setAttend(0); // 承認待ち
-		return membersRepository.save(member);
-	}
+    @PostMapping("/members/invite")
+    public ResponseEntity<String> inviteMember(@RequestBody Member member) {
+        Integer userId = member.getUserId();
+        Integer projectId = member.getProjectId();
+
+        // 既に存在するか確認
+        List<Member> existing = membersRepository.findAllByUserId(userId).stream()
+            .filter(m -> m.getProjectId().equals(projectId))
+            .toList();
+
+        if (!existing.isEmpty()) {
+            Member existingMember = existing.get(0);  // 1件でもあればチェック
+
+            switch (existingMember.getAttend()) {
+                case 0:
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("すでに招待済みです（承認待ち）");
+                case 1:
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("このユーザーはすでにプロジェクトに参加しています");
+                case 2:
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("以前招待をキャンセルされています");
+                default:
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("不明な参加状態です");
+            }
+        }
+
+        // 新規招待を登録
+        member.setAttend(0); // 招待中（承認待ち）
+        membersRepository.save(member);
+        return ResponseEntity.ok("メンバーを招待しました");
+    }
 
 	// メンバー承認
 	@PostMapping("/members/approve")

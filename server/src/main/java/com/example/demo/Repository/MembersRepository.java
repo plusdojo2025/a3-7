@@ -17,6 +17,7 @@ public interface MembersRepository extends JpaRepository<Member, Integer> {
 	List<Member> findByProjectIdAndAttend(Integer projectId, Integer attend);
 	List<Member> findAllByUserId(Integer userId);
 	List<Member> findAllByUserIdAndAttend(Integer userId,Integer attend);
+	
 
 	// 👇 追加：authority を更新するクエリ
 	@Modifying
