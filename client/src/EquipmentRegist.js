@@ -74,13 +74,6 @@ export default function EquipmentRegist() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { equipName, limited, remaining, unit, storage } = form;
-
-    if (!equipName || !limited || !remaining || !unit || !storage) {
-      setError('すべての必須項目を入力してください。');
-      return;
-    }
-
     const formData = new FormData();
     formData.append('equipName', form.equipName);
     formData.append('limited', form.limited);
