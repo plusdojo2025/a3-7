@@ -231,6 +231,19 @@
   box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
 
+/* 戻るボタン */
+.equipment-back-button {
+  background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+  color: white !important;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3) !important;
+}
+
+.equipment-back-button:hover {
+  background: linear-gradient(135deg, #5a6268, #495057) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4) !important;
+}
+
 /* ===== 空の状態表示 ===== */
 .equipment-empty-state {
   text-align: center;
