@@ -61,7 +61,7 @@ function App() {
               <Route path="bioEdit" element={<BioEdit />} />
               <Route path="report/project/:projectId/process/:processId" element={<Report />} />
               <Route path="reflect/project/:projectId/process/:processId" element={<Reflect />} />
-              <Route path="reportEdit/" element={<ReportEdit />} />
+            <Route path="/reportEdit/:reportId" element={<ReportEdit />} />
               <Route path="project/:projectId/processes/:processId" element={<WeeklyReport />} />
               
              
