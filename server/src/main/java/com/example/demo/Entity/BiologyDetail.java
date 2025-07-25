@@ -33,8 +33,6 @@ public class BiologyDetail {
     @Column(name = "process_id")
     private Integer processId;
 
-    @Column(name = "equip_id")
-    private Integer equipId; // 登録時にControllerでセット
 
     private String remarks;
 
