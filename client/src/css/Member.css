@@ -52,6 +52,15 @@
     background-color: #f8f8f8;
     width: 60%;
     margin-bottom: 20px;
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    border-radius: 16px;
+    padding: 35px 45px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(163, 204, 190, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .search_container {
@@ -207,4 +216,26 @@
   transition: background-color 0.3s, color 0.3s;
   text-align: right;
   margin: 20px;
+}
+
+.delete-check {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* ボタン間にスペースを作る */
+  margin-top: 20px; /* 上との間隔も空けるなら */
+}
+
+.delete-check button {
+  padding: 10px 20px;
+}
+
+.invite-check{
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* ボタン間にスペースを作る */
+  margin-top: 20px; /* 上との間隔も空けるなら */
+}
+
+.invite-check button{
+  padding: 10px 20px;
 }

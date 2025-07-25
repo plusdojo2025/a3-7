@@ -204,13 +204,10 @@ export default class Member extends React.Component {
                   <div className="modal-overlay">
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                       <h2>この方をプロジェクトに招待しますか？</h2>
+                      <div className="invite-check">
                       <button onClick={this.closeInviteModal}>いいえ</button>
-                      <input
-                        className="sub_botun"
-                        type="button"
-                        value="はい"
-                        onClick={this.inviteUser}
-                      />
+                      <button className="sub_botun" onClick={this.inviteUser}>はい</button>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -267,7 +264,7 @@ export default class Member extends React.Component {
             <div className="modal-overlay" onClick={this.closeDeleteModal}>
               <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <h2>このメンバーをプロジェクトから削除してもよろしいですか？</h2>
-                <div>
+                <div className="delete-check">
                 <button onClick={this.closeDeleteModal}>いいえ</button>
                 <button className="sub_botun" onClick={this.handleDeleteMember}>はい</button>
                 </div>
@@ -291,6 +288,9 @@ export default class Member extends React.Component {
             戻る
           </button>
         </div>
+
+        
+       
       </>
     );
   }
