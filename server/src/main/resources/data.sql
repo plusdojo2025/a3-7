@@ -43,17 +43,16 @@ INSERT INTO members (project_id, user_id, authority, attend) VALUES(7, 2, 2, 1);
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(8, 2, 2, 1);
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(9, 2, 2, 1);
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(10, 2, 2, 1);
+
 --備品種類
-INSERT INTO equip_kinds (equip_kind_name) VALUES ('道具');
-INSERT INTO equip_kinds (equip_kind_name) VALUES ('昆虫');
-INSERT INTO equip_kinds (equip_kind_name) VALUES ('果物');
+INSERT INTO equip_kinds (equip_kind_name) VALUES ('備品'); --1
+INSERT INTO equip_kinds (equip_kind_name) VALUES ('生物'); --2
 
 
 --備品
-INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('虫あみ', 1, 1, 1);
-INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('バナナ', 3, 2, 2);
-
---生体
+INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('虫あみ', 1, 1, 1); --1なので備品
+INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('バナナ', 1, 2, 2); --1なので備品
+INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('鶏', 2, 1, 1);   --2なので生体
 
 --生体詳細
 INSERT INTO biology_details (kind, gender, age, process_id, remarks, picture) VALUE (2, 1, 23, 2, '片翼', null);
