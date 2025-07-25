@@ -83,7 +83,7 @@ export default function ReportEdit() {
       </div>
 
       <div className="button-group">
-        <button type="button" onClick={() => navigate(-1)}>戻る</button>
+        <button type="button" onClick={() => navigate(`/process?id=${processId}`)}>戻る</button>
         <button type="submit">更新</button>
       </div>
     </form>
