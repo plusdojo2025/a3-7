@@ -23,17 +23,22 @@ const Process = () => {
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const processId = params.get("id");
-  const projectId = params.get("projectId");
+  const [projectId, setProjectId] = useState(params.get("projectId")); // ここをステートに
    
 
 
   // Fetch process name
   useEffect(() => {
-    if (processId) {
-      axios
-        .get(`/api/processes/${processId}`)
-        .then((res) => setProcess(res.data))
-        .catch(() => setError("工程の取得に失敗しました"));
+  if (processId) {
+    axios.get(`/api/processes/${processId}`)
+        .then((res) => {
+        setProcess(res.data);
+        // ここでprojectIdもセット
+        if (res.data.projectId) {
+          setProjectId(res.data.projectId);
+        }
+      })
+      .catch(() => setError("工程の取得に失敗しました"));
     } else {
       setError("Process ID が指定されていません");
     }
