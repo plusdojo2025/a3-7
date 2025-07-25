@@ -26,6 +26,8 @@ export default function BioRegist() {
   //process格納用
   const [process, setProcess] = useState([]);
 
+
+
   //工程取得
   const fetchProcess = async (currentProjectId) => {
     try {
@@ -117,6 +119,24 @@ export default function BioRegist() {
     }
   };
 
+  //工程登録プルダウン
+  const renderProcessOptions = () => {
+
+    if (error && process.length === 0) {
+      return <option value="" disabled>工程の取得に失敗しました</option>;
+    }
+
+    if (process.length > 0) {
+      // process.map のループ変数名を p に変更しました (可読性のため)
+      return process.map((p) => (
+        <option key={p.processId} value={p.processId}>
+          {p.processName}
+        </option>
+      ));
+    }
+    return <option value="" disabled>利用可能な工程がありません</option>;
+  };
+
   return (
     <div>
       <h2>生物の登録</h2>
@@ -137,21 +157,10 @@ export default function BioRegist() {
             value={form.projectProcess} 
             onChange={handleChange}
             // processがまだ取得できていない間は無効化する
-            disabled={process.length === 0 && !error} 
+            disabled={error && process.length === 0}
           >
             <option value="">選択してください</option>
-            {/* process ステートにデータがあれば、それを元に <option> を生成 */}
-            {process.length > 0 ? (
-                process.map((process) => (
-                    // key にはユニークな値 (processId) を、value にはAPIに送信する値 (processId) を設定
-                    <option key={process.processId} value={process.processId}>
-                        {process.processName} {/* 表示名には processName を使用 */}
-                    </option>
-                ))
-            ) : (
-                // process が空で、エラーがない場合は読み込み中メッセージを表示
-                !error && <option value="" disabled>読み込み中...</option>
-            )}
+            {renderProcessOptions()} 
           </select>
         </label>
         <label>備考<input type="text" name="note" value={form.note} onChange={handleChange} /></label>
