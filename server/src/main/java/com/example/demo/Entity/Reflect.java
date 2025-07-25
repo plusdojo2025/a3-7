@@ -1,5 +1,7 @@
 package com.example.demo.Entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,6 @@ public class Reflect {
 	private Integer projectId;
 	@Column(name = "reflect_tag_id")
 	private Integer reflectTagId;
-	private String createdAt;
+	private LocalDate createdAt;
     private String comment;
 }
