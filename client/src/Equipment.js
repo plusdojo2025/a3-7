@@ -10,7 +10,7 @@ import './css/equipment.css';
  */
 export default function Equipment() {
   const [keyword, setKeyword] = useState('');
-  const [equipmentType, setEquipmentType] = useState(''); // "1"=備品, "2"=生物, ""=全て
+  const [equipmentType, setEquipmentType] = useState('1'); // デフォルトを備品に設定
   const [equipmentTypes, setEquipmentTypes] = useState([]);
   const [items, setItems] = useState([]);
   const [alerts, setAlerts] = useState([]);
@@ -34,72 +34,79 @@ export default function Equipment() {
     console.log('備品・生物検索開始:', { projectIdToSearch, searchKeyword, searchType });
     
     try {
-      let equipmentData = [];
-      let biologyData = [];
+      let results = [];
+      // searchTypeが未指定の場合はデフォルトで備品を検索
+      const typeToSearch = searchType || '1';
 
-      // 備品検索（種類が空または1の場合）
-      if (searchType === '' || searchType === '1') {
-        const equipUrl = new URL('/api/equip/search', window.location.origin);
-        if (searchKeyword && searchKeyword.trim()) {
-          equipUrl.searchParams.append('keyword', searchKeyword.trim());
-        }
-        if (projectIdToSearch) {
-          equipUrl.searchParams.append('projectId', projectIdToSearch);
-        }
-        // 備品種類IDを指定
-        equipUrl.searchParams.append('equipKindId', '1');
-
-        const equipResponse = await axios.get(equipUrl.toString());
-        equipmentData = equipResponse.data.map(item => ({
-          ...item,
-          type: "備品",
-          displayType: "備品"
-        }));
-        console.log('備品検索結果:', equipmentData.length + '件');
-      }
-
-      // 生物検索（種類が空または2の場合）
-      if (searchType === '' || searchType === '2') {
-        // 生物用APIは未実装のため、備品APIから生物をフィルタリング
-        console.log('生物検索：備品APIからフィルタリング実行');
+      if (typeToSearch === '1') {
+        // 備品検索
+        console.log('備品検索開始');
         
-        const fallbackUrl = new URL('/api/equip/search', window.location.origin);
-        if (searchKeyword && searchKeyword.trim()) {
-          fallbackUrl.searchParams.append('keyword', searchKeyword.trim());
-        }
-        if (projectIdToSearch) {
-          fallbackUrl.searchParams.append('projectId', projectIdToSearch);
-        }
-
         try {
-          const fallbackResponse = await axios.get(fallbackUrl.toString());
-          // equipKindId = 2 で生物をフィルタリング（実際のデータに合わせて調整）
-          biologyData = fallbackResponse.data
-            .filter(item => {
-              // 生物の判定ロジック（データ構造に応じて調整）
-              return item.equipKindId === 2 || 
-                     item.type === "生物" || 
-                     (item.equipName && (item.equipName.includes('生物') || item.equipName.includes('動物')));
-            })
-            .map(item => ({
-              ...item,
-              type: "生物",
-              displayType: "生物"
-            }));
-          console.log('生物フィルタリング結果:', biologyData.length + '件');
+          const equipResponse = await axios.get(`/api/equip/${projectIdToSearch}/1/`);
+          console.log('備品検索レスポンス:', equipResponse.data);
+          
+          let filteredResults = equipResponse.data;
+          
+          // キーワード検索がある場合はフィルタリング
+          if (searchKeyword && searchKeyword.trim()) {
+            const keyword = searchKeyword.trim().toLowerCase();
+            filteredResults = equipResponse.data.filter(item => 
+              (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
+              (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
+            );
+          }
+          
+          results = filteredResults.map(item => ({
+            ...item,
+            type: "備品",
+            displayType: "備品"
+          }));
+          
+          console.log('備品検索結果:', results.length + '件');
+          
+        } catch (equipError) {
+          console.error('備品検索エラー:', equipError);
+          results = [];
+        }
+        
+      } else if (typeToSearch === '2') {
+        // 生物検索
+        console.log('生物検索開始');
+        
+        try {
+          const bioResponse = await axios.get(`/api/equip/${projectIdToSearch}/2/`);
+          console.log('生物検索レスポンス:', bioResponse.data);
+          
+          let filteredResults = bioResponse.data;
+          
+          // キーワード検索がある場合はフィルタリング
+          if (searchKeyword && searchKeyword.trim()) {
+            const keyword = searchKeyword.trim().toLowerCase();
+            filteredResults = bioResponse.data.filter(item => 
+              (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
+              (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
+            );
+          }
+          
+          results = filteredResults.map(item => ({
+            ...item,
+            type: "生物",
+            displayType: "生物"
+          }));
+          
+          console.log('生物検索結果:', results.length + '件');
+          
         } catch (bioError) {
           console.error('生物検索エラー:', bioError);
-          biologyData = [];
+          results = [];
         }
       }
 
-      // 結果をマージ
-      const combinedResults = [...equipmentData, ...biologyData];
-      console.log('検索結果合計:', combinedResults.length + '件');
-      setItems(combinedResults);
+      setItems(results);
       
     } catch (error) {
-      console.error('備品・生物検索エラー:', error);
+      console.error('検索エラー:', error);
       alert('検索に失敗しました。時間をおいて再度お試しください。');
     } finally {
       setLoading(false);
@@ -150,9 +157,8 @@ export default function Equipment() {
   useEffect(() => {
     const fetchEquipmentTypes = async () => {
       try {
-        // 備品種類マスタの取得を想定（実際のAPIに合わせて調整）
+        // マスタの取得
         const equipmentTypes = [
-          { id: '', name: '全て' },
           { id: '1', name: '備品' },
           { id: '2', name: '生物' }
         ];
@@ -161,7 +167,6 @@ export default function Equipment() {
         console.error('備品種類取得エラー:', error);
         // エラー時もデフォルト値をセット
         setEquipmentTypes([
-          { id: '', name: '全て' },
           { id: '1', name: '備品' },
           { id: '2', name: '生物' }
         ]);
@@ -180,8 +185,8 @@ export default function Equipment() {
       setCurrentProjectId(projectIdFromUrl);
       console.log('プロジェクトID検出:', projectIdFromUrl);
 
-      // 初期検索とアラート読み込み実行
-      performSearch(projectIdFromUrl, '', ''); 
+      // 初期検索で備品一覧を表示
+      performSearch(projectIdFromUrl, '', '1'); 
       loadAlerts(projectIdFromUrl, projectIdFromUrl, 1); // 1は備品のkindId
     } else {
       console.log('プロジェクトIDが見つかりません');
@@ -270,23 +275,6 @@ export default function Equipment() {
     <div className="equipment-container">
       <h2>備品・生物管理</h2>
 
-      {/* アラート表示エリア */}
-      {/* {alerts.length > 0 && (
-        <div className="equipment-alert-area">
-          <h3 className="alert-title">⚠️ アラート ({alerts.length}件)</h3>
-          {alerts.slice(0, 3).map((alert, index) => (
-            <div key={index} className="alert-item">
-              {alert.message}
-            </div>
-          ))}
-          {alerts.length > 3 && (
-            <div className="alert-more">
-              ...他 {alerts.length - 3} 件のアラート
-            </div>
-          )}
-        </div>
-      )} */}
-
       {/* 備品・生物一覧と検索バー統合エリア */}
       <div className="equipment-list-area">
         {/* 検索バー */}
@@ -333,7 +321,7 @@ export default function Equipment() {
           </div>
         ) : items.length === 0 ? (
           <div className="equipment-empty-state">
-            <p>該当するもの見つかりませんでした。</p>
+            <p>該当する備品・生物が見つかりませんでした。</p>
             <p>検索条件を変更するか、新しく登録してください。</p>
           </div>
         ) : (

@@ -79,7 +79,7 @@ public class BioRegistController {
             equipment.setProjectId(projectId);
             equipmentsRepository.save(equipment);
             
-            equipment.setEquipKindId(Integer.parseInt(kind));
+            equipment.setEquipKindId(2); //生体で固定
 
             equipmentsRepository.save(equipment);
             
