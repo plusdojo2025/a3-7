@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import './css/reflect.css';
 
 function ReflectWrapper() {
   const { projectId, processId } = useParams(); 
-  return <Reflect projectId={projectId} processId={processId} />;
+  const navigate = useNavigate();
+  return <Reflect projectId={projectId} processId={processId} navigate={navigate} />;
 }
 
 class Reflect extends React.Component {
@@ -120,7 +121,7 @@ class Reflect extends React.Component {
           </div>
 
           <div style={{ marginTop: "10px" }}>
-            <button type="button" onClick={() => window.history.back()}>
+            <button type="button" onClick={() => this.props.navigate(`/process?id=${this.props.processId}`)}>
               戻る
             </button>
             <button type="submit">登録</button>

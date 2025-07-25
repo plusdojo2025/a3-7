@@ -69,7 +69,7 @@ export default function BioRegist() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.gender || !form.age || !form.projectProcess) {
+    if (!form.kind ||!form.name || !form.gender || !form.age || !form.projectProcess) {
       setError('入力されていない項目があります');
       return;
     }
@@ -88,7 +88,7 @@ export default function BioRegist() {
     try {
       const formData = new FormData();
       if (image) formData.append('image', image);
-      formData.append('kind', '2'); //2（生体）で固定
+      formData.append('kind', form.kind); 
       formData.append('name', form.name);
       formData.append('gender', genderNum);
       formData.append('age', ageNum);
@@ -142,6 +142,7 @@ export default function BioRegist() {
       <h2>生物の登録</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label>画像<input type="file" accept="image/*" onChange={handleImageChange} /></label>
+        <label>種類<input type="text" name="kind" value={form.kind} onChange={handleChange} /></label>
         <label>名前<input type="text" name="name" value={form.name} onChange={handleChange} /></label>
         <label>性別
           <select name="gender" value={form.gender} onChange={handleChange}>
