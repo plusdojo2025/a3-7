@@ -19,9 +19,6 @@ export default function Equipment() {
   // URLからprojectIdを取得
   const [currentProjectId, setCurrentProjectId] = useState(null);
   
-  //alert用
-  const [alertList, setAlertList] = useState([]);
-  const [allList, setAllList] = useState([]);
   //種類は備品で固定
   const kindId = 1;
 
@@ -80,17 +77,11 @@ export default function Equipment() {
     );
 
     // 状態をまとめて更新
-    setAlertList(alertData);
-    setAllList(equipData);
     setAlerts(filteredAlerts);
-    console.log(alertList);
-    console.log(allList);
-    console.log(alerts);
+    console.log(filteredAlerts);
 
   } catch (error) {
       console.error('データ取得エラー:', error);
-      setAlertList([]);
-      setAllList([]);
       setAlerts([]);
     }
   };
@@ -107,7 +98,7 @@ export default function Equipment() {
 
       // 初期検索とアラート読み込み実行
       performSearch(projectIdFromUrl, ''); 
-      loadAlerts(projectIdFromUrl, currentProjectId, kindId);
+      loadAlerts(projectIdFromUrl, projectIdFromUrl, kindId);
     } else {
       console.log('プロジェクトIDが見つかりません');
       setCurrentProjectId(null);
