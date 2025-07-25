@@ -75,13 +75,13 @@ INSERT INTO processes (process_name, project_id, complete) VALUES ('ウイルス
 INSERT INTO processes (process_name, project_id, complete) VALUES ('ウイルスBを用いた実験', 2, 0);
 
 --日報
-INSERT INTO reports (process_id, project_id, created_at, comment) VALUE (1, 1, '2024-03-25', 'つかれた。');
+INSERT INTO reports (process_id, project_id, created_at, comment) VALUE (1, 1, '2025-04-25', 'つかれた。');
 
 --反省
-INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 1, '2024-03-25', 1, '寝坊した。');
-INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2024-03-25', 1, '寝坊した。');
-INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2024-03-26', 2, 'よくわからなかった。');
-INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2024-03-27', 1, '寝坊した。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 1, '2025-04-25', 1, '寝坊した。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2025-04-25', 1, '寝坊した。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2025-04-26', 2, 'よくわからなかった。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2025-04-27', 1, '寝坊した。');
 --反省タグ
 INSERT INTO reflect_tags (reflect_name) VALUE ('災害');
 INSERT INTO reflect_tags (reflect_name) VALUE ('報連相');
@@ -113,7 +113,7 @@ VALUES (1, 2, 3, '2025-07-18', 'Sample comment here');
 --INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-05-15', '中間報告：これまでに約50種のハナアブを捕獲。未識別の種も複数確認。');
 
 --ばかでか報告書
-INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2024-03-25', '調査地選定の進捗と候補地の絞り込み
+INSERT INTO project_reports (project_id, created_at, report) VALUES (1, '2025-04-25', '調査地選定の進捗と候補地の絞り込み
 本日は、熱帯雨林におけるハナアブの生態調査プロジェクトにおいて、最も重要な初期段階である調査地の選定作業に集中的に取り組みました。これまでの文献調査や過去の気象データ、植生情報、現地の地理情報システム（GIS）データを総合的に分析し、主要な候補地をいくつか絞り込むことができました。
 
 まず、ハナアブの多様性が高く、かつ熱帯雨林特有の環境が良好に保たれている地域を優先しました。具体的には、〇〇国アマゾン熱帯雨林地域内の国立公園や保護区が中心となります。これらの地域は、人間の活動による攪乱が比較的少なく、原始的な生態系が維持されている可能性が高いと判断しました。ハナアブは多種多様な植物と相互作用し、特に花の蜜や花粉を主要な食料源とする種が多いため、豊かな植物相が維持されている場所が必須条件となります。また、腐生植物や枯死木に依存するハナアブ種もいるため、そうした環境要因も考慮しました。
