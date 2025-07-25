@@ -58,7 +58,7 @@ INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) 
 INSERT INTO equipments (equip_name, equip_kind_id, equip_detail_id, project_id) VALUE ('鶏', 2, 1, 1);   --2なので生体
 
 --生体詳細
-INSERT INTO biology_details (kind, gender, age, process_id, remarks, picture) VALUE ('虻', 1, 23, 2, '片翼', null);
+INSERT INTO biology_details (kind, gender, age, process_id, remarks, picture) VALUE (2, 1, 23, 2, '虻です。', null);
 
 --備品詳細
 INSERT INTO equip_details (remaining, limited, judge, storage, remarks, unit, picture) VALUE (100.0, '2025-04-28', 10.0, '倉庫', '所々穴が開いている。', 1, null);
