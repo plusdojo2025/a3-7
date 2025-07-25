@@ -164,13 +164,5 @@ public class ReportController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-//    @GetMapping("/reflectTag/createdAt")
-//    public ResponseEntity<?> getWeeklyReflectTag(
-//            @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
-//            @RequestParam("processId") Integer processId) {
-//
-//        return reflectTagRepository.findByProcessIdAndCreatedAt(processId, createdAt)
-//                .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.notFound().build());
-//    }
+
 }
