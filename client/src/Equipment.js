@@ -155,6 +155,16 @@ export default function Equipment() {
       } 
     });
   };
+  
+  //生体登録ページ遷移処理
+  const handleNavigateToBioRegist = () => {
+    if (currentProjectId) {
+      navigate(`/bioRegist?projectId=${currentProjectId}`);
+    } else {
+      alert('プロジェクトIDが不明なため、生体登録画面へ遷移できません。');
+    }
+  };
+
 
   /**
    * 画像エラー処理
@@ -274,7 +284,7 @@ export default function Equipment() {
         <button onClick={handleNavigateToEquipmentRegist}>
           備品登録
         </button>
-        <button onClick={() => navigate('/bioRegist')}>
+        <button onClick={handleNavigateToBioRegist}>
           生体登録
         </button>
       </div>
