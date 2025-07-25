@@ -149,9 +149,16 @@ const handleEdit = () => {
 
   const handleConfirm = () => {
     if (window.confirm("工程を完了してもよろしいですか？")) {
-      navigate(`/project?id=${projectId}`);
+      axios.get(`/api/endProcess/${processId}/`)
+        .then(() => {
+          navigate(`/project?id=${projectId}`);
+        })
+        .catch(err => {
+          console.error("登録時にエラーが発生しました:", err);
+        });
     }
   };
+
 
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!process) return <p>読み込み中...</p>;

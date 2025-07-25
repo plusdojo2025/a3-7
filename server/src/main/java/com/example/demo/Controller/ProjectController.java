@@ -221,6 +221,15 @@ public class ProjectController {
     public Process getProcess(@PathVariable int processId) {
     	return processRepository.findByProcessId(processId);
     }
+    
+    //プロセスを終了状態に
+    @GetMapping("/endProcess/{processId}/")
+    public void endProcess(@PathVariable int processId) {
+    	Process target = processRepository.findByProcessId(processId);
+    	target.setComplete(1);
+    	processRepository.save(target);
+    	return;
+    }
    
 	// メンバー招待（承認待ちで保存）
     @PostMapping("/members/invite")
