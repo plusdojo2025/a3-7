@@ -6,23 +6,22 @@ import axios from "axios";
 export default class Member extends React.Component {
   constructor(props) {
     super(props);
-    //ここを意図するプロジェクトに飛ぶように変える
     const params = new URLSearchParams(window.location.search);
-  this.projectId = params.get("projectId"); // ← URLから取得
+    this.projectId = params.get("projectId"); // ← URLから取得
 
-  this.state = {
-    email: '',
-    name: '',
-    isInviteModalOpen: false,
-    isDeleteModalOpen: false,
-    userId: null,
-    approvedMembers: [],
-    selectedMemberId: null,
-    currentUserId: null,
-    currentUserAuthority: null,
-    updatedAuthorities: {},
-  };
-}
+    this.state = {
+      email: '',
+      name: '',
+      isInviteModalOpen: false,
+      isDeleteModalOpen: false,
+      userId: null,
+      approvedMembers: [],
+      selectedMemberId: null,
+      currentUserId: null,
+      currentUserAuthority: null,
+      updatedAuthorities: {},
+    };
+  }
 
   componentDidMount() {
     axios.get("http://localhost:8080/getCurrentUser", { withCredentials: true })
@@ -195,21 +194,20 @@ export default class Member extends React.Component {
 
             <div className="member-container">
               <div className="result">
-                <p className="user-name-display">一致した名前：{this.state.name}</p>
-                {this.state.userId && this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
-                  <button onClick={this.openInviteModal}>招待メール送信</button>
-                )}
+                <div className="name-and-button">
+                  <p className="user-name-display">一致した名前：{this.state.name}</p>
+                  {this.state.userId && this.state.name && this.state.name !== "該当するユーザーが見つかりません。" && (
+                    <button onClick={this.openInviteModal} className="invite-mail-button" align="right">招待メール送信</button>
+                  )}
+                </div>
                 {this.state.isInviteModalOpen && (
                   <div className="modal-overlay">
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                       <h2>この方をプロジェクトに招待しますか？</h2>
+                      <div className="invite-check">
                       <button onClick={this.closeInviteModal}>いいえ</button>
-                      <input
-                        className="sub_botun"
-                        type="button"
-                        value="はい"
-                        onClick={this.inviteUser}
-                      />
+                      <button className="sub_botun" onClick={this.inviteUser}>はい</button>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -220,7 +218,7 @@ export default class Member extends React.Component {
         )}
 
         <div className="member-container">
-          <table>
+          <table className="design10">
             <thead>
               <tr>
                 <th>メンバー名</th>
@@ -236,7 +234,7 @@ export default class Member extends React.Component {
                   <td>{member.userName || `ユーザーID: ${member.userId}`}</td>
                   {[1, 2, 3].map((auth) => (
                     <td key={auth}>
-                      <label>
+                      <label className="custom-radio">
                         <input
                           type="radio"
                           name={`authority-${index}`}
@@ -244,6 +242,7 @@ export default class Member extends React.Component {
                           onChange={() => this.handleAuthorityChange(member.userId, auth)}
                           disabled={this.state.currentUserAuthority !== 3}
                         />
+                        <span className="check"></span>
                       </label>
                     </td>
                   ))}
@@ -251,6 +250,7 @@ export default class Member extends React.Component {
                     <button
                       onClick={() => this.openDeleteModal(member.userId)}
                       disabled={this.state.currentUserAuthority !== 3}
+                      className="member-delete-button"
                     >
                       削除
                     </button>
@@ -264,21 +264,20 @@ export default class Member extends React.Component {
             <div className="modal-overlay" onClick={this.closeDeleteModal}>
               <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <h2>このメンバーをプロジェクトから削除してもよろしいですか？</h2>
+                <div className="delete-check">
                 <button onClick={this.closeDeleteModal}>いいえ</button>
-                <input
-                  className="sub_botun"
-                  type="button"
-                  value="はい"
-                  onClick={this.handleDeleteMember}
-                />
+                <button className="sub_botun" onClick={this.handleDeleteMember}>はい</button>
+                </div>
               </div>
             </div>
           )}
 
           {this.state.currentUserAuthority === 3 && (
-            <button className="sub_botun" onClick={this.handleUpdateAuthorities}>
-              更新
-            </button>
+            <div style={{ textAlign: "right" }}>
+              <button className="update-authority-button" onClick={this.handleUpdateAuthorities}>
+                更新
+              </button>
+            </div>
           )}
         </div>
         <div style={{ marginTop: "20px" }}>
@@ -289,6 +288,9 @@ export default class Member extends React.Component {
             戻る
           </button>
         </div>
+
+        
+       
       </>
     );
   }

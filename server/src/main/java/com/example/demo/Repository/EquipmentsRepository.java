@@ -13,4 +13,6 @@ public interface EquipmentsRepository extends JpaRepository<Equipment, Integer> 
 	 List<Equipment> findByProjectIdAndEquipNameContaining(Integer projectId, String keyword);
 	 
 	 List<Equipment> findByProjectId(Integer projectId);
+	 
+	 List<Equipment> findByEquipKindIdAndProjectId(Integer equipKindId, Integer projectId);
 }

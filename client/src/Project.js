@@ -17,12 +17,16 @@ export default class Project extends React.Component {
         const currentDate = new Date();
         const defaultDate = currentDate.toISOString().slice(0, 10);
 
+        //備品で固定
+        const kindId = 1;
+
 
         this.state = {
             projectId: projectId,
             project: [],
             processes: [],
             error: "",
+            err:"",
             reflects: [],
             reflectTags:[],
             showCloseProjectModal: false,
@@ -30,27 +34,38 @@ export default class Project extends React.Component {
             addName: "",
             date: defaultDate,
             report: "",
+            equipKindId:kindId,
+            alertList:[]
         }
         this.manageEquipment = this.manageEquipment.bind(this);
     }
 
     componentDidMount() {
-        const { projectId } = this.state;
+        const { projectId, equipKindId} = this.state;
         console.log("projectId:" + projectId);
           Promise.all([
             axios.get(`/api/project/${projectId}/`),
             axios.get(`/api/projectDetails/${projectId}/`),
             axios.get(`/api/reflectSummary/${projectId}/`),
-            axios.get(`/api/reflectTags/`)
+            axios.get(`/api/reflectTags/`),
+            axios.get('/api/equip/alert/detail/'),
+            axios.get(`/api/equip/${projectId}/${equipKindId}/`)
         ])
-        .then(([projectRes, detailsRes, summaryRes, tagsRes]) => {
+        .then(([projectRes, detailsRes, summaryRes, tagsRes, alertRes, equipRes]) => {
             this.setState({
                 project: projectRes.data,
                 processes: detailsRes.data,
                 reflects: summaryRes.data,
-                reflectTags: tagsRes.data
+                reflectTags: tagsRes.data,
             });
-        console.log('すべてのデータを取得しました');
+            console.log('すべてのデータを取得しました');
+            console.log(alertRes.data);
+            const validIds = new Set(alertRes.data.map(item => item.equipDetailId));
+            const filteredAlerts = equipRes.data.filter(alert =>
+                validIds.has(alert.equipDetailId)
+            );
+            this.setState({alertList:filteredAlerts});
+            console.log(filteredAlerts);
         })
         .catch(error => {
             console.error("データ取得エラー:", error);
@@ -90,11 +105,11 @@ export default class Project extends React.Component {
 
         //入力チェック
         if (!date) {
-            this.setState({ error: "作成日を設定してください" });
+            this.setState({ err: "作成日を設定してください" });
             return;
         }
         if (!report) {
-            this.setState({ error: "報告書が記載されていません" });
+            this.setState({ err: "報告書が記載されていません" });
             return;
         }
 
@@ -107,8 +122,9 @@ export default class Project extends React.Component {
                     this.toggleCloseProjectModal();
                     this.componentDidMount();
                 })
-                .catch(error => {
-                    console.error("登録時にエラーが発生しました:", error);
+                .catch(err => {
+                    console.error("登録時にエラーが発生しました:", err);
+                    this.setState({ err: "登録時にエラーが発生しました" });
                 });
         }
         else {
@@ -117,8 +133,8 @@ export default class Project extends React.Component {
                     this.toggleCloseProjectModal();
                     this.componentDidMount();
                 })
-                .catch(error => {
-                    console.error("登録時にエラーが発生しました:", error);
+                .catch(err => {
+                    console.error("登録時にエラーが発生しました:", err);
                 });
         }
 
@@ -146,7 +162,7 @@ export default class Project extends React.Component {
 
         //入力チェック
         if (!addName) {
-            this.setState({ error: "プロジェクト名を設定してください" });
+            this.setState({ err: "プロジェクト名を設定してください" });
             return;
         }
 
@@ -158,8 +174,8 @@ export default class Project extends React.Component {
                 this.componentDidMount();
 
             })
-            .catch(error => {
-                console.error("登録時にエラーが発生しました:", error);
+            .catch(err => {
+                console.error("登録時にエラーが発生しました:", err);
             });
     }
 
@@ -171,7 +187,7 @@ export default class Project extends React.Component {
     }
 
     render() {
-        const { project, processes, reflects, showCloseProjectModal, showAddProcessModal, error } = this.state;
+        const { project, processes, reflects, alertList, showCloseProjectModal, showAddProcessModal, error } = this.state;
         // completeが0のプロセス
         const progressProcesses = processes.filter(p => p.complete === 0);
 
@@ -255,6 +271,28 @@ export default class Project extends React.Component {
                                 </div>
                             </div>
                         )}
+                    
+                        -----------------------------------------------
+                        <div className="equipAlertContainer">
+                            <div className="equipAlert">
+                                {alertList.length === 0 ? (
+                                    <p>備品の問題はありません</p>
+                                ) : (
+                                    <div className="equipAnnounce">
+                                        <p>以下の備品を確認してください</p>
+                                        <div className="someEquips">
+
+                                            {alertList.map((equip, index) =>
+                                                <div key={index} className="equip">
+                                                    {equip.equipName}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -262,13 +300,14 @@ export default class Project extends React.Component {
                 {showCloseProjectModal && (
                     <div id="overlayCloseProject" className="modal-overlay">
                         <div id="contentCloseProject" className="modal-content">
-                            <h2>報告書登録</h2>
+                            <h2>終了報告書登録</h2>
+                            <p>{this.state.err}</p>
                             <div className="inputContainer">
                                 <label>日時</label>
                                 <input type="date" name="date" value={this.state.date} onChange={this.onInput} />
                             </div>
                             <div className="inputContainer">
-                                <label>コメント</label>
+                                <label>報告</label>
                                 <input type="text" name="report" onChange={this.onInput} />
                             </div>
                             <p>プロジェクトを終了します。このプロジェクトを公開しますか？</p>
@@ -286,6 +325,7 @@ export default class Project extends React.Component {
                     <div id="overlayAddProcess" className="modal-overlay">
                         <div id="contentAddProcess" className="modal-content">
                             <h2>工程の追加</h2>
+                            <p>{this.state.err}</p>
                             <div className="inputContainer">
                                 <label>工程名</label>
                                 <input type="text" name="addName" value={this.state.addName} onChange={this.onInput} />

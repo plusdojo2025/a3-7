@@ -91,6 +91,8 @@ span{
     justify-content: center;  /* 水平方向に中央に配置 */
     align-items: center;      /* 垂直方向に中央に配置 */
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .someReflects {
@@ -120,6 +122,21 @@ display: inline-block;   /* 横並び */
   aspect-ratio: 2 / 1 ;
 }
 
+.equipAlertContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.equipAlert{
+    background-color: #fafafa;
+    width: 50%;
+    height: 30%;
+    border-radius: 8px;
+    padding: 12px;
+    vertical-align: top;
+}
 /* モーダル背景 (オーバーレイ) */
 .modal-overlay {
   display: none; /* 最初は非表示 */

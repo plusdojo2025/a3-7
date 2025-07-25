@@ -5,10 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.Entity.EquipDetail;
 import com.example.demo.Entity.Equipment;
 import com.example.demo.Repository.EquipDetailsRepository;
 import com.example.demo.Repository.EquipmentsRepository;
@@ -77,6 +79,16 @@ public class EquipSearchController {
 
         return searchEquipments(null, null); 
     }
+    
+    @GetMapping("/alert/detail/")
+    public List<EquipDetail> getAlertEquipmentsDetail(){
+    	return detailsRepo.findByJudgeGreaterThanEqualRemainingOrLimitedBeforeToday();
+    }
+    
+    @GetMapping("/{projectId}/{equipKindId}/")
+    public List<Equipment> getAlertEquipments( @PathVariable int projectId, @PathVariable int equipKindId){
+    	return equipmentsRepo.findByEquipKindIdAndProjectId(equipKindId, projectId);
+    }
 
     /** レスポンス用DTOクラス */
     public static class EquipmentSearchResponse {
@@ -85,6 +97,8 @@ public class EquipSearchController {
         public String type;
         public String imageUrl; // 画像URLを保持するフィールド
     }
+
 }
+    
 
 

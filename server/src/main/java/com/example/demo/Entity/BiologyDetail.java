@@ -24,8 +24,6 @@ public class BiologyDetail {
 
     private String kind;
 
-    private String name; // Reactのnameと対応
-
     private Integer gender;
 
     private Integer age;
@@ -33,8 +31,6 @@ public class BiologyDetail {
     @Column(name = "process_id")
     private Integer processId;
 
-    @Column(name = "equip_id")
-    private Integer equipId; // 登録時にControllerでセット
 
     private String remarks;
 

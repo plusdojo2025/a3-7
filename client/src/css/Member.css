@@ -52,17 +52,26 @@
     background-color: #f8f8f8;
     width: 60%;
     margin-bottom: 20px;
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    border-radius: 16px;
+    padding: 35px 45px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(163, 204, 190, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .search_container {
   position: relative;
   box-sizing: border-box;
-  border: 2px solid #3879D9;
+  border: 2px solid #A3CCBE;
   display: block;
   padding: 3px 10px;
   border-radius: 3px;
   height: 2.3em;
-  width: 265px;
+  width: 500px;
   overflow: hidden;
 }
 
@@ -79,7 +88,7 @@
   cursor: pointer;
   font-family: FontAwesome;
   border: none;
-  background: #3879D9;
+  background: #A3CCBE;
   color: #fff;
   position: absolute;
   width: 3.5em;
@@ -89,3 +98,144 @@
   outline: none;
 }
 
+.user-name-display{
+  color: #000;
+  text-align: left;
+  margin: 0;
+}
+
+.name-and-button{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.invite-mail-button{
+  margin-left:auto;
+  background-color: #A3CCBE;
+}
+
+.design10 {
+ width: 100%;
+ text-align: center;
+ border-collapse: collapse;
+ border-spacing: 0;
+}
+.design10 th {
+ padding: 10px;
+ border-bottom: solid 4px #A3CCBE;
+ color: #A3CCBE
+}
+.design10 td {
+ padding: 10px;
+ border-bottom: solid 1px #A3CCBE;
+}
+
+.member-delete-button{
+  color: white !important;
+  background-color: red;
+  border: 2px solid red;
+  padding: 8px 16px;
+  font-size: 1.2em;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ラベル全体を中央配置する */
+.custom-radio {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  width: 24px;
+  margin: auto; /* テーブルセル内で中央に配置 */
+}
+
+/* 実際のラジオボタンは非表示 */
+.custom-radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* 外側の円 */
+.custom-radio .check {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  border: 2px solid #aaa;
+  border-radius: 50%;
+  box-sizing: border-box;
+  transition: border-color 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 内側の丸（チェック時の色） */
+.custom-radio .check::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: #A3CCBE;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* 選択状態のスタイル */
+.custom-radio input[type="radio"]:checked ~ .check {
+  border-color: #A3CCBE;
+}
+
+.custom-radio input[type="radio"]:checked ~ .check::before {
+  transform: scale(1);
+}
+
+.sub_botun{
+  color: black !important;
+  background-color: #A3CCBE;
+  border: 2px solid #A3CCBE;
+  padding: 8px 16px;
+  font-size: 1.2em;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.update-authority-button{
+  color: black !important;
+  background-color: #A3CCBE;
+  border: 2px solid #A3CCBE;
+  padding: 8px 16px;
+  font-size: 1.2em;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+  text-align: right;
+  margin: 20px;
+}
+
+.delete-check {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* ボタン間にスペースを作る */
+  margin-top: 20px; /* 上との間隔も空けるなら */
+}
+
+.delete-check button {
+  padding: 10px 20px;
+}
+
+.invite-check{
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* ボタン間にスペースを作る */
+  margin-top: 20px; /* 上との間隔も空けるなら */
+}
+
+.invite-check button{
+  padding: 10px 20px;
+}
