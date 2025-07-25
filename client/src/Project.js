@@ -269,25 +269,28 @@ export default class Project extends React.Component {
                                 </div>
                             </div>
                         )}
-                    </div>
+                    
+                        -----------------------------------------------
+                        <div className="equipAlertContainer">
+                            <div className="equipAlert">
+                                {alertList.length === 0 ? (
+                                    <p>備品の問題はありません</p>
+                                ) : (
+                                    <div className="equipAnnounce">
+                                        <p>以下の備品を確認してください</p>
+                                        <div className="someEquips">
 
-                    <div className="equipAlert">
-                        {alertList.length === 0 ? (
-                            <p>備品の問題はありません</p>
-                        ) : (
-                            <div className="equipAnnounce">
-                                <p>以下の備品を確認してください</p>
-                                <div className="someEquips">
-
-                                    {alertList.map((equip, index) =>
-                                        <div key={index} className="equip">
-                                            {equip.equipName}
+                                            {alertList.map((equip, index) =>
+                                                <div key={index} className="equip">
+                                                    {equip.equipName}
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
+                                    </div>
+                                )}
 
+                            </div>
+                        </div>
                     </div>
                 </div>
 
