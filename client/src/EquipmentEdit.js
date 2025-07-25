@@ -5,21 +5,11 @@ import './css/EquipmentEdit.css';
 
 const alertTimingOptions = ['50', '40', '30', '20', '10'];
 
-/*const unitMap = {
-  '個': 1,
-  '箱': 2,
-  'kg': 3,
-  'g': 4,
-  'mg': 5,
-  'L': 6,
-  'ml': 7
-};*/
-
-
 export default function EquipmentEdit() {
   const location = useLocation();
   const navigate = useNavigate();
   const equipmentId = location.state?.equipmentId;
+  const projectIdFromState = location.state?.projectId;
 
   const [form, setForm] = useState({
     itemName: '',
@@ -33,25 +23,37 @@ export default function EquipmentEdit() {
 
   const [currentImageUrl, setCurrentImageUrl] = useState('');
   const [newImage, setNewImage] = useState(null);
+  const [unitMap, setUnitMap] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const [unitMap,setUnitMap] = useState([]);
+  const [projectId, setProjectId] = useState(null);
 
+  // 初期データ読み込み
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const projectIdFromUrl = params.get('projectId');
+
+    const resolvedProjectId = projectIdFromState || projectIdFromUrl;
+    if (resolvedProjectId) {
+      setProjectId(resolvedProjectId);
+    } else {
+      console.error('projectId が見つかりません');
+    }
+
     if (!equipmentId) {
       setError('備品IDが指定されていません');
       setLoading(false);
       return;
     }
 
-    axios.get("/api/equipment/edit/get/units").then(respons => {
-      setUnitMap(respons.data);
-      console.log(respons.data);
+    // 単位の取得
+    axios.get("/api/equipment/edit/get/units")
+      .then(res => setUnitMap(res.data))
+      .catch(err => console.error('単位データ取得エラー:', err));
 
-    })
-
+    // 備品データの取得
     axios.get(`/api/equipment/edit/${equipmentId}`)
-      .then((res) => {
+      .then(res => {
         const data = res.data;
         setForm({
           itemName: data.itemName,
@@ -65,16 +67,16 @@ export default function EquipmentEdit() {
         setCurrentImageUrl(data.imageUrl);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error('データ取得エラー:', err);
-        setError('データ取得に失敗しました');
+      .catch(err => {
+        console.error('備品データ取得エラー:', err);
+        setError('備品データの取得に失敗しました');
         setLoading(false);
       });
-  }, [equipmentId]);
+  }, [equipmentId, location.search, projectIdFromState]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -83,42 +85,36 @@ export default function EquipmentEdit() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setError('');
+
+    if (!projectId) {
+      setError('projectIdが取得できていません');
+      return;
+    }
 
     if (!form.itemName || !form.quantity || !form.unit || !form.expiryDate || !form.location || !form.alertTiming) {
       setError('入力されていない項目があります');
       return;
     }
 
-    setError('');
-
     try {
       const formData = new FormData();
-
       if (newImage) {
         formData.append('image', newImage);
       }
 
-      formData.append('itemName', form.itemName);
-      formData.append('quantity', form.quantity);
-      formData.append('unit', form.unit);
-      formData.append('expiryDate', form.expiryDate);
-      formData.append('location', form.location);
-      formData.append('alertTiming', form.alertTiming);
-      formData.append('note', form.note);
+      Object.entries(form).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      formData.append('projectId', projectId);
 
       await axios.put(`/api/equipment/edit/${equipmentId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-        console.log(formData);
-
-    for(let[key,value] of formData.entries()){
-      console.log(key + value);
-    }
-
-
       alert('更新完了！');
-      navigate('/equipment');
+      navigate(`/equipment?projectId=${projectId}`);
     } catch (err) {
       console.error('更新エラー:', err);
       setError('更新に失敗しました');
@@ -126,48 +122,38 @@ export default function EquipmentEdit() {
   };
 
   const handleDelete = async () => {
+    if (!projectId) {
+      alert('projectIdが不明なため削除できません');
+      return;
+    }
+
     if (!window.confirm('本当に削除しますか？')) return;
+
     try {
       await axios.delete(`/api/equipment/edit/${equipmentId}`);
       alert('削除完了！');
-      navigate('/equipment');
+      navigate(`/equipment?projectId=${projectId}`);
     } catch (err) {
       console.error('削除エラー:', err);
       setError('削除に失敗しました');
     }
   };
 
-  if (loading) {
-    return <div>読み込み中...</div>;
-  }
-
-  if (!equipmentId) {
-    return (
-      <div className='equipmentEdit-card'>
-        <h2>エラー</h2>
-        <p>備品IDが指定されていません</p>
-        <button onClick={() => navigate('/equipment')}>戻る</button>
-      </div>
-    );
-  }
+  if (loading) return <div>読み込み中...</div>;
 
   return (
     <div className='equipmentEdit-card'>
       <h2>備品の詳細</h2>
+
       <form onSubmit={handleUpdate} encType="multipart/form-data" className="edit-form">
-        {/* 左側 画像表示エリア */}
         <div className="image-section">
           <div className="image-label">画像</div>
           {newImage ? (
-            <img
-              src={URL.createObjectURL(newImage)}
-              alt="新しい画像プレビュー"
-              className="preview-image"
-            />
+            <img src={URL.createObjectURL(newImage)} alt="新しい画像" className="preview-image" />
           ) : currentImageUrl ? (
             <img
               src={currentImageUrl}
-              alt="登録済み画像"
+              alt="既存画像"
               className="preview-image"
               onError={(e) => {
                 e.target.style.display = 'none';
@@ -175,123 +161,70 @@ export default function EquipmentEdit() {
               }}
             />
           ) : (
-            <div className="no-image-placeholder">
-              画像なし
-            </div>
+            <div className="no-image-placeholder">画像なし</div>
           )}
-          <div className="image-error-message">画像の読み込みに失敗しました</div>
           <div className="file-input-container">
             <input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
         </div>
 
-        {/* 右側 フォーム入力エリア */}
         <div className="form-section">
           <div className="form-group">
             <label>備品名</label>
-            <input 
-              type="text" 
-              name="itemName" 
-              value={form.itemName} 
-              onChange={handleChange}
-              className="form-input"
-            />
+            <input type="text" name="itemName" value={form.itemName} onChange={handleChange} />
           </div>
-
           <div className="form-group">
             <label>残量</label>
-            <input 
-              type="number" 
-              name="quantity" 
-              value={form.quantity} 
-              onChange={handleChange}
-              className="form-input"
-            />
+            <input type="number" name="quantity" value={form.quantity} onChange={handleChange} />
           </div>
-
           <div className="form-group">
             <label>単位</label>
             <select name="unit" value={form.unit} onChange={handleChange}>
-          <option value="">選択</option>
-          {unitMap.map((unit, index) => <option key={index} value={unit.unitId}>{unit.unit}</option>)}
-        </select>      
-        </div>
-
+              <option value="">選択</option>
+              {unitMap.map((u) => (
+                <option key={u.unitId} value={u.unitId}>{u.unit}</option>
+              ))}
+            </select>
+          </div>
           <div className="form-group">
             <label>期限</label>
-            <input 
-              type="date" 
-              name="expiryDate" 
-              value={form.expiryDate} 
-              onChange={handleChange}
-              className="form-input"
-            />
+            <input type="date" name="expiryDate" value={form.expiryDate} onChange={handleChange} />
           </div>
-
           <div className="form-group">
             <label>保管場所</label>
-            <input 
-              type="text" 
-              name="location" 
-              value={form.location} 
-              onChange={handleChange}
-              className="form-input"
-            />
+            <input type="text" name="location" value={form.location} onChange={handleChange} />
           </div>
-
           <div className="form-group">
             <label>アラートのタイミング</label>
-            <select 
-              name="alertTiming" 
-              value={form.alertTiming} 
-              onChange={handleChange}
-              className="form-input"
-            >
+            <select name="alertTiming" value={form.alertTiming} onChange={handleChange}>
               <option value="">選択</option>
-              {alertTimingOptions.map((a) => (
+              {alertTimingOptions.map(a => (
                 <option key={a} value={a}>{a}%</option>
               ))}
             </select>
           </div>
-
           <div className="form-group">
             <label>備考</label>
-            <input 
-              type="text" 
-              name="note" 
-              value={form.note} 
-              onChange={handleChange}
-              className="form-input"
-            />
+            <input type="text" name="note" value={form.note} onChange={handleChange} />
           </div>
         </div>
+
+        {error && <div className="error-message">{error}</div>}
       </form>
 
-      {error && <div className="error-message">{error}</div>}
-
-      <div className="button-group">
-        <button 
-          type="button" 
-          onClick={() => navigate('/equipment')}
-          className="button-back"
-        >
-          戻る
-        </button>
-        <button
-          type="button"
-          className="button-delete"
-          onClick={handleDelete}
-        >
-          削除
-        </button>
-        <button
-          type="submit"
-          className="button-update"
-          onClick={handleUpdate}
-        >
-          更新
-        </button>
-      </div>
-    </div>
-  );
+    {/* ← フォームの外に配置する */}
+  <div className="button-group">
+    <button type="button" onClick={() => navigate(`/equipment?projectId=${projectId}`)} className="button-back">
+      戻る
+    </button>
+    <button type="button" onClick={handleDelete} className="button-delete">
+      削除
+    </button>
+    <button type="button" onClick={() => navigate(`/equipment?projectId=${projectId}`)} form="equipment-edit-form" className="button-update">
+      更新
+    </button>
+  </div>
+</div>
+        
+      );
 }
