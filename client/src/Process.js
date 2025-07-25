@@ -149,7 +149,7 @@ const handleEdit = () => {
 
   const handleConfirm = () => {
     if (window.confirm("工程を完了してもよろしいですか？")) {
-      navigate("/project");
+      navigate(`/project?id=${projectId}`);
     }
   };
 
@@ -239,9 +239,6 @@ const handleEdit = () => {
           <div>
             <p><strong>日報:</strong></p>
             <label>日付: {report.createdAt}</label><br />
-            <label>研修タイトル: {projectName}</label><br />
-            <label>備品名: {equipName}</label><br />
-            <label>使用量: {report.usageAmount}</label><br />
             <label>コメント: {report.comment}</label><br />
 
             {reflect ? (
