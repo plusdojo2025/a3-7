@@ -132,7 +132,7 @@ class ViewProjectComponent extends React.Component {
                         <ul className="project-report-list">
                             {projectReports.map(report => (
                                 <li key={report.projectReportId}>
-                                    <Link to={`/view-text/project-report/${report.projectReportId}`}>
+                                    <Link to={`/view-text/project-report/${report.projectReportId}?projectId=${project.projectId}`}>
                                         {/* 日付形式の調整が必要であればここで */}
                                         {new Date(report.createdAt).toLocaleDateString()}
                                     </Link>

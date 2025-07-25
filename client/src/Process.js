@@ -23,7 +23,9 @@ const Process = () => {
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const processId = params.get("id");
-  const projectId = params.get("projectId") || processId;
+  const projectId = params.get("projectId");
+   
+
 
   // Fetch process name
   useEffect(() => {
@@ -61,7 +63,7 @@ const Process = () => {
         if (reflectDate === dateStr) {
           setReflect(res.data);
         } else {
-          setReflect(null); // ignore if the date does not match
+          setReflect(null); 
         }
       })
       .catch(() => setReflect(null));
@@ -95,7 +97,8 @@ const Process = () => {
 
   // Fetch reflect name when reflect is present
   useEffect(() => {
-    if (reflect && reflect.reflectTagId) {
+    if (reflect) {
+       
       axios
         .get(`/api/reflectTag/${reflect.reflectTagId}`)
         .then((res) => setReflectName(res.data.reflectName))
