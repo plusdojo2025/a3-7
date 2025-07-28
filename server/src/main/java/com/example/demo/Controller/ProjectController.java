@@ -344,9 +344,9 @@ public class ProjectController {
 	        return "ログイン情報が見つかりません";
 	    }
 
-	    Integer userId = (Integer) payload.get("userId");
-	    Integer projectId = (Integer) payload.get("projectId");
-	    Integer authority = (Integer) payload.get("authority");
+	    Integer userId = Integer.parseInt(payload.get("userId").toString());
+	    Integer projectId = Integer.parseInt(payload.get("projectId").toString());
+	    Integer authority = Integer.parseInt(payload.get("authority").toString());
 
 	    System.out.println("🧩 対象メンバー userId: " + userId);
 	    System.out.println("🧩 対象プロジェクト projectId: " + projectId);

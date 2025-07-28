@@ -42,6 +42,7 @@ export default function BioEdit() {
 
     const tryGetBiologyData = async () => {
       const endpoints = [
+        `/api/biology/edit/${equipmentId}`,
         `/api/equip/${equipmentId}`,
         `/api/equip/${equipmentId}/details`,
         `/api/biology/${equipmentId}`,
