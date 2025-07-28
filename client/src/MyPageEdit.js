@@ -276,7 +276,7 @@ export default class MyPageEdit extends React.Component {
      */
     handleBack = () => {
         console.log("マイページ編集画面から戻る");
-        window.history.back();
+        window.location.href = "/mypage";
     };
 
     /**

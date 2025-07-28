@@ -43,7 +43,7 @@ export default function Report() {
         console.error("データ取得エラー:", error);
         setError("データ取得中にエラーが発生しました");
       });
-  }, [projectId]);
+  }, [projectId, processId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,7 +96,6 @@ export default function Report() {
       };
 
       await axios.post("/api/report", payload);
-      alert("日報登録成功！");
 
       // 続けて備品残量更新を1つずつ送る
       for (const equip of equipForms) {
