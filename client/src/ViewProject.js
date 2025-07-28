@@ -148,7 +148,7 @@ class ViewProjectComponent extends React.Component {
 
             {/* --- 「前のページに戻る」リンク --- */}
             <div className="back-link-container"> 
-                <Link to={-1} className="back-link">戻る</Link>
+                <Link to="/search" className="back-link">戻る</Link>
             </div>
         </>
     );
