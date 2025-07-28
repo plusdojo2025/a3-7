@@ -240,12 +240,12 @@ export default class Project extends React.Component {
                             </div>
                         )}
                     </div>
-                    <div className="buttons">
+                    <div className="pj-buttons">
                         <button className="closeButton" onClick={this.toggleCloseProjectModal} disabled={project.complete === 1}>プロジェクトを終了する</button>
-                        <button className="button" onClick={this.editMembers}>メンバー編集</button>
-                        <button className="button" onClick={this.manageEquipment}>備品管理</button>
-                        <button className="button" onClick={this.toggleAddProcessModal} disabled={project.complete === 1}>工程追加</button>
-                        <button className="button" onClick={() => window.location.href = "/"}>戻る</button>
+                        <button className="button-pj-medit" onClick={this.editMembers}>メンバー編集</button>
+                        <button className="button-pj-eq" onClick={this.manageEquipment}>備品管理</button>
+                        <button className="button-pj-pros" onClick={this.toggleAddProcessModal} disabled={project.complete === 1}>工程追加</button>
+                        <button className="button-pj-back" onClick={() => window.location.href = "/"}>戻る</button>
                     </div>
                 </div>
                 <div className="alertBox">
@@ -337,7 +337,7 @@ export default class Project extends React.Component {
                                 <input type="text" name="addName" value={this.state.addName} onChange={this.onInput} />
                             </div>
                             <div className="buttonContainer">
-                                <button onClick={this.toggleAddProcessModal}>戻る</button>
+                                <button className="buttonContainer-back-btn" onClick={this.toggleAddProcessModal}>戻る</button>
                                 <button onClick={() => this.addProcess()}>登録</button>
                             </div>
                         </div>

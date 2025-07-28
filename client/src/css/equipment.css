@@ -450,14 +450,14 @@
 }
 
 
-/* ボタンホバー時の色変更 */
+/* ボタンホバー時の色変更 
 button:hover {
     background: linear-gradient(135deg, #8bb8a8, #7aa396);
     transform: translateY(-2px);
     box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
     text-decoration: none !important;
     color: white !important;
-}
+}*/
 
 /* ホバー時のボタン内テキストも白色維持 */
 button:hover span {
