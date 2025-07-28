@@ -20,12 +20,17 @@ export default class SignUp extends React.Component{
         const { email, name, companyCode, password, check } = this.state;
         //入力チェック
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const nameRegex = /[\p{L}\p{N}](?:\u0020|\u3000)[\p{L}\p{N}]/u;
         if (!email || !password) {
             this.setState({ error: "メールアドレスとパスワードは必須です。" });
             return;
         }
         if (!emailRegex.test(email)) {
             this.setState({ error: "メールアドレスの形式が正しくありません。" });
+            return;
+        }
+        if(!nameRegex.test(name)){
+            this.setState({ error: "姓□名 の形で入力してください。" });
             return;
         }
         if (password.length < 8) {

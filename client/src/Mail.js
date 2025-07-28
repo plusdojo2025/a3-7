@@ -4,7 +4,6 @@ import "./css/Mail.css";
 
 export default class Mail extends React.Component {
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -91,7 +90,7 @@ export default class Mail extends React.Component {
             </ul>
           )}
         </div>
-        <button style={{ marginTop: "10px" }} onClick={() => window.history.back()}>戻る</button>
+        <button style={{ marginTop: "10px" }} onClick={() => window.location.href = "/mypage"}>戻る</button>
       </div>
     );
   }

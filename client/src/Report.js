@@ -43,7 +43,7 @@ export default function Report() {
         console.error("データ取得エラー:", error);
         setError("データ取得中にエラーが発生しました");
       });
-  }, [projectId]);
+  }, [projectId, processId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,7 +96,6 @@ export default function Report() {
       };
 
       await axios.post("/api/report", payload);
-      alert("日報登録成功！");
 
       // 続けて備品残量更新を1つずつ送る
       for (const equip of equipForms) {
@@ -126,8 +125,7 @@ export default function Report() {
 
   return (
     <div>
-      <h2>日報登録 - {projectName}</h2>
-      <h3>{processName}</h3>
+      <h2>日報登録 : {projectName} - {processName}</h2>
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit} className="report-form">
@@ -173,30 +171,40 @@ export default function Report() {
                 ))}
               </select>
 
-              <input
-                type="text"
-                name="usageAmount"
-                value={equip.usageAmount}
-                onChange={(e) => handleEquipChange(index, e)}
-                placeholder="使用量"
-              />
+              <div className="input-with-unit">
+                <input
+                  type="text"
+                  name="usageAmount"
+                  value={equip.usageAmount}
+                  onChange={(e) => handleEquipChange(index, e)}
+                  placeholder="使用量"
+                />
 
-              {/* 単位ラベルの表示 */}
-              <span className="unit-label">{unitLabel}</span>
-
-              <button type="button" onClick={() => handleEquipRemove(index)}>
-                削除
-              </button>
+                {/* 単位ラベルの表示 */}
+                <span className="unit-label">{unitLabel}</span>
+              </div>
+              <div className="deleteButton">
+                <button type="button" onClick={() => handleEquipRemove(index)} className="deleteItem">
+                  削除
+                </button>
+              </div>
             </div>
           );
         })}
 
 
-        <button type="button" onClick={addEquipField}>
-          備品を追加
-        </button>
+        
 
-        <div>
+        <div className="equipment-button-area">
+        <button 
+          onClick={() => navigate(`/process?id=${processId}`)}
+          className="equipment-back-button"
+        >
+          戻る
+        </button>
+          <button type="button" onClick={addEquipField} className="addItem">
+            備品を追加
+          </button>
           <button type="submit">登録</button>
         </div>
       </form>
