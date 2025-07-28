@@ -18,5 +18,5 @@ public interface ProjectsRepository extends JpaRepository<Project, Integer>{
 		List<Project> findByProjectTagIdAndPrivacy(Integer tagId, Integer privacy);
 
 		Project findByProjectId(Integer projectId);
-
+		
 }

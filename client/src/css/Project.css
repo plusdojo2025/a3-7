@@ -31,6 +31,12 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
+.closeButton:hover{
+  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
 .button {
     margin: 10px;
     background-color: #c0c0c0;
@@ -38,6 +44,13 @@
     width: 70%;
     padding: 10px 10px;
     border-radius: 15px;
+}
+
+.button:hover{
+  background: linear-gradient(135deg, #a3a3a3, #8f8f8f);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+  border-color: #8f8f8f;
 }
 
 .Progress{
