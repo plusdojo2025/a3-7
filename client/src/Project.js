@@ -171,6 +171,7 @@ export default class Project extends React.Component {
         axios.post(`/api/addProcess/${projectId}/`, data)
             .then(json => {
                 this.toggleAddProcessModal();
+                this.setState({ addName: "" });
                 this.componentDidMount();
 
             })
@@ -205,6 +206,7 @@ export default class Project extends React.Component {
                         {progressProcesses.length === 0 ? (
                             <p>進行中の工程がありません</p>
                         ) : (
+                            <div className="scroll">
                             <table>
                                 <tbody>
                                     {progressProcesses.map((process, index) =>
@@ -215,6 +217,7 @@ export default class Project extends React.Component {
                                     )}
                                 </tbody>
                             </table>
+                            </div>
                         )}
                     </div>
 
@@ -223,6 +226,7 @@ export default class Project extends React.Component {
                         {closedProcesses.length === 0 ? (
                             <p>終了した工程がありません</p>
                         ) : (
+                            <div className="scroll">
                             <table>
                                 <tbody>
                                     {closedProcesses.map((process, index) =>
@@ -233,6 +237,7 @@ export default class Project extends React.Component {
                                     )}
                                 </tbody>
                             </table>
+                            </div>
                         )}
                     </div>
                     <div className="buttons">
@@ -240,6 +245,7 @@ export default class Project extends React.Component {
                         <button className="button" onClick={this.editMembers}>メンバー編集</button>
                         <button className="button" onClick={this.manageEquipment}>備品管理</button>
                         <button className="button" onClick={this.toggleAddProcessModal} disabled={project.complete === 1}>工程追加</button>
+                        <button className="button" onClick={() => window.location.href = "/"}>戻る</button>
                     </div>
                 </div>
                 <div className="alertBox">

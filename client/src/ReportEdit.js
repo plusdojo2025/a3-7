@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import './css/report.css';
+import './css/reportEdit.css';
 
 
 export default function ReportEdit() {
@@ -82,8 +82,8 @@ export default function ReportEdit() {
        
       </div>
 
-      <div className="button-group">
-        <button type="button" onClick={() => navigate(`/process?id=${processId}`)}>戻る</button>
+      <div className="report-edit-button-area">
+        <button type="button" onClick={() => navigate(`/process?id=${processId}`)} className='report-edit-back'>戻る</button>
         <button type="submit">更新</button>
       </div>
     </form>

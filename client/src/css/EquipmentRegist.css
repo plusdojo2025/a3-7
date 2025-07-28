@@ -49,31 +49,41 @@ input[type="file"] {
 }
 
 .button-group button {
-  padding: 10px 30px;
-  font-size: 18px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
+    padding: 12px 25px;
+    font-size: 15px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+    color: white !important;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none !important;
+    font-weight: 600;
+    box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
+    min-width: 140px;
+    justify-content: center;
 }
 
-/* 戻るボタンはグレーに */
-.button-group button:first-child {
-  background-color: #d3d3d3;
-  color: #000;
+/* ボタン内のテキストも強制的に白色指定 */
+.button-group button {
+    color: rgb(242, 242, 242) !important;
 }
 
-.button-group button:first-child:hover {
-  background-color: #bcbcbc;
+/* ボタンホバー時の色変更 */
+.button-group button:hover {
+    background: linear-gradient(135deg, #8bb8a8, #7aa396);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+    text-decoration: none !important;
+    color: white !important;
 }
 
-/* 登録ボタンは緑に */
-.button-group button:last-child {
-  background-color: #a4d9a7;
-  color: #000;
-}
-
-.button-group button:last-child:hover {
-  background-color: #8ed093;
+/* ホバー時のボタン内テキストも白色維持 */
+.button-group:hover button {
+    color: white !important;
 }
 p {
   color: red;
