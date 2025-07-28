@@ -1,54 +1,36 @@
-/* Process.css */
-
 /* コンポーネント全体のコンテナ */
 .process-container {
   padding: 20px;
+  position: relative; /* 子要素のabsolute配置の基準にするため */
 }
 
 /* 工程名とボタンを配置するヘッダー部分 */
 .process-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 20px;
 }
 
-.process-header h2 {
-  flex-grow: 1;
-  margin: 0;
-}
-
-/* 戻るボタンの個別スタイル */
-.action-buttons .back-button {
-  background: linear-gradient(135deg, #6c757d, #5a6268); 
-  color: white;
-  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3);
-}
-
-.action-buttons .back-button:hover {
-  background: linear-gradient(135deg, #5a6268, #495057); 
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4);
-}
-
-/* カレンダーのナビゲーションとボタンの全体コンテナ */
-.calendar-nav-and-buttons {
+/* カレンダーナビゲーションを中央に配置するコンテナ */
+.calendar-nav-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: center; /* 子要素（calendar-nav）を中央に配置 */
+  width: 100%;
 }
 
 /* カレンダーのナビゲーション部分 */
 .calendar-nav {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 20px;
-  flex-grow: 1;
-  padding: 10px;
+  margin-bottom: 20px;
 }
 
+/* 月表示のテキストスタイル */
+.calendar-nav .month-display {
+  font-weight: bold;
+  color: #333;
+}
+
+/* カレンダーナビゲーションのボタン */
 .calendar-nav button {
   background: none;
   border: none;
@@ -56,17 +38,18 @@
   cursor: pointer;
 }
 
-.calendar-nav span {
-  color: #000;
-  font-weight: bold;
+/* ボタン群を配置するコンテナ（右上に配置）*/
+.action-buttons-container {
+  position: absolute; /* 親要素に対して絶対配置 */
+  top: 20px; /* 画面の上から20px */
+  right: 20px; /* 画面の右から20px */
 }
 
-/* カレンダーのボタン群 */
+/* ボタン群 */
 .action-buttons {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 20px;
 }
 
 .action-buttons button {
@@ -89,10 +72,23 @@
   box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
 
-/* 週カレンダーの表示部分 */
+/* 戻るボタンの個別スタイル */
+.action-buttons .back-button {
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+  color: white;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3);
+}
+
+.action-buttons .back-button:hover {
+  background: linear-gradient(135deg, #5a6268, #495057);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4);
+}
+
+/* 週カレンダー */
 .week-calendar {
   display: flex;
-  width: 100%;
+  width: 60%;
   max-width: 1000px;
   margin: 0 auto;
   padding: 10px;
@@ -100,15 +96,15 @@
   margin-bottom: 80px;
 }
 
+/* 日付セル */
 .day-cell {
   width: 13%;
   border: 1px solid #ccc;
   text-align: center;
-  padding: 15px 8px;
+  padding: 8px;
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.2s ease;
-  font-size: 18px;
 }
 
 .day-cell:hover {
@@ -133,9 +129,14 @@
 .detail-area {
   border: 2px solid #0c3a4d;
   border-radius: 15px;
-  padding: 20px;
+  padding: 10px;
   background: #f5f5f5;
   margin-top: 20px;
   height: 300px;
   overflow-y: auto;
+}
+
+/* 反省リストの各項目 */
+.reflect-item {
+  margin-bottom: 10px;
 }
