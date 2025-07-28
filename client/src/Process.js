@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import ReportEdit from "./ReportEdit";
 
 const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -12,12 +11,9 @@ const Process = () => {
   const [weekDates, setWeekDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [report, setReport] = useState(null);
-  const [reflect, setReflect] = useState(null);
-  const [reflectTag, setReflectTag] = useState(null);
-
-  const [projectName, setProjectName] = useState("");
-  const [equipName, setEquipName] = useState("");
-  const [reflectName, setReflectName] = useState("");
+  const [reflect, setReflect] = useState([]);
+  const [reflectTag, setReflectTag] = useState([]);
+  
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -70,56 +66,45 @@ const Process = () => {
 
       // Reflect
       axios
-        .get(`/api/reflect/createdAt?createdAt=${dateStr}&processId=${processId}/`)
+        .get(`/api/reflect/createdAt?createdAt=${dateStr}&processId=${processId}`)
         .then((res) => {
-          const reflectDate = new Date(res.data.createdAt).toISOString().slice(0, 10);
-          if (reflectDate === dateStr) {
-            setReflect(res.data);
-          } else {
-            setReflect(null);
-          }
+          setReflect(res.data); // ← 配列を state に保存
+          console.log(res.data);
         })
-        .catch(() => setReflect(null));
+        .catch(() => setReflect([]));
+
 
       // ReflectTag
       axios
-        .get(`/api/reflectTag/createdAt?createdAt=${dateStr}&processId=${processId}`)
-        .then((res) => setReflectTag(res.data))
+        .get("/api/reflectTag")
+        .then((res) => {
+          setReflectTag(res.data);
+          console.log(res.data);
+        })
         .catch(() => setReflectTag(null));
+        
     }
   }, [selectedDate, processId]);
 
-  // Fetch names related to report
-  useEffect(() => {
-    if (report) {
-      if (report.projectId) {
-        axios
-          .get(`/api/projects/${projectId}`)
-          .then((res) => setProjectName(res.data.projectName))
-          .catch(() => setProjectName("不明"));
-      }
+  // 2. タグID→タグ名のマップを作成（高速参照用）
+  const tagMap = useMemo(() => {
+    const map = {};
+    reflectTag.forEach((tag) => {
+      map[tag.reflectTagId] = tag.reflectName;
+    });
+    return map;
+  }, [reflectTag]);
 
-      if (report.equipId) {
-        axios
-          .get(`/api/equip/${report.equipId}`)
-          .then((res) => setEquipName(res.data.equipName))
-          .catch(() => setEquipName("不明"));
-      }
-    }
-  }, [report]);
+  // 3. 反省データにタグ名を付与した新配列を作成
+  const reflectWithName = useMemo(() => {
+    return reflect.map((r) => ({
+      ...r,
+      reflectName: tagMap[r.reflectTagId] || "不明なタグ",
+    }));
+  }, [reflect, tagMap]);
 
-  // Fetch reflect name when reflect is present
-  useEffect(() => {
-    if (reflect) {
 
-      axios
-        .get(`/api/reflect/${reflect.reflectTagId}`)
-        .then((res) => setReflectName(res.data.reflectName))
-        .catch(() => setReflectName("不明"));
-    } else {
-      setReflectName("");
-    }
-  }, [reflect]);
+ 
 
   const generateWeek = (date) => {
     const start = new Date(date);
@@ -248,27 +233,30 @@ const Process = () => {
           background: "#f5f5f5",
         }}
       >
-        <h4>詳細（日報と反省）</h4>
-        {report ? (
-          <div>
-            <p><strong>日報:</strong></p>
-            <label>日付: {report.createdAt}</label><br />
-            <label>コメント: {report.comment}</label><br />
+         <h4>詳細（日報と反省）</h4>
+      {report ? (
+        <div>
+          <p><strong>日報:</strong></p>
+          <label>日付: {report.createdAt}</label><br />
+          <label>コメント: {report.comment}</label><br />
 
-            {reflect ? (
-              <>
-                <p><strong>反省:</strong></p>
-                <label>日付: {reflect.createdAt}</label><br />
-                <label>タグ: {reflectName}</label><br />
-                <label>コメント: {reflect.comment}</label><br />
-              </>
-            ) : (
-              <p>反省は登録されていません</p>
-            )}
-          </div>
-        ) : (
-          <p>登録された日報がありません</p>
-        )}
+          <p><strong>反省:</strong></p>
+          {reflectWithName.length > 0 ? (
+            reflectWithName.map((r, i) => (
+              <div key={i} style={{ marginBottom: "10px" }}>
+                <label>日付: {r.createdAt}</label><br />
+                <label>タグ: {r.reflectName}</label><br />
+                <label>コメント: {r.comment}</label><br />
+                <hr />
+              </div>
+            ))
+          ) : (
+            <p>反省は登録されていません</p>
+          )}
+        </div>
+      ) : (
+        <p>登録された日報がありません</p>
+      )}
 
         {authority >= 2 && report && <button onClick={handleEdit}>編集</button>}
       </div>

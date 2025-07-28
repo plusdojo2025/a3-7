@@ -37,7 +37,6 @@ import com.example.demo.Repository.ProjectTagsRepository;
 import com.example.demo.Repository.ProjectsRepository;
 import com.example.demo.Repository.ReflectTagsRepository;
 import com.example.demo.Repository.ReflectsRepository;
-import com.example.demo.Repository.ReportsRepository;
 import com.example.demo.Repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -56,11 +55,7 @@ public class ProjectController {
 	@Autowired
 	private MembersRepository membersRepository;
     @Autowired
-    private ReportsRepository reportRepository;
-    @Autowired
     private ReflectsRepository reflectRepository;
-    @Autowired
-    private ReflectTagsRepository reflectTagRepository;
     @Autowired
     private ProcessesRepository processRepository;
     @Autowired

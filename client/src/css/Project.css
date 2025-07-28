@@ -32,7 +32,7 @@
 }
 
 .closeButton:hover{
-  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  background: linear-gradient(135deg, #e67373, #e67373);
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
@@ -75,6 +75,13 @@
     border-radius: 15px;
     width: 29%;
     text-align: center;
+}
+
+.process_name:hover{
+  background: linear-gradient(135deg, #8fb3a7, #8fb3a7);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+  border-color: #8fb3a7;
 }
 
 .ProgeressProcess{
