@@ -262,7 +262,7 @@ export default class Member extends React.Component {
                           name={`authority-${index}`}
                           checked={(this.state.updatedAuthorities[member.userId] ?? member.authority) === auth}
                           onChange={() => this.handleAuthorityChange(member.userId, auth)}
-                          disabled={this.state.currentUserAuthority !== 2}
+                          disabled={this.state.currentUserAuthority !== 2 || member.authority === 2}
                         />
                         <span className="check"></span>
                       </label>
@@ -271,7 +271,7 @@ export default class Member extends React.Component {
                   <td>
                     <button
                       onClick={() => this.openDeleteModal(member.userId)}
-                      disabled={this.state.currentUserAuthority !== 2}
+                      disabled={this.state.currentUserAuthority !== 2 || member.authority === 2}
                       className="member-delete-button"
                     >
                       削除

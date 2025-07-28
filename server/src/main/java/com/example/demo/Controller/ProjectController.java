@@ -320,12 +320,24 @@ public class ProjectController {
 	@PostMapping("/members/cancel")
 	public String cancelInvitation(@RequestBody Member member) {
 	    Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
-	    if (m != null && m.getAttend() == 0) {
-	        membersRepository.delete(m);
-	        return "招待をキャンセルしました（削除済み）";
-	    } else {
-	        return "該当する招待中のメンバーが見つかりません";
+	    if (m != null) {
+	    	return "該当するメンバーが見つかりません";
 	    }
+	    
+	    //管理者は削除できない
+	    if (m.getAttend() ==1 && m.getAuthority() ==2) {
+	    	return "管理者ユーザーは削除できません";
+	    }
+	    
+	    //招待中（未承認）なら削除
+	    if(m.getAttend() == 0) {
+	    	membersRepository.delete(m);
+	    	return "招待をキャンセルしました（削除済み）";
+	    }
+	    
+	    //参加済みだけど削除対象として認められるケース
+	    membersRepository.delete(m);
+	    return 	"メンバーを削除しました";
 	}
 	
 	@GetMapping("/member/authority")
@@ -356,9 +368,9 @@ public class ProjectController {
 	        return "ログイン情報が見つかりません";
 	    }
 
-	    Integer userId = (Integer) payload.get("userId");
-	    Integer projectId = (Integer) payload.get("projectId");
-	    Integer authority = (Integer) payload.get("authority");
+	    Integer userId = Integer.parseInt(payload.get("userId").toString());
+	    Integer projectId = Integer.parseInt(payload.get("projectId").toString());
+	    Integer authority = Integer.parseInt(payload.get("authority").toString());
 
 	    System.out.println("🧩 対象メンバー userId: " + userId);
 	    System.out.println("🧩 対象プロジェクト projectId: " + projectId);
@@ -391,6 +403,11 @@ public class ProjectController {
 	    if (target.getAttend() != 1) {
 	        System.out.println("❌ 対象メンバーは未承認です（attend=" + target.getAttend() + "）");
 	        return "対象メンバーは未承認です";
+	    }
+	    
+	    if(target.getAuthority() == 2) {
+	    	System.out.println("❌　管理者ユーザーの権限は変更できません");
+	    	return "管理者の権限は変更できません";
 	    }
 
 	    try {
