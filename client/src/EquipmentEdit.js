@@ -105,6 +105,7 @@ export default function EquipmentEdit() {
     if (newImage) {
       formData.append('image', newImage);
     }
+    form.judge =(form.quantity * form.judge) /100;
 
     formData.append('itemName', form.itemName);
     formData.append('quantity', form.quantity);
