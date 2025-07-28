@@ -131,23 +131,42 @@
  border-bottom: solid 1px #A3CCBE;
 }
 
-.member-delete-button{
-  color: white !important;
-  background-color: red;
-  border: 2px solid red;
-  padding: 8px 16px;
-  font-size: 1.2em;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s, color 0.3s;
+.member-delete-button {
+   padding: 12px 25px;
+    font-size: 15px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, red, red);
+    color: rgb(255, 0, 0);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none !important;
+    font-weight: 600;
+    box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
+    min-width: 140px;
+    justify-content: center;
 }
-.member-delete-button:hover {
-    background: linear-gradient(135deg,red, red);
+.member-delete-button{
+    color: rgb(255, 0, 0) !important;
+}
+
+/* ボタンホバー時の色変更 */
+.member-delete-button button:hover {
+    background: linear-gradient(135deg, #ffffff, #ffffff);
     transform: translateY(-2px);
     box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
     text-decoration: none !important;
-    color: white !important;
+    color: red;
 }
+
+/* ホバー時のボタン内テキストも白色維持 */
+.member-delete-button:hover {
+    color: rgb(255, 0, 0) !important;
+}
+
 
 /* ラベル全体を中央配置する */
 .custom-radio {
@@ -202,20 +221,38 @@
 }
 
 .sub_botun{
-  color: black !important;
-  background-color: #A3CCBE;
-  border: 2px solid #A3CCBE;
-  padding: 8px 16px;
-  font-size: 1.2em;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s, color 0.3s;
+   padding: 12px 25px;
+    font-size: 15px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+    color: white !important;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none !important;
+    font-weight: 600;
+    box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
+    min-width: 140px;
+    justify-content: center;
 }
+.sub_botun span {
+    color: rgb(242, 242, 242) !important;
+}
+
+/* ボタンホバー時の色変更 */
 .sub_botun:hover {
     background: linear-gradient(135deg, #8bb8a8, #7aa396);
     transform: translateY(-2px);
     box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
     text-decoration: none !important;
+    color: white !important;
+}
+
+/* ホバー時のボタン内テキストも白色維持 */
+.sub_botun:hover span {
     color: white !important;
 }
 
@@ -273,8 +310,8 @@
 }
 
 .member-delete-button:disabled {
-  background-color: #ccc;
+  background-color: #ff0000;
   border-color: #ccc;
   cursor: not-allowed;
-  color: #666 !important;
+  color: #ffffff !important;
 }
