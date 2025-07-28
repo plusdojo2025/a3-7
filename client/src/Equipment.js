@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'; 
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom'; 
+import { useLocation, useNavigate } from 'react-router-dom';
 import './css/Common.css';
 import './css/equipment.css';
 
@@ -17,10 +17,10 @@ export default function Equipment() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // URLからprojectIdを取得
   const [currentProjectId, setCurrentProjectId] = useState(null);
-  
+
   //alert用
   // const [alertList, setAlertList] = useState([]);
   // const [allList, setAllList] = useState([]);
@@ -30,55 +30,55 @@ export default function Equipment() {
    * キーワード、種類、プロジェクトIDで検索
    */
   const performSearch = useCallback(async (projectIdToSearch, searchKeyword, searchType) => {
-  setLoading(true);
-  console.log('備品・生物検索開始:', { projectIdToSearch, searchKeyword, searchType });
+    setLoading(true);
+    console.log('備品・生物検索開始:', { projectIdToSearch, searchKeyword, searchType });
 
-  try {
-    let results = [];
-    const typeToSearch = searchType || '1';
+    try {
+      let results = [];
+      const typeToSearch = searchType || '1';
 
-    if (typeToSearch === '1') {
-      // 備品検索
-      const equipResponse = await axios.get(`/api/equip/${projectIdToSearch}/1/`);
-      let filteredResults = equipResponse.data;
+      if (typeToSearch === '1') {
+        // 備品検索
+        const equipResponse = await axios.get(`/api/equip/${projectIdToSearch}/1/`);
+        let filteredResults = equipResponse.data;
 
-      if (searchKeyword && searchKeyword.trim()) {
-        const keyword = searchKeyword.trim().toLowerCase();
-        filteredResults = filteredResults.filter(item => 
-          (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
-          (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
-        );
+        if (searchKeyword && searchKeyword.trim()) {
+          const keyword = searchKeyword.trim().toLowerCase();
+          filteredResults = filteredResults.filter(item =>
+            (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
+            (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
+          );
+        }
+
+        results = filteredResults.map(item => ({
+          ...item,
+          type: "備品",
+          displayType: "備品",
+          imageUrl: item.equipDetailId ? `/api/images/equipment/${item.equipDetailId}?t=${Date.now()}` : null
+        }));
+
+      } else if (typeToSearch === '2') {
+        // 生物検索
+        const bioResponse = await axios.get(`/api/equip/${projectIdToSearch}/2/`);
+        let filteredResults = bioResponse.data;
+
+        if (searchKeyword && searchKeyword.trim()) {
+          const keyword = searchKeyword.trim().toLowerCase();
+          filteredResults = filteredResults.filter(item =>
+            (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
+            (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
+          );
+        }
+
+        results = filteredResults.map(item => ({
+          ...item,
+          type: "生物",
+          displayType: "生物",
+          imageUrl: item.equipDetailId ? `/api/images/biology/${item.equipDetailId}?t=${Date.now()}` : null
+        }));
       }
 
-      results = filteredResults.map(item => ({
-        ...item,
-        type: "備品",
-        displayType: "備品",
-        imageUrl: item.equipDetailId ? `/api/images/equipment/${item.equipDetailId}?t=${Date.now()}` : null
-      }));
-
-    } else if (typeToSearch === '2') {
-      // 生物検索
-      const bioResponse = await axios.get(`/api/equip/${projectIdToSearch}/2/`);
-      let filteredResults = bioResponse.data;
-
-      if (searchKeyword && searchKeyword.trim()) {
-        const keyword = searchKeyword.trim().toLowerCase();
-        filteredResults = filteredResults.filter(item => 
-          (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
-          (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
-        );
-      }
-
-      results = filteredResults.map(item => ({
-        ...item,
-        type: "生物",
-        displayType: "生物",
-        imageUrl: item.equipDetailId ? `/api/images/biology/${item.equipDetailId}?t=${Date.now()}` : null
-      }));
-    }
-
-    setItems(results);
+      setItems(results);
 
     } catch (error) {
       console.error('検索エラー:', error);
@@ -127,7 +127,7 @@ export default function Equipment() {
       // setAllList([]);
       // setAlerts([]);
     }
-  },  []);
+  }, []);
 
   // 備品種類一覧の取得
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function Equipment() {
 
   // コンポーネント初期化処理
   useEffect(() => {
-    const params = new URLSearchParams(location.search); 
+    const params = new URLSearchParams(location.search);
     const projectIdFromUrl = params.get('projectId');
 
     if (projectIdFromUrl) {
@@ -162,13 +162,13 @@ export default function Equipment() {
       console.log('プロジェクトID検出:', projectIdFromUrl);
 
       // 初期検索で備品一覧を表示（equipmentTypeのデフォルト'1'を使用）
-      performSearch(projectIdFromUrl, '', '1'); 
+      performSearch(projectIdFromUrl, '', '1');
       loadAlerts(projectIdFromUrl, projectIdFromUrl, 1); // 1は備品のkindId
     } else {
       console.log('プロジェクトIDが見つかりません');
       setCurrentProjectId(null);
-      setItems([]); 
-      setKeyword(''); 
+      setItems([]);
+      setKeyword('');
       // setAlerts([]); 
     }
   }, [location.search, performSearch, loadAlerts]);
@@ -222,7 +222,7 @@ export default function Equipment() {
       type: item.type,
       projectId: currentProjectId
     });
-    
+
     if (item.type === "生物") {
       // 生物の場合 - 既存のルート設定に合わせてクエリパラメータ形式で遷移
       console.log('生物詳細画面への遷移開始');
@@ -232,10 +232,10 @@ export default function Equipment() {
         id: item.equipId,
         projectId: currentProjectId
       });
-      
+
       // 既存のルート設定に合わせて、equipmentIdをクエリパラメータとして渡す
-      navigate(`/bioEdit?equipmentId=${item.equipId}&projectId=${currentProjectId}`, { 
-        state: { 
+      navigate(`/bioEdit?equipmentId=${item.equipId}&projectId=${currentProjectId}`, {
+        state: {
           // 追加のパラメータもstateで渡す
           biologyId: item.equipId,
           equipmentId: item.equipId,
@@ -244,18 +244,18 @@ export default function Equipment() {
           id: item.equipId,
           projectId: currentProjectId,
           biologyData: item
-        } 
+        }
       });
     } else {
       // 備品の場合
-      navigate(`/equipmentEdit`, { 
-        state: { 
+      navigate(`/equipmentEdit`, {
+        state: {
           equipmentId: item.equipId,
           equipId: item.equipId,
           equipDetailId: item.equipDetailId,
           id: item.equipId, // 汎用的なidパラメータ
-          projectId: currentProjectId 
-        } 
+          projectId: currentProjectId
+        }
       });
     }
   };
@@ -270,6 +270,16 @@ export default function Equipment() {
       e.target.nextElementSibling.style.display = 'block';
     }
   };
+
+  const [authority, setAuthority] = useState(0); // 0: 一般, 1以上: 編集可
+
+  useEffect(() => {
+    if (currentProjectId) {
+      axios.get(`/api/member/authority?projectId=${currentProjectId}`, { withCredentials: true })
+        .then(res => setAuthority(res.data))
+        .catch(() => setAuthority(0));
+    }
+  }, [currentProjectId]);
 
   return (
     <div className="equipment-container">
@@ -291,7 +301,7 @@ export default function Equipment() {
             }}
             disabled={loading}
           />
-          
+
           {/* 種類選択プルダウン */}
           <select
             value={equipmentType}
@@ -305,9 +315,9 @@ export default function Equipment() {
               </option>
             ))}
           </select>
-          
-          <button 
-            onClick={handleSearchButtonClick} 
+
+          <button
+            onClick={handleSearchButtonClick}
             disabled={loading}
           >
             {loading ? '検索中...' : '検索'}
@@ -328,13 +338,17 @@ export default function Equipment() {
           <div className="equipment-grid">
             {items.map((item) => (
               <div
-                className="equipment-item-card"
+                className={`equipment-item-card ${authority < 1 ? 'disabled' : ''}`}
                 key={`${item.type}-${item.equipId}`}
-                onClick={() => handleItemClick(item)}
+                onClick={() => {
+                  if (authority >= 1) {
+                    handleItemClick(item);
+                  }
+                }}
                 role="button"
                 tabIndex={0}
                 onKeyPress={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
+                  if (authority >= 1 && (e.key === 'Enter' || e.key === ' ')) {
                     handleItemClick(item);
                   }
                 }}
@@ -346,10 +360,10 @@ export default function Equipment() {
                       src={item.imageUrl}
                       alt={`${item.equipName}の画像`}
                       className="equipment-item-image"
-                      onLoad={() => console.log('画像読み込み成功:', item.equipName)} 
-                      onError={handleImageError} 
+                      onLoad={() => console.log('画像読み込み成功:', item.equipName)}
+                      onError={handleImageError}
                     />
-                    <div 
+                    <div
                       className="equipment-no-image-fallback"
                       style={{ display: 'none' }}
                     >
@@ -361,7 +375,7 @@ export default function Equipment() {
                     No image
                   </div>
                 )}
-                
+
                 <div className="equipment-item-info">
                   <div className="equipment-item-name">{item.equipName}</div>
                   <div className="equipment-item-type">{item.displayType}</div>
@@ -374,18 +388,23 @@ export default function Equipment() {
 
       {/* 操作ボタンエリア */}
       <div className="equipment-button-area">
-        <button 
+        <button
           onClick={() => navigate(`/project?id=${currentProjectId}`)}
           className="equipment-back-button"
         >
           戻る
         </button>
-        <button onClick={handleNavigateToEquipmentRegist}>
-          備品登録
-        </button>
-        <button onClick={handleNavigateToBioRegist}>
-          生物登録
-        </button>
+
+        {authority >= 1 && (
+          <>
+            <button onClick={handleNavigateToEquipmentRegist}>
+              備品登録
+            </button>
+            <button onClick={handleNavigateToBioRegist}>
+              生物登録
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
