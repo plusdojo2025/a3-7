@@ -333,6 +333,23 @@ public class ProjectController {
 	    }
 	}
 	
+	@GetMapping("/member/authority")
+	public ResponseEntity<Integer> getMemberAuthority(@RequestParam Integer projectId, HttpSession session){
+		Object obj = session.getAttribute("user");
+		if(!(obj instanceof User)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		}
+		
+		User user =(User) obj;
+		Member member = membersRepository.findByUserIdAndProjectId(user.getUserId(), projectId);
+		
+		if(member == null || member.getAttend()!=1) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+		}
+		
+		return ResponseEntity.ok(member.getAuthority());
+	}
+	
 	@Transactional
 	@PostMapping("/members/updateAuthority")
 	public String updateMemberAuthority(@RequestBody Map<String, Object> payload, HttpSession session) {
