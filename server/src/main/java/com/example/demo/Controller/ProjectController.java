@@ -320,12 +320,11 @@ public class ProjectController {
 	@PostMapping("/members/cancel")
 	public String cancelInvitation(@RequestBody Member member) {
 	    Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
-	    if (m != null) {
-	    	m.setAttend(2);	        
-	    	membersRepository.save(m);
-	        return "招待をキャンセルしました";
+	    if (m != null && m.getAttend() == 0) {
+	        membersRepository.delete(m);
+	        return "招待をキャンセルしました（削除済み）";
 	    } else {
-	        return "該当メンバーが見つかりません";
+	        return "該当する招待中のメンバーが見つかりません";
 	    }
 	}
 	
