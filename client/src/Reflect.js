@@ -124,7 +124,7 @@ class Reflect extends React.Component {
             <button type="button" onClick={() => this.props.navigate(`/process?id=${this.props.processId}`)}>
               戻る
             </button>
-            <button type="submit" className="reflect=submit">登録</button>
+            <button type="submit">登録</button>
           </div>
         </form>
         </div>
