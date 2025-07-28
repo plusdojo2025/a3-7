@@ -26,4 +26,5 @@ public interface MembersRepository extends JpaRepository<Member, Integer> {
 	void updateAuthority(@Param("projectId") Integer projectId,
 	                     @Param("userId") Integer userId,
 	                     @Param("authority") Integer authority);
+	
 }
