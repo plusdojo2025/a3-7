@@ -36,14 +36,23 @@
   text-align: left;          /* ラベルやプレースホルダ用に必要なら left に */
 }
 
-.Button {
+.loginButton {
   background-color: red;
   border-radius: 8px;          /* 丸角の長方形にするなら8px前後が自然 */
+  border: 2px solid red;
   padding: 8px 20px;           /* 上下8px、左右20px */
   color: white;
   border: none;
   cursor: pointer;
   font-size: 16px;
+}
+
+.loginButton:hover {
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  color: red !important;
+  border-color: red;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
 
 .inputBox {

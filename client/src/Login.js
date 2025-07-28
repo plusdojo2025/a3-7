@@ -92,7 +92,7 @@ export default class Login extends React.Component{
                     <div className="inputBox">
                         <input type="password" name="password" onChange={this.onInput} value={password} /><br />
                     </div>
-                    <button type="submit" className="Button">ログイン</button><br />                    新規登録は<Link to="/signup">こちら</Link>
+                    <button type="submit" className="loginButton">ログイン</button><br />                    新規登録は<Link to="/signup">こちら</Link>
                 </form>
                 
             </div>

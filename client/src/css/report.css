@@ -116,6 +116,14 @@ textarea {
   line-height: 1;
 }
 
+.deleteItem:hover {
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  color: red !important;
+  border-color: red;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
 /* ===== 操作ボタンエリア ===== */
 .equipment-button-area {
   display: flex;
