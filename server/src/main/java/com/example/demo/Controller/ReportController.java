@@ -145,14 +145,15 @@ public class ReportController {
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
+    
     @GetMapping("/weekly-reports/createdAt")
     public ResponseEntity<?> getWeeklyReport(
             @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
             @RequestParam("processId") Integer processId) {
 
-        return reportRepository.findByProcessIdAndCreatedAt(processId, createdAt)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(
+            reportRepository.findByProcessIdAndCreatedAt(processId, createdAt).orElse(null)
+        );
     }
     
     @GetMapping("/reflect/createdAt")
@@ -162,12 +163,10 @@ public class ReportController {
     ) {
         List<Reflect> reflects = reflectRepository.findAllByProcessIdAndCreatedAt(processId, createdAt);
 
-        if (reflects.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(reflects);
-        }
+        // データがない場合でも200で空リストを返す
+        return ResponseEntity.ok(reflects);
     }
+
 
 
 }

@@ -134,10 +134,10 @@
 .member-delete-button {
    padding: 12px 25px;
     font-size: 15px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, red, red);
-    color: rgb(255, 0, 0);
-    border: none;
+     background: linear-gradient(135deg, red, red);
+    color: rgb(255, 246, 246);
+    border: 2px solid red;
+    border-radius: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -145,26 +145,29 @@
     gap: 8px;
     text-decoration: none !important;
     font-weight: 600;
-    box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
-    min-width: 140px;
+      min-width: 140px;
     justify-content: center;
 }
 .member-delete-button{
-    color: rgb(255, 0, 0) !important;
+    color: rgb(255, 255, 255) !important;
 }
 
 /* ボタンホバー時の色変更 */
-.member-delete-button button:hover {
+.member-delete-button:hover {
     background: linear-gradient(135deg, #ffffff, #ffffff);
     transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+    border: 2px solid red;
+    border-radius: 20px;
     text-decoration: none !important;
-    color: red;
+    color: rgb(255, 255, 255);
+    
+    
 }
 
 /* ホバー時のボタン内テキストも白色維持 */
 .member-delete-button:hover {
     color: rgb(255, 0, 0) !important;
+    
 }
 
 
@@ -309,9 +312,3 @@
   background-color: #ccc;
 }
 
-.member-delete-button:disabled {
-  background-color: #ff0000;
-  border-color: #ccc;
-  cursor: not-allowed;
-  color: #ffffff !important;
-}
