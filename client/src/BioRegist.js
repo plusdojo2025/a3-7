@@ -53,7 +53,7 @@ export default function BioRegist() {
       fetchProcess(idFromUrl);
     }
     else {
-      alert('プロジェクトIDが見つかりません。');
+      // alert('プロジェクトIDが見つかりません。');
       navigate(-1);
     }
   }, [location, navigate]
@@ -113,7 +113,7 @@ export default function BioRegist() {
       });
       setImage(null);
 
-      alert('登録完了！');
+      // alert('登録完了！');
       navigate(`/equipment?projectId=${projectId}`);
     } catch (err) {
       console.error(err);

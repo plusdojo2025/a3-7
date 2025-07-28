@@ -56,7 +56,7 @@ export default class Common extends React.Component {
             <li><Link to="/home">ホーム</Link></li>
             <li><Link to="/mypage">マイページ</Link></li>
             <li><Link to="/search">プロジェクト検索</Link></li>
-            <li><button onClick={this.handleLogout} className="logout-button">ログアウト</button></li>
+            <li><button onClick={this.handleLogout} className="logoutButton">ログアウト</button></li>
           </ul>
         </header>
         <main>

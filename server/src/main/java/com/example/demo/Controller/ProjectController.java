@@ -316,28 +316,28 @@ public class ProjectController {
 	    System.out.println("🧪 Found " + list.size() + " pending invites");
 	    return list;
 	}
-	// 招待キャンセルなども必要なら
 	@PostMapping("/members/cancel")
 	public String cancelInvitation(@RequestBody Member member) {
 	    Member m = membersRepository.findByUserIdAndProjectId(member.getUserId(), member.getProjectId());
-	    if (m != null) {
-	    	return "該当するメンバーが見つかりません";
-	    }
 	    
-	    //管理者は削除できない
-	    if (m.getAttend() ==1 && m.getAuthority() ==2) {
-	    	return "管理者ユーザーは削除できません";
+	    if (m == null) {
+	        return "該当するメンバーが見つかりません";
 	    }
-	    
-	    //招待中（未承認）なら削除
-	    if(m.getAttend() == 0) {
-	    	membersRepository.delete(m);
-	    	return "招待をキャンセルしました（削除済み）";
+
+	    // 管理者は削除できない
+	    if (m.getAttend() == 1 && m.getAuthority() == 2) {
+	        return "管理者ユーザーは削除できません";
 	    }
-	    
-	    //参加済みだけど削除対象として認められるケース
+
+	    // 招待中（未承認）なら削除
+	    if (m.getAttend() == 0) {
+	        membersRepository.delete(m);
+	        return "招待をキャンセルしました（削除済み）";
+	    }
+
+	    // 参加済みだが削除対象として認められるケース
 	    membersRepository.delete(m);
-	    return 	"メンバーを削除しました";
+	    return "メンバーを削除しました";
 	}
 	
 	@GetMapping("/member/authority")

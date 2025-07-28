@@ -13,7 +13,7 @@ export default function Equipment() {
   const [equipmentType, setEquipmentType] = useState('1'); // デフォルトを備品に設定
   const [equipmentTypes, setEquipmentTypes] = useState([]);
   const [items, setItems] = useState([]);
-  const [alerts, setAlerts] = useState([]);
+  // const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,8 +22,8 @@ export default function Equipment() {
   const [currentProjectId, setCurrentProjectId] = useState(null);
   
   //alert用
-  const [alertList, setAlertList] = useState([]);
-  const [allList, setAllList] = useState([]);
+  // const [alertList, setAlertList] = useState([]);
+  // const [allList, setAllList] = useState([]);
 
   /**
    * 備品・生物検索実行処理
@@ -82,7 +82,7 @@ export default function Equipment() {
 
     } catch (error) {
       console.error('検索エラー:', error);
-      alert('検索に失敗しました。時間をおいて再度お試しください。');
+      // alert('検索に失敗しました。時間をおいて再度お試しください。');
     } finally {
       setLoading(false);
     }
@@ -93,7 +93,7 @@ export default function Equipment() {
    * アラート情報読み込み処理
    * 備品の在庫アラートを取得
    */
-  const loadAlerts = async (projectIdFromUrl, projectId, equipKindId) => {
+  const loadAlerts = useCallback(async (projectIdFromUrl, projectId, equipKindId) => {
     try {
       // 2つのAPIを並列で呼び出し、両方完了まで待つ
       const [alertRes, equipRes] = await Promise.all([
@@ -108,26 +108,26 @@ export default function Equipment() {
       console.log(equipData);
 
       // 取得できてからフィルタ処理をする
-      const validIds = new Set(equipData.map(item => item.equipDetailId));
-      const filteredAlerts = alertData.filter(alert =>
-        validIds.has(alert.equipDetailId)
-      );
+      // const validIds = new Set(equipData.map(item => item.equipDetailId));
+      // const filteredAlerts = alertData.filter(alert =>
+      //   validIds.has(alert.equipDetailId)
+      // );
 
       // 状態をまとめて更新
-      setAlertList(alertData);
-      setAllList(equipData);
-      setAlerts(filteredAlerts);
-      console.log(alertList);
-      console.log(allList);
-      console.log(alerts);
+      // setAlertList(alertData);
+      // setAllList(equipData);
+      // setAlerts(filteredAlerts);
+      // console.log(alertList);
+      // console.log(allList);
+      // console.log(alerts);
 
     } catch (error) {
       console.error('データ取得エラー:', error);
-      setAlertList([]);
-      setAllList([]);
-      setAlerts([]);
+      // setAlertList([]);
+      // setAllList([]);
+      // setAlerts([]);
     }
-  };
+  },  []);
 
   // 備品種類一覧の取得
   useEffect(() => {
@@ -169,9 +169,9 @@ export default function Equipment() {
       setCurrentProjectId(null);
       setItems([]); 
       setKeyword(''); 
-      setAlerts([]); 
+      // setAlerts([]); 
     }
-  }, [location.search, performSearch]);
+  }, [location.search, performSearch, loadAlerts]);
 
   /**
    * 検索ボタンクリック処理
@@ -179,7 +179,7 @@ export default function Equipment() {
    */
   const handleSearchButtonClick = () => {
     if (!currentProjectId) {
-      alert('プロジェクトIDが不明です。');
+      // alert('プロジェクトIDが不明です。');
       return;
     }
     console.log('検索実行:', { keyword, equipmentType });
@@ -194,7 +194,7 @@ export default function Equipment() {
     if (currentProjectId) {
       navigate(`/equipmentRegist?projectId=${currentProjectId}`);
     } else {
-      alert('プロジェクトIDが不明なため、備品登録画面へ遷移できません。');
+      // alert('プロジェクトIDが不明なため、備品登録画面へ遷移できません。');
     }
   };
 
@@ -206,7 +206,7 @@ export default function Equipment() {
     if (currentProjectId) {
       navigate(`/bioRegist?projectId=${currentProjectId}`);
     } else {
-      alert('プロジェクトIDが不明なため、生体登録画面へ遷移できません。');
+      // alert('プロジェクトIDが不明なため、生体登録画面へ遷移できません。');
     }
   };
 

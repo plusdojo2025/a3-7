@@ -35,15 +35,15 @@ INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('神経伝�
 
 --メンバーリスト
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(1, 1, 2, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(2, 2, 1, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(3, 2, 1, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(4, 2, 1, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(5, 2, 1, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(6, 2, 1, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(7, 2, 1, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(8, 2, 1, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(9, 2, 1, 1);
-INSERT INTO members (project_id, user_id, authority, attend) VALUES(10, 2, 1, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(2, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(3, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(4, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(5, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(6, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(7, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(8, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(9, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(10, 2, 2, 1);
 
 --備品種類
 INSERT INTO equip_kinds (equip_kind_name) VALUES ('備品'); --1
