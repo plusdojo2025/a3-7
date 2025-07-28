@@ -29,8 +29,8 @@ const Process = () => {
   useEffect(() => {
     if (projectId) {
       axios.get(`/api/member/authority?projectId=${projectId}`, { withCredentials: true })
-        .then(res => setAuthority(res.data)) // 1 or 2 or 3
-        .catch(() => setAuthority(0)); // 権限なしや未承認
+        .then(res => setAuthority(res.data)) 
+        .catch(() => setAuthority(0)); 
     }
   }, [projectId]);
 
@@ -181,9 +181,9 @@ const Process = () => {
       {/* ボタン群を配置するためのコンテナ */}
       <div className="action-buttons-container">
         <div className="action-buttons">
-          {authority >= 2 && <button onClick={handleReport}>日報</button>}
-          {authority >= 2 && <button onClick={handleReflect}>反省</button>}
-          {authority >= 2 && <button onClick={handleConfirm}>工程を完了</button>}
+          {authority >= 1 && <button onClick={handleReport}>日報</button>}
+          {authority >= 1 && <button onClick={handleReflect}>反省</button>}
+          {authority >= 1 && <button onClick={handleConfirm}>工程を完了</button>}
           <button onClick={handleGoBack} className="back-button">戻る</button>
         </div>
       </div>
@@ -235,7 +235,7 @@ const Process = () => {
         ) : (
           <p>登録された日報がありません</p>
         )}
-        {authority >= 2 && report && <button onClick={handleEdit}>編集</button>}
+        {authority >= 1 && report && <button onClick={handleEdit}>編集</button>}
       </div>
     </div>
   );
