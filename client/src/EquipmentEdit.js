@@ -124,14 +124,14 @@ export default function EquipmentEdit() {
       axios.get(`/api/equipment/edit/${equipmentId}`)
         .then(res => {
           const data = res.data;
-          setCurrentImageUrl(`${data.imageUrl}?t=${Date.now()}`); // ← キャッシュ対策
+          setCurrentImageUrl(`${data.imageUrl}?t=${Date.now()}`); // キャッシュ対策
         })
         .catch(err => {
           console.error('画像再取得失敗:', err);
         });
     }, 200);
 
-    alert('更新完了！');
+    // alert('更新完了！');
     navigate(`/equipment?projectId=${projectId}`);
   } catch (err) {
     console.error('更新エラー:', err);
@@ -141,15 +141,15 @@ export default function EquipmentEdit() {
 
   const handleDelete = async () => {
     if (!projectId) {
-      alert('projectIdが不明なため削除できません');
+      // alert('projectIdが不明なため削除できません');
       return;
     }
 
-    if (!window.confirm('本当に削除しますか？')) return;
+    // if (!window.confirm('本当に削除しますか？')) return;
 
     try {
       await axios.delete(`/api/equipment/edit/${equipmentId}`);
-      alert('削除完了！');
+      // alert('削除完了！');
       navigate(`/equipment?projectId=${projectId}`);
     } catch (err) {
       console.error('削除エラー:', err);

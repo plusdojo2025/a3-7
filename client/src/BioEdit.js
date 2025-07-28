@@ -133,7 +133,7 @@ export default function BioEdit() {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      alert('更新完了！');
+      // alert('更新完了！');
       window.history.back();
     } catch (err) {
       console.error('更新エラー:', err);
@@ -147,12 +147,12 @@ export default function BioEdit() {
       return;
     }
 
-    if (!window.confirm('本当に削除しますか？')) return;
+    // if (!window.confirm('本当に削除しますか？')) return;
     
     try {
       // 修正されたAPIエンドポイントを使用
       await axios.delete(`/api/biology/edit/equip/${equipmentId}`);
-      alert('削除完了！');
+      // alert('削除完了！');
       window.history.back();
     } catch (err) {
       console.error('削除エラー:', err);
