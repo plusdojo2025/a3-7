@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./css/Process.css";
+import "./css/Common.css";
+
 
 const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -151,73 +154,56 @@ const Process = () => {
     }
   };
 
+  //追加：戻るボタン
+   const handleGoBack = () => {
+      navigate(`/project?id=${projectId}`);
+    };
+
 
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!process) return <p>読み込み中...</p>;
 
-  return (
-    <div style={{ padding: 20 }}>
-      <h2>{process.processName}</h2>
+   return (
+    <div className="process-container">
+      <div className="process-header">
+        <h2>{process.processName}</h2>
+      </div>
 
-      {/* Calendar Navigation & Buttons */}
-      <div
-        style={{
-          padding: "10px",
-          marginBottom: "20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <button onClick={() => handleArrow("prev")}>◀</button>
-        <span style={{ fontWeight: "bold" }}>{currentDate.getMonth() + 1}月</span>
-        <button onClick={() => handleArrow("next")}>▶</button>
+      {/* カレンダーナビゲーションだけを中央に配置するためのコンテナ */}
+      <div className="calendar-nav-container">
+        <div className="calendar-nav">
+          <button onClick={() => handleArrow("prev")}>◀</button>
+          <span className="month-display">{currentDate.getMonth() + 1}月</span>
+          <button onClick={() => handleArrow("next")}>▶</button>
+        </div>
+      </div>
 
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 10,
-            marginBottom: 20,
-          }}
-        >
+      {/* ボタン群を配置するためのコンテナ */}
+      <div className="action-buttons-container">
+        <div className="action-buttons">
           {authority >= 2 && <button onClick={handleReport}>日報</button>}
           {authority >= 2 && <button onClick={handleReflect}>反省</button>}
           {authority >= 2 && <button onClick={handleConfirm}>工程を完了</button>}
+          <button onClick={handleGoBack} className="back-button">戻る</button>
         </div>
       </div>
 
       {/* Week Calendar */}
-      <div
-        style={{
-          display: "flex",
-          width: "60%",
-          padding: "10px",
-          justifyContent: "space-between",
-          marginBottom: "80px",
-        }}
-      >
+      <div className="week-calendar">
         {weekDates.map((date, idx) => {
           const isSelected = selectedDate?.toDateString() === date.toDateString();
           const isSunday = date.getDay() === 0;
           const isSaturday = date.getDay() === 6;
 
+          const dayClasses = `day-cell ${isSelected ? 'selected' : ''} ${isSunday ? 'sunday' : ''} ${isSaturday ? 'saturday' : ''}`;
+
           return (
             <div
               key={idx}
               onClick={() => setSelectedDate(date)}
-              style={{
-                width: "13%",
-                border: "1px solid #ccc",
-                textAlign: "center",
-                padding: 8,
-                cursor: "pointer",
-                backgroundColor: isSelected ? "#e0f0ff" : "#fff",
-              }}
+              className={dayClasses}
             >
-              <div style={{ color: isSunday ? "red" : isSaturday ? "blue" : "#000" }}>
-                {date.getDate()}日
-              </div>
+              <div>{date.getDate()}日</div>
               <div>{weekdays[date.getDay()]}</div>
             </div>
           );
@@ -225,47 +211,34 @@ const Process = () => {
       </div>
 
       {/* Detail area */}
-      <div
-        style={{
-          border: "2px solid #0c3a4d",
-          borderRadius: "15px",
-          padding: "10px",
-          background: "#f5f5f5",
-        }}
-      >
-         <h4>詳細（日報と反省）</h4>
-      {report ? (
-        <div>
-          <p><strong>日報:</strong></p>
-          <label>日付: {report.createdAt}</label><br />
-          <label>コメント: {report.comment}</label><br />
-
-          <p><strong>反省:</strong></p>
-          {reflectWithName.length > 0 ? (
-            reflectWithName.map((r, i) => (
-              <div key={i} style={{ marginBottom: "10px" }}>
-                <label>日付: {r.createdAt}</label><br />
-                <label>タグ: {r.reflectName}</label><br />
-                <label>コメント: {r.comment}</label><br />
-                <hr />
-              </div>
-            ))
-          ) : (
-            <p>反省は登録されていません</p>
-          )}
-        </div>
-      ) : (
-        <p>登録された日報がありません</p>
-      )}
-
+      <div className="detail-area">
+        <h4>詳細（日報と反省）</h4>
+        {report ? (
+          <div>
+            <p><strong>日報:</strong></p>
+            <label>日付: {report.createdAt}</label><br />
+            <label>コメント: {report.comment}</label><br />
+            <p><strong>反省:</strong></p>
+            {reflectWithName.length > 0 ? (
+              reflectWithName.map((r, i) => (
+                <div key={i} className="reflect-item">
+                  <label>日付: {r.createdAt}</label><br />
+                  <label>タグ: {r.reflectName}</label><br />
+                  <label>コメント: {r.comment}</label><br />
+                  <hr />
+                </div>
+              ))
+            ) : (
+              <p>反省は登録されていません</p>
+            )}
+          </div>
+        ) : (
+          <p>登録された日報がありません</p>
+        )}
         {authority >= 2 && report && <button onClick={handleEdit}>編集</button>}
       </div>
     </div>
-
-
   );
 };
-
-
 
 export default Process;
