@@ -227,7 +227,7 @@ export default class Member extends React.Component {
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                       <h2>この方をプロジェクトに招待しますか？</h2>
                       <div className="invite-check">
-                        <button onClick={this.closeInviteModal}>いいえ</button>
+                        <button className="rejectButton" onClick={this.closeInviteModal}>いいえ</button>
                         <button className="sub_botun" onClick={this.inviteUser}>はい</button>
                       </div>
                     </div>
@@ -287,7 +287,7 @@ export default class Member extends React.Component {
               <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <h2>このメンバーをプロジェクトから削除してもよろしいですか？</h2>
                 <div className="delete-check">
-                  <button onClick={this.closeDeleteModal}>いいえ</button>
+                  <button className="rejectButton" onClick={this.closeDeleteModal}>いいえ</button>
                   <button className="sub_botun" onClick={this.handleDeleteMember}>はい</button>
                 </div>
               </div>
@@ -304,7 +304,7 @@ export default class Member extends React.Component {
         </div>
         <div style={{ marginTop: "20px" }}>
           <button
-            className="sub_botun"
+            className="back-button"
             onClick={() => window.location.href = `/project?id=${this.projectId}`}
           >
             戻る

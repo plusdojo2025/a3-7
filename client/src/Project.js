@@ -26,25 +26,24 @@ export default class Project extends React.Component {
             project: [],
             processes: [],
             error: "",
-            err: "",
+            err:"",
             reflects: [],
-            reflectTags: [],
+            reflectTags:[],
             showCloseProjectModal: false,
             showAddProcessModal: false,
             addName: "",
             date: defaultDate,
             report: "",
-            equipKindId: kindId,
-            alertList: [],
-            authority: 0,
+            equipKindId:kindId,
+            alertList:[]
         }
         this.manageEquipment = this.manageEquipment.bind(this);
     }
 
     componentDidMount() {
-        const { projectId, equipKindId } = this.state;
+        const { projectId, equipKindId} = this.state;
         console.log("projectId:" + projectId);
-        Promise.all([
+          Promise.all([
             axios.get(`/api/project/${projectId}/`),
             axios.get(`/api/projectDetails/${projectId}/`),
             axios.get(`/api/reflectSummary/${projectId}/`),
@@ -52,34 +51,26 @@ export default class Project extends React.Component {
             axios.get('/api/equip/alert/detail/'),
             axios.get(`/api/equip/${projectId}/${equipKindId}/`)
         ])
-            .then(([projectRes, detailsRes, summaryRes, tagsRes, alertRes, equipRes]) => {
-                this.setState({
-                    project: projectRes.data,
-                    processes: detailsRes.data,
-                    reflects: summaryRes.data,
-                    reflectTags: tagsRes.data,
-                });
-                console.log('すべてのデータを取得しました');
-                console.log(alertRes.data);
-                const validIds = new Set(alertRes.data.map(item => item.equipDetailId));
-                const filteredAlerts = equipRes.data.filter(alert =>
-                    validIds.has(alert.equipDetailId)
-                );
-                this.setState({ alertList: filteredAlerts });
-                console.log(filteredAlerts);
-            })
-            .catch(error => {
-                console.error("データ取得エラー:", error);
-                console.error('データ取得中にエラーが発生しました:', error);
+        .then(([projectRes, detailsRes, summaryRes, tagsRes, alertRes, equipRes]) => {
+            this.setState({
+                project: projectRes.data,
+                processes: detailsRes.data,
+                reflects: summaryRes.data,
+                reflectTags: tagsRes.data,
             });
-
-        axios.get(`/api/member/authority?projectId=${projectId}`, { withCredentials: true })
-            .then(res => {
-                this.setState({ authority: res.data });
-            })
-            .catch(() => {
-                this.setState({ authority: 0 });
-            });
+            console.log('すべてのデータを取得しました');
+            console.log(alertRes.data);
+            const validIds = new Set(alertRes.data.map(item => item.equipDetailId));
+            const filteredAlerts = equipRes.data.filter(alert =>
+                validIds.has(alert.equipDetailId)
+            );
+            this.setState({alertList:filteredAlerts});
+            console.log(filteredAlerts);
+        })
+        .catch(error => {
+            console.error("データ取得エラー:", error);
+        console.error('データ取得中にエラーが発生しました:', error);
+        });
     }
 
     onInput = (e) => {
@@ -161,7 +152,7 @@ export default class Project extends React.Component {
 
     //備品の管理をする
     manageEquipment() {
-        const { projectId } = this.state;
+        const {projectId} = this.state;
         window.location.href = `/equipment?projectId=${projectId}`;
     }
 
@@ -204,7 +195,7 @@ export default class Project extends React.Component {
         // completeが1のプロセス
         const closedProcesses = processes.filter(p => p.complete === 1);
 
-        const reflect = reflects[0];
+         const reflect = reflects[0];
         return (
             <div className="ProjectDetails">
                 <h1 className="ProjectTitle">{project.projectName}</h1>
@@ -216,16 +207,16 @@ export default class Project extends React.Component {
                             <p>進行中の工程がありません</p>
                         ) : (
                             <div className="scroll">
-                                <table>
-                                    <tbody>
-                                        {progressProcesses.map((process, index) =>
-                                            <tr key={index} className="ProgeressProcess">
-                                                <td className="process_name" onClick={() => this.lookProcess(process.processId)}>
-                                                    {process.processName}</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                            <table>
+                                <tbody>
+                                    {progressProcesses.map((process, index) =>
+                                        <tr key={index} className="ProgeressProcess">
+                                            <td className="process_name" onClick={() => this.lookProcess(process.processId)}>
+                                                {process.processName}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                             </div>
                         )}
                     </div>
@@ -236,35 +227,31 @@ export default class Project extends React.Component {
                             <p>終了した工程がありません</p>
                         ) : (
                             <div className="scroll">
-                                <table>
-                                    <tbody>
-                                        {closedProcesses.map((process, index) =>
-                                            <tr key={index} className="ClosedProcesses">
-                                                <td className="process_name" onClick={() => this.lookProcess(process.processId)}>
-                                                    {process.processName}</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                            <table>
+                                <tbody>
+                                    {closedProcesses.map((process, index) =>
+                                        <tr key={index} className="ClosedProcesses">
+                                            <td className="process_name" onClick={() => this.lookProcess(process.processId)}>
+                                                {process.processName}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                             </div>
                         )}
                     </div>
-                    <div className="buttons">
-                        {this.state.authority >= 1 && (
+                    <div className="pj-buttons">
                         <button className="closeButton" onClick={this.toggleCloseProjectModal} disabled={project.complete === 1}>プロジェクトを終了する</button>
-                        )}
-                        <button className="button" onClick={this.editMembers}>メンバー編集</button>
-                        <button className="button" onClick={this.manageEquipment}>備品管理</button>
-                        {this.state.authority >= 1 && (
-                        <button className="button" onClick={this.toggleAddProcessModal} disabled={project.complete === 1}>工程追加</button>
-                        )}
-                        <button className="button" onClick={() => window.location.href = "/"}>戻る</button>
+                        <button className="button-pj-medit" onClick={this.editMembers}>メンバー編集</button>
+                        <button className="button-pj-eq" onClick={this.manageEquipment}>備品管理</button>
+                        <button className="button-pj-pros" onClick={this.toggleAddProcessModal} disabled={project.complete === 1}>工程追加</button>
+                        <button className="button-pj-back" onClick={() => window.location.href = "/"}>戻る</button>
                     </div>
                 </div>
                 <div className="alertBox">
                     <div className="showAlert">
                         {/*アラート部分の画面表示*/}
-                        {reflects.length === 0 ? (
+                         {reflects.length === 0 ? (
                             <p>反省が登録されていません</p>
                         ) : (
                             <div className="reflectAnnounce">
@@ -273,7 +260,7 @@ export default class Project extends React.Component {
                                 </div>
                                 最近作成された内容
                                 <div className="someReflects">
-
+                                    
                                     <div className="reflect">
                                         {reflects[reflects.length - 1].createdAt}
                                         <br />--------------------<br />
@@ -290,7 +277,7 @@ export default class Project extends React.Component {
                                 </div>
                             </div>
                         )}
-
+                    
                         -----------------------------------------------
                         <div className="equipAlertContainer">
                             <div className="equipAlert">
@@ -350,7 +337,7 @@ export default class Project extends React.Component {
                                 <input type="text" name="addName" value={this.state.addName} onChange={this.onInput} />
                             </div>
                             <div className="buttonContainer">
-                                <button onClick={this.toggleAddProcessModal}>戻る</button>
+                                <button className="buttonContainer-back-btn" onClick={this.toggleAddProcessModal}>戻る</button>
                                 <button onClick={() => this.addProcess()}>登録</button>
                             </div>
                         </div>
