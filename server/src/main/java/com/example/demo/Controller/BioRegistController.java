@@ -34,6 +34,9 @@ public class BioRegistController {
     @Autowired
     private ProcessesRepository processesRepository;
     
+    /**
+     * プロジェクトIDから実験工程リストを取得
+     */
     @GetMapping("/processes/{projectId}")
     public ResponseEntity<List<Process>> getProcessByProjectId(@PathVariable Integer projectId) {
     	try {
@@ -46,6 +49,10 @@ public class BioRegistController {
     	}
     }
 
+    /**
+     * 生体の新規登録
+     * 生体詳細テーブルと備品管理テーブルの両方に登録する
+     */
     @PostMapping("/")
     public ResponseEntity<?> registerBiology(
             @RequestParam("kind") String kind,
@@ -58,6 +65,7 @@ public class BioRegistController {
             @RequestParam(value = "image", required = false) MultipartFile image
     ) {
         try {
+            // 生体詳細エンティティの作成
             BiologyDetail bio = new BiologyDetail();
             bio.setKind(kind);
             bio.setGender(gender);
@@ -65,6 +73,7 @@ public class BioRegistController {
             bio.setProcessId(projectProcess);
             bio.setRemarks(note);
 
+            // 画像がある場合は設定
             if (image != null && !image.isEmpty()) {
                 bio.setPicture(image.getBytes());
             }
@@ -72,15 +81,14 @@ public class BioRegistController {
             // 生物詳細を保存
             BiologyDetail savedBio = biologyDetailsRepository.save(bio);
 
-            // equipments にも登録
+            // 備品管理テーブルにも登録
             Equipment equipment = new Equipment();
             equipment.setEquipName(name);
             equipment.setEquipDetailId(savedBio.getBiologyDetailId());
             equipment.setProjectId(projectId);
-            equipmentsRepository.save(equipment);
-            
-            equipment.setEquipKindId(2); //生体で固定
+            equipment.setEquipKindId(2); // 生体で固定（最初から設定）
 
+            // 一度だけ保存
             equipmentsRepository.save(equipment);
             
             return ResponseEntity.ok("登録完了！");
