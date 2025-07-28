@@ -141,6 +141,13 @@
   font-weight: bold;
   transition: background-color 0.3s, color 0.3s;
 }
+.member-delete-button:hover {
+    background: linear-gradient(135deg,red, red);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+    text-decoration: none !important;
+    color: white !important;
+}
 
 /* ラベル全体を中央配置する */
 .custom-radio {
@@ -204,6 +211,14 @@
   font-weight: bold;
   transition: background-color 0.3s, color 0.3s;
 }
+.sub_botun:hover {
+    background: linear-gradient(135deg, #8bb8a8, #7aa396);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+    text-decoration: none !important;
+    color: white !important;
+}
+
 
 .update-authority-button{
   color: black !important;
@@ -216,6 +231,13 @@
   transition: background-color 0.3s, color 0.3s;
   text-align: right;
   margin: 20px;
+}
+.update-authority-button:hover {
+    background: linear-gradient(135deg, #8bb8a8, #7aa396);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+    text-decoration: none !important;
+    color: white !important;
 }
 
 .delete-check {

@@ -30,81 +30,56 @@ export default function Equipment() {
    * キーワード、種類、プロジェクトIDで検索
    */
   const performSearch = useCallback(async (projectIdToSearch, searchKeyword, searchType) => {
-    setLoading(true);
-    console.log('備品・生物検索開始:', { projectIdToSearch, searchKeyword, searchType });
-    
-    try {
-      let results = [];
-      // searchTypeが未指定の場合はデフォルトで備品を検索
-      const typeToSearch = searchType || '1';
+  setLoading(true);
+  console.log('備品・生物検索開始:', { projectIdToSearch, searchKeyword, searchType });
 
-      if (typeToSearch === '1') {
-        // 備品検索
-        console.log('備品検索開始');
-        
-        try {
-          const equipResponse = await axios.get(`/api/equip/${projectIdToSearch}/1/`);
-          console.log('備品検索レスポンス:', equipResponse.data);
-          
-          let filteredResults = equipResponse.data;
-          
-          // キーワード検索がある場合はフィルタリング
-          if (searchKeyword && searchKeyword.trim()) {
-            const keyword = searchKeyword.trim().toLowerCase();
-            filteredResults = equipResponse.data.filter(item => 
-              (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
-              (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
-            );
-          }
-          
-          results = filteredResults.map(item => ({
-            ...item,
-            type: "備品",
-            displayType: "備品"
-          }));
-          
-          console.log('備品検索結果:', results.length + '件');
-          
-        } catch (equipError) {
-          console.error('備品検索エラー:', equipError);
-          results = [];
-        }
-        
-      } else if (typeToSearch === '2') {
-        // 生物検索
-        console.log('生物検索開始');
-        
-        try {
-          const bioResponse = await axios.get(`/api/equip/${projectIdToSearch}/2/`);
-          console.log('生物検索レスポンス:', bioResponse.data);
-          
-          let filteredResults = bioResponse.data;
-          
-          // キーワード検索がある場合はフィルタリング
-          if (searchKeyword && searchKeyword.trim()) {
-            const keyword = searchKeyword.trim().toLowerCase();
-            filteredResults = bioResponse.data.filter(item => 
-              (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
-              (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
-            );
-          }
-          
-          results = filteredResults.map(item => ({
-            ...item,
-            type: "生物",
-            displayType: "生物"
-          }));
-          
-          console.log('生物検索結果:', results.length + '件');
-          
-        } catch (bioError) {
-          console.error('生物検索エラー:', bioError);
-          results = [];
-        }
+  try {
+    let results = [];
+    const typeToSearch = searchType || '1';
+
+    if (typeToSearch === '1') {
+      // 備品検索
+      const equipResponse = await axios.get(`/api/equip/${projectIdToSearch}/1/`);
+      let filteredResults = equipResponse.data;
+
+      if (searchKeyword && searchKeyword.trim()) {
+        const keyword = searchKeyword.trim().toLowerCase();
+        filteredResults = filteredResults.filter(item => 
+          (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
+          (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
+        );
       }
 
-      setItems(results);
-      
+      results = filteredResults.map(item => ({
+        ...item,
+        type: "備品",
+        displayType: "備品",
+        imageUrl: item.equipDetailId ? `/api/images/equipment/${item.equipDetailId}?t=${Date.now()}` : null
+      }));
+
+    } else if (typeToSearch === '2') {
+      // 生物検索
+      const bioResponse = await axios.get(`/api/equip/${projectIdToSearch}/2/`);
+      let filteredResults = bioResponse.data;
+
+      if (searchKeyword && searchKeyword.trim()) {
+        const keyword = searchKeyword.trim().toLowerCase();
+        filteredResults = filteredResults.filter(item => 
+          (item.equipName && item.equipName.toLowerCase().includes(keyword)) ||
+          (item.equip_name && item.equip_name.toLowerCase().includes(keyword))
+        );
+      }
+
+      results = filteredResults.map(item => ({
+        ...item,
+        type: "生物",
+        displayType: "生物",
+        imageUrl: item.equipDetailId ? `/api/images/biology/${item.equipDetailId}?t=${Date.now()}` : null
+      }));
+    }
+
+    setItems(results);
+
     } catch (error) {
       console.error('検索エラー:', error);
       alert('検索に失敗しました。時間をおいて再度お試しください。');
@@ -112,6 +87,7 @@ export default function Equipment() {
       setLoading(false);
     }
   }, []);
+
 
   /**
    * アラート情報読み込み処理
@@ -408,7 +384,7 @@ export default function Equipment() {
           備品登録
         </button>
         <button onClick={handleNavigateToBioRegist}>
-          生体登録
+          生物登録
         </button>
       </div>
     </div>

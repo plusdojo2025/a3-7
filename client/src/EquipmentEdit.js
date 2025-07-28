@@ -65,7 +65,7 @@ export default function EquipmentEdit() {
           judge: data.judge,
           note: data.note || ''
         });
-        setCurrentImageUrl(data.imageUrl);
+        setCurrentImageUrl(`${data.imageUrl}?t=${Date.now()}`);
         setLoading(false);
       })
       .catch(err => {
@@ -118,6 +118,18 @@ export default function EquipmentEdit() {
     await axios.put(`/api/equipment/edit/${equipmentId}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
+
+    // 更新後すぐ画像を再取得（キャッシュ防止のためtimestamp付与）
+    setTimeout(() => {
+      axios.get(`/api/equipment/edit/${equipmentId}`)
+        .then(res => {
+          const data = res.data;
+          setCurrentImageUrl(`${data.imageUrl}?t=${Date.now()}`); // ← キャッシュ対策
+        })
+        .catch(err => {
+          console.error('画像再取得失敗:', err);
+        });
+    }, 200);
 
     alert('更新完了！');
     navigate(`/equipment?projectId=${projectId}`);

@@ -138,8 +138,8 @@ export default class MyPageEdit extends React.Component {
                 if (value && value.length < 8) {
                     return { isValid: false, message: "新しいパスワードは8文字以上で入力してください" };
                 }
-                if (value && value.length > 50) {
-                    return { isValid: false, message: "新しいパスワードは50文字以内で入力してください" };
+                if (value && value.length > 20) {
+                    return { isValid: false, message: "新しいパスワードは20文字以内で入力してください" };
                 }
                 return { isValid: true, message: "" };
                 
@@ -417,7 +417,7 @@ export default class MyPageEdit extends React.Component {
                         </div>
 
                         <div className="mypage-edit-form-group">
-                            <label className="mypage-edit-label">新しいパスワード確認</label>
+                            <label className="mypage-edit-label">新規パスワード確認</label>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="confirmNewPassword"
