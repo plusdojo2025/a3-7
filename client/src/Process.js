@@ -16,7 +16,7 @@ const Process = () => {
   const [report, setReport] = useState(null);
   const [reflect, setReflect] = useState([]);
   const [reflectTag, setReflectTag] = useState([]);
-  
+
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,13 +24,12 @@ const Process = () => {
   const processId = params.get("id");
   const [projectId, setProjectId] = useState(params.get("projectId"));
   const [authority, setAuthority] = useState(0);
-  // ここをステートに
 
   useEffect(() => {
     if (projectId) {
       axios.get(`/api/member/authority?projectId=${projectId}`, { withCredentials: true })
-        .then(res => setAuthority(res.data)) 
-        .catch(() => setAuthority(0)); 
+        .then(res => setAuthority(res.data))
+        .catch(() => setAuthority(0));
     }
   }, [projectId]);
 
@@ -40,7 +39,6 @@ const Process = () => {
       axios.get(`/api/processes/${processId}`)
         .then((res) => {
           setProcess(res.data);
-          // ここでprojectIdもセット
           if (res.data.projectId) {
             setProjectId(res.data.projectId);
           }
@@ -71,7 +69,7 @@ const Process = () => {
       axios
         .get(`/api/reflect/createdAt?createdAt=${dateStr}&processId=${processId}`)
         .then((res) => {
-          setReflect(res.data); // ← 配列を state に保存
+          setReflect(res.data);
           console.log(res.data);
         })
         .catch(() => setReflect([]));
@@ -85,7 +83,7 @@ const Process = () => {
           console.log(res.data);
         })
         .catch(() => setReflectTag(null));
-        
+
     }
   }, [selectedDate, processId]);
 
@@ -106,8 +104,6 @@ const Process = () => {
     }));
   }, [reflect, tagMap]);
 
-
- 
 
   const generateWeek = (date) => {
     const start = new Date(date);
@@ -155,15 +151,15 @@ const Process = () => {
   };
 
   //追加：戻るボタン
-   const handleGoBack = () => {
-      navigate(`/project?id=${projectId}`);
-    };
+  const handleGoBack = () => {
+    navigate(`/project?id=${projectId}`);
+  };
 
 
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!process) return <p>読み込み中...</p>;
 
-   return (
+  return (
     <div className="process-container">
       <div className="process-header">
         <h2>{process.processName}</h2>
@@ -212,30 +208,39 @@ const Process = () => {
 
       {/* Detail area */}
       <div className="detail-area">
-        <h4>詳細（日報と反省）</h4>
         {report ? (
-          <div>
-            <p><strong>日報:</strong></p>
-            <label>日付: {report.createdAt}</label><br />
-            <label>コメント: {report.comment}</label><br />
-            <p><strong>反省:</strong></p>
+          <>
+            <h4>日報｜反省</h4>
+            <p className="report-title"><strong>日報</strong></p>
+            <div className="report-card">
+              <div className="report-header">
+                <div className="report-info">
+                  <p className="report-comment">{report.comment}</p>
+                </div>
+                {authority >= 1 && <button onClick={handleEdit}>編集</button>}
+              </div>
+            </div>
+
+            <p className="reflect-title"><strong>反省</strong></p>
             {reflectWithName.length > 0 ? (
               reflectWithName.map((r, i) => (
-                <div key={i} className="reflect-item">
-                  <label>日付: {r.createdAt}</label><br />
-                  <label>タグ: {r.reflectName}</label><br />
-                  <label>コメント: {r.comment}</label><br />
-                  <hr />
+                <div key={i} className="reflect-card-item">
+                  <div className="reflect-card-content">
+                    <p className="reflect-tag">{r.reflectName}</p>
+                    <p className="reflect-comment">{r.comment}</p>
+                  </div>
                 </div>
               ))
             ) : (
               <p>反省は登録されていません</p>
             )}
-          </div>
+          </>
         ) : (
-          <p>登録された日報がありません</p>
+          <>
+            <h4>日報｜反省</h4>
+            <p>登録されていません</p>
+          </>
         )}
-        {authority >= 1 && report && <button onClick={handleEdit}>編集</button>}
       </div>
     </div>
   );
