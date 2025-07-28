@@ -194,7 +194,7 @@ export default class Member extends React.Component {
       <>
         <h1>プロジェクトメンバー編集</h1>
 
-        {this.state.currentUserAuthority === 3 && (
+        {this.state.currentUserAuthority === 2 && (
           <div>
             <div className="input-wrapper">
               <div className="search_container">
@@ -254,7 +254,7 @@ export default class Member extends React.Component {
               {this.state.approvedMembers.map((member, index) => (
                 <tr key={index}>
                   <td>{member.userName || `ユーザーID: ${member.userId}`}</td>
-                  {[1, 2, 3].map((auth) => (
+                  {[0, 1, 2].map((auth) => (
                     <td key={auth}>
                       <label className="custom-radio">
                         <input
@@ -262,7 +262,7 @@ export default class Member extends React.Component {
                           name={`authority-${index}`}
                           checked={(this.state.updatedAuthorities[member.userId] ?? member.authority) === auth}
                           onChange={() => this.handleAuthorityChange(member.userId, auth)}
-                          disabled={this.state.currentUserAuthority !== 3}
+                          disabled={this.state.currentUserAuthority !== 2}
                         />
                         <span className="check"></span>
                       </label>
@@ -271,7 +271,7 @@ export default class Member extends React.Component {
                   <td>
                     <button
                       onClick={() => this.openDeleteModal(member.userId)}
-                      disabled={this.state.currentUserAuthority !== 3}
+                      disabled={this.state.currentUserAuthority !== 2}
                       className="member-delete-button"
                     >
                       削除
@@ -294,7 +294,7 @@ export default class Member extends React.Component {
             </div>
           )}
 
-          {this.state.currentUserAuthority === 3 && (
+          {this.state.currentUserAuthority === 2 && (
             <div style={{ textAlign: "right" }}>
               <button className="update-authority-button" onClick={this.handleUpdateAuthorities}>
                 更新

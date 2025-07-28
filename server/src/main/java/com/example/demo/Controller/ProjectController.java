@@ -279,7 +279,7 @@ public class ProjectController {
 
 	        // 権限がまだ未設定の場合は閲覧（1）にする
 	        if (m.getAuthority() == null || m.getAuthority() == 0) {
-	            m.setAuthority(1); // 閲覧権限をデフォルトで付与
+	            m.setAuthority(0); // 閲覧権限をデフォルトで付与
 	        }
 
 	        membersRepository.save(m);
@@ -381,7 +381,7 @@ public class ProjectController {
 
 	    System.out.println("✅ 操作ユーザーの権限: " + operator.getAuthority());
 
-	    if (operator.getAuthority() != 3) {
+	    if (operator.getAuthority() != 2) {
 	        System.out.println("❌ 操作ユーザーに管理権限がありません");
 	        return "権限がありません";
 	    }
