@@ -23,7 +23,8 @@ const Process = () => {
   const navigate = useNavigate();
   const params = new URLSearchParams(location.search);
   const processId = params.get("id");
-  const [projectId, setProjectId] = useState(params.get("projectId")); // ここをステートに
+  const [projectId, setProjectId] = useState(params.get("projectId"));
+  // ここをステートに
    
 
 
@@ -105,7 +106,7 @@ const Process = () => {
     if (reflect) {
        
       axios
-        .get(`/api/reflectTag/${reflect.reflectTagId}`)
+        .get(`/api/reflect/${reflect.reflectTagId}`)
         .then((res) => setReflectName(res.data.reflectName))
         .catch(() => setReflectName("不明"));
     } else {
@@ -148,9 +149,16 @@ const handleEdit = () => {
 
   const handleConfirm = () => {
     if (window.confirm("工程を完了してもよろしいですか？")) {
-      navigate("/project");
+      axios.get(`/api/endProcess/${processId}/`)
+        .then(() => {
+          navigate(`/project?id=${projectId}`);
+        })
+        .catch(err => {
+          console.error("登録時にエラーが発生しました:", err);
+        });
     }
   };
+
 
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!process) return <p>読み込み中...</p>;
@@ -238,9 +246,6 @@ const handleEdit = () => {
           <div>
             <p><strong>日報:</strong></p>
             <label>日付: {report.createdAt}</label><br />
-            <label>研修タイトル: {projectName}</label><br />
-            <label>備品名: {equipName}</label><br />
-            <label>使用量: {report.usageAmount}</label><br />
             <label>コメント: {report.comment}</label><br />
 
             {reflect ? (

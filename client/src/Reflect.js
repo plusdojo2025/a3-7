@@ -69,6 +69,7 @@ class Reflect extends React.Component {
       .catch(() => {
         alert("登録に失敗しました");
       });
+    this.props.navigate(`/process?id=${this.props.processId}`);
   };
 
   render() {

@@ -128,7 +128,6 @@ public class ReportController {
         Optional<Report> optionalReport = reportRepository.findById(reportId);
         if (optionalReport.isPresent()) {
             Report report = optionalReport.get();
-            report.setEquipId(updatedReport.getEquipId());
             report.setProjectId(updatedReport.getProjectId());
             report.setProcessId(updatedReport.getProcessId());
             report.setCreatedAt(updatedReport.getCreatedAt());
@@ -164,13 +163,5 @@ public class ReportController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-//    @GetMapping("/reflectTag/createdAt")
-//    public ResponseEntity<?> getWeeklyReflectTag(
-//            @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
-//            @RequestParam("processId") Integer processId) {
-//
-//        return reflectTagRepository.findByProcessIdAndCreatedAt(processId, createdAt)
-//                .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.notFound().build());
-//    }
+
 }

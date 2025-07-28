@@ -23,13 +23,10 @@ public class Report {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "report_id")
 	private Integer reportId;
-	@Column(name = "equip_id")
-	private Integer equipId;
 	@Column(name = "project_id")
 	private Integer projectId;
 	@Column(name = "process_id")
 	private Integer processId;
-	private Integer usageAmount;
 	private LocalDate createdAt;
 	private String comment;
 }

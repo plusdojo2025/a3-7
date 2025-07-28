@@ -12,35 +12,36 @@ export default function ReportEdit() {
     createdAt: '',
     projectId: '',
     processId: '',
-    equipId: '',
-    comment: '',
     usageAmount: ''
   });
 
   const [projectName, setProjectName] = useState('');
-  const [equipmentList, setEquipmentList] = useState([]);
+  const [processName, setProcessName] = useState('');
+  const [projectId, setProjectId] = useState(0);
+  const [processId, setProcessId] = useState(0);
   const [error, setError] = useState('');
  
  
 
   // 初期データ取得
   useEffect(() => {
-    // 備品リストの取得
-    axios.get('/api/equip')
-      .then(res => setEquipmentList(res.data))
-      .catch(() => setError('備品リストの取得に失敗しました'));
-
     // レポート内容の取得
     if (reportId) {
       axios.get(`/api/report/${reportId}`)
         .then(res => {
           setForm(res.data);
           // projectName を取得
-          const projectId = res.data.projectId;
-          if (projectId) {
-            axios.get(`/api/project/${projectId}`)
+          setProjectId(res.data.projectId);
+          setProcessId(res.data.processId);
+          if (res.data.projectId) {
+            axios.get(`/api/project/${res.data.projectId}`)
               .then(resp => setProjectName(resp.data.projectName))
               .catch(() => setProjectName('（取得失敗）'));
+          }
+          if(res.data.processId) {
+            axios.get(`/api/process/${res.data.processId}/`)
+              .then(resp => setProcessName(resp.data.processName))
+              .catch(() => setProcessName('（取得失敗）'));
           }
         })
         .catch(() => setError('レポートの取得に失敗しました'));
@@ -57,7 +58,7 @@ export default function ReportEdit() {
     try {
       await axios.put(`/api/report/${reportId}`, form);
       alert('更新成功！');
-      navigate(-1); // 前のページに戻る
+      navigate(`/process?id=${processId}`); // 前のページに戻る
     } catch (err) {
       console.error('更新エラー', err.response || err);
       setError('更新に失敗しました');
@@ -67,6 +68,7 @@ export default function ReportEdit() {
   return (
   <div >
     <h2>日報編集</h2>
+    {projectName} - {processName}
   <div className="report-container">
      {error && <p className="error">{error}</p>}
 
@@ -75,34 +77,13 @@ export default function ReportEdit() {
         <label>日付:<input name="createdAt" value={form.createdAt} readOnly /></label>
         
       </div>
-
-      <div className="form-group">
-        <label>研修タイトル:  <input name="projectName" value={projectName} readOnly /></label>
-      
-      </div>
-
-      <div className="form-group">
-        <label>備品名:<select name="equipId" value={form.equipId || ''} onChange={handleChange}>
-          <option value="">選択してください</option>
-          {equipmentList.map(e => (
-            <option key={e.equipId} value={e.equipId}>{e.equipName}</option>
-          ))}
-        </select></label>
-        
-      </div>
-
-      <div className="form-group">
-        <label>使用量:<input name="usageAmount" value={form.usageAmount} onChange={handleChange} /></label>
-        
-      </div>
-
       <div className="form-group">
         <label>コメント: <textarea name="comment" value={form.comment || ''} onChange={handleChange} /></label>
        
       </div>
 
       <div className="button-group">
-        <button type="button" onClick={() => navigate(-1)}>戻る</button>
+        <button type="button" onClick={() => navigate(`/process?id=${processId}`)}>戻る</button>
         <button type="submit">更新</button>
       </div>
     </form>

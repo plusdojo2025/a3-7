@@ -204,4 +204,12 @@ public class EquipEditController {
     public List<EquipDetail> getAllDetails(){
     	return equipDetailsRepository.findAll();
     }
+    
+    @PostMapping("/{equipDetailId}/{used}")
+    public void updateRemaining(@PathVariable Integer equipDetailId, @PathVariable Double used) {
+    	EquipDetail target = equipDetailsRepository.findByequipDetailId(equipDetailId);
+    	// 更新
+        target.setRemaining(target.getRemaining() - used);
+        equipDetailsRepository.save(target);
+    }
 }
