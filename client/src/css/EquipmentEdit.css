@@ -118,23 +118,31 @@
 }
 
 .button-back {
-  background-color: #ddd;
-  border: 1px solid #999;
-  color: #333;
+  background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+  color: white !important;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3) !important;
 }
 
 .button-back:hover {
-  background-color: #ccc;
+  background: linear-gradient(135deg, #5a6268, #495057) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4) !important;
 }
 
-.button-delete {
-  background-color: #f88;
-  border: 1px solid #c00;
-  color: #000;
+body .button-delete {
+  background: red !important;
+  color: white !important;
+  border: 2px solid red !important;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3) !important;
+  transition: all 0.2s ease-in-out !important;
 }
 
-.button-delete:hover {
-  background-color: #e77;
+body .button-delete:hover {
+  background: white !important;
+  color: red !important;
+  border: 2px solid red !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4) !important;
 }
 
 .button-update {

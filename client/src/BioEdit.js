@@ -290,22 +290,16 @@ export default function BioEdit() {
 
       {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
 
-      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between' }}>
-        <button type="button" onClick={() => window.history.back()}>戻る</button>
-        <button
-          type="button"
-          style={{ backgroundColor: '#f88', border: '1px solid #c00', padding: '5px 10px', cursor: 'pointer' }}
-          onClick={handleDelete}
-        >
+      <div className="button-group">
+        <button type="button" onClick={() => window.history.back()} className='button-back'>
+          戻る
+          </button>
+        <button type="button" onClick={handleDelete} className='button-delete'>
           削除
-        </button>
-        <button
-          type="button"
-          style={{ backgroundColor: '#cfc', border: '1px solid #9c9', padding: '5px 10px', cursor: 'pointer' }}
-          onClick={handleUpdate}
-        >
+          </button>
+        <button type="button" onClick={handleUpdate} className='button-update'>
           更新
-        </button>
+          </button>
       </div>
     </div>
   );

@@ -1,53 +1,264 @@
-/* メール画面全体の余白設定 */
-.mail-container {
-    padding: 30px;
+.mail-page-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* メール一覧タイトル */
-.mail-title {
-    font-size: 20px;
-    margin-bottom: 20px;
-    font-weight: bold;
+/* ヘッダー部分 */
+.mail-page-container .mail-header {
+  text-align: center;
+  margin-bottom: 40px;
 }
 
-/* メール一覧の表示ボックス */
-.mail-list {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 15px;
-    height: 300px;
-     /* 縦スクロール表示 */
-    overflow-y: auto;
-    background-color: #f5f5f5;
+.mail-page-container .mail-page-title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
 }
 
-/* 各メール行のスタイル */
-.mail-item {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+/* メインコンテンツ */
+.mail-page-container .mail-content {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-/* 最後の行の下線を非表示 */
-.mail-item:last-child {
-    border-bottom: none;
+.mail-page-container .mail-list-container {
+  background: white;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-height: 400px;
 }
 
-/* 戻るボタンのスタイル */
-button {
-    /* margin-top: 20px; */
-  color: black !important;
-  background-color: #A3CCBE;
-  border: 2px solid #A3CCBE;
-  padding: 8px 16px;
-  font-size: 1.2em;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s, color 0.3s;
+/* 招待なしの場合 */
+.mail-page-container .no-invites-message {
+  text-align: center;
+  padding: 80px 20px;
+  color: #666;
 }
-button:hover {
-    background: linear-gradient(135deg, #8bb8a8, #7aa396);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
-    text-decoration: none !important;
-    color: white !important;
+
+.mail-page-container .no-invites-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.mail-page-container .no-invites-message p {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* 招待リスト */
+.mail-page-container .invites-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 招待カード */
+.mail-page-container .invite-card {
+  background: white;
+  padding: 32px;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.mail-page-container .invite-card:first-child {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.mail-page-container .invite-card:last-child {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-bottom: none;
+}
+
+.mail-page-container .invite-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4285f4 0%, #9c27b0 100%);
+}
+
+/* カードヘッダー */
+.mail-page-container .invite-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.mail-page-container .invite-icon {
+  font-size: 20px;
+  margin-right: 8px;
+  color: #4285f4;
+}
+
+.mail-page-container .invite-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* カードボディ */
+.mail-page-container .invite-card-body {
+  margin-bottom: 32px;
+}
+
+.mail-page-container .invite-detail-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.mail-page-container .detail-label {
+  font-weight: 400;
+  color: #666;
+  min-width: 100px;
+  margin-right: 16px;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.mail-page-container .detail-value {
+  color: #333;
+  font-size: 16px;
+  font-weight: 400;
+  flex: 1;
+}
+
+.mail-page-container .detail-project {
+  color: #9c27b0;
+  font-weight: 500;
+}
+
+.mail-page-container .invite-message {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 6px;
+  color: #666;
+  margin-top: 20px;
+  font-size: 15px;
+  font-style: italic;
+  border-left: 3px solid #4285f4;
+}
+
+/* カードアクション */
+.mail-page-container .invite-card-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+/* ボタンスタイル */
+.mail-page-container .mail-action-btn {
+  flex: 1;
+  min-width: 80px;
+  max-width: 140px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mail-page-container .mail-approve-btn {
+  background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+  color: white;
+  box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
+}
+
+.mail-page-container .mail-approve-btn:hover {
+  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
+.mail-page-container .mail-reject-btn {
+  background-color: red;
+  color: white;
+  border: 2px solid red;
+  box-shadow: 0 3px 6px rgba(244, 67, 54, 0.3);
+}
+
+.mail-page-container .mail-reject-btn:hover {
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  color: red;
+  transform: translateY(-0.5px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
+.mail-page-container .mail-action-btn:active {
+  transform: translateY(0);
+}
+
+/* フッター */
+.mail-page-container .mail-footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* 戻るボタンスタイル */
+.mail-page-container .mail-back-btn {
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6c757d, #5a6268);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3);
+  padding: 12px 32px;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .mail-page-container {
+    padding: 20px 16px;
+  }
+  
+  .mail-page-container .mail-page-title {
+    font-size: 28px;
+  }
+  
+  .mail-page-container .invite-card {
+    padding: 24px 20px;
+  }
+  
+  .mail-page-container .invite-card-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .mail-page-container .mail-action-btn {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .mail-page-container .invite-detail-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .mail-page-container .detail-label {
+    min-width: auto;
+    margin-right: 0;
+    margin-bottom: 4px;
+  }
 }
