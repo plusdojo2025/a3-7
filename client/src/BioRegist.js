@@ -170,9 +170,9 @@ export default function BioRegist() {
 
         {error && <p className="error-message">{error}</p>}
 
-        <div className="button-group">
-          <button type="button" onClick={() => navigate(`/equipment?projectId=${projectId}`)}>戻る</button>
-          <button type="submit">登録</button>
+        <div className="bioRegist-button-group">
+          <button type="button" className="bioreg-back" onClick={() => navigate(`/equipment?projectId=${projectId}`)}>戻る</button>
+          <button type="submit" className="bioreg-submit">登録</button>
         </div>
       </form>
     </div>

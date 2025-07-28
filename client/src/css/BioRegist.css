@@ -48,34 +48,59 @@ body {
   font-size: 16px;
 }
 
-.button-group {
-  display: flex;
+
+ .bioRegist-button-group{
+    display: flex;
   justify-content: space-between;
-  margin: 20px;
+  margin: 20px auto 0;
+  max-width: 800px;
+  gap: 10px;
+  padding: 0 20px;
 }
 
-.button-group button {
-  padding: 10px 30px;
-  font-size: 18px;
-  border: none;
+
+.bioreg-submit {
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
   border-radius: 12px;
+  background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+  color: white;
+  border: none;
   cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
 }
 
-.button-group button:first-child {
-  background-color: #d3d3d3;
-  color: #000;
+.bioreg-submit:hover {
+  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
 
-.button-group button:first-child:hover {
-  background-color: #bcbcbc;
+
+
+.bioreg-back{
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+  color: white  !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3) !important;
 }
 
-.button-group button:last-child {
-  background-color: #a4d9a7;
-  color: #000;
-}
-
-.button-group button:last-child:hover {
-  background-color: #8ed093;
+.bioreg-back:hover {
+  background: linear-gradient(135deg, #5a6268, #495057) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4) !important;
 }
