@@ -40,9 +40,11 @@
   transition: color 0.3s ease;
 }
 
-/* 矢印ボタンのホバー時のスタイル */
 .calendar-nav button:hover {
-  color: #007bff;
+  color: #555 !important; /* 通常時の色に強制的に戻す */
+  transform: none !important; /* 拡大効果を強制的に無効化 */
+  transition: none !important; /* アニメーションを強制的に無効化 */
+  cursor: pointer !important; /* カーソルはpointerのままにする */
 }
 
 /* ボタン群を配置するコンテナ（右上に配置）*/
@@ -60,6 +62,8 @@
 }
 
 .action-buttons button {
+  width: 150px;
+  height: 60px; 
   height: 60px;
   padding: 10px 20px;
   border: none;
@@ -170,6 +174,26 @@
   width: 100%;
 }
 
+.report-header button {
+  height: 40px;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #a3ccbe, #8bb8a8); 
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3); 
+  font-size: 16px;
+  white-space: nowrap; 
+  
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* 日報の情報（日付とコメント）を縦に並べる */
 .report-info {
   display: flex;
@@ -195,11 +219,6 @@
   color: #333;
 }
 
-.report-header button:hover {
-  background: linear-gradient(135deg, #8aaac5, #7598b0);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(160, 210, 235, 0.4);
-}
 .reflect-title {
   font-size: 1.2em;
   font-weight: bold;
