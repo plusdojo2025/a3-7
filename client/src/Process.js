@@ -24,22 +24,29 @@ const Process = () => {
   const params = new URLSearchParams(location.search);
   const processId = params.get("id");
   const [projectId, setProjectId] = useState(params.get("projectId"));
+  const [authority, setAuthority] = useState(0);
   // ここをステートに
-   
 
+  useEffect(() => {
+    if (projectId) {
+      axios.get(`/api/member/authority?projectId=${projectId}`, { withCredentials: true })
+        .then(res => setAuthority(res.data)) // 1 or 2 or 3
+        .catch(() => setAuthority(0)); // 権限なしや未承認
+    }
+  }, [projectId]);
 
   // Fetch process name
   useEffect(() => {
-  if (processId) {
-    axios.get(`/api/processes/${processId}`)
+    if (processId) {
+      axios.get(`/api/processes/${processId}`)
         .then((res) => {
-        setProcess(res.data);
-        // ここでprojectIdもセット
-        if (res.data.projectId) {
-          setProjectId(res.data.projectId);
-        }
-      })
-      .catch(() => setError("工程の取得に失敗しました"));
+          setProcess(res.data);
+          // ここでprojectIdもセット
+          if (res.data.projectId) {
+            setProjectId(res.data.projectId);
+          }
+        })
+        .catch(() => setError("工程の取得に失敗しました"));
     } else {
       setError("Process ID が指定されていません");
     }
@@ -62,17 +69,17 @@ const Process = () => {
         .catch(() => setReport(null));
 
       // Reflect
-        axios
-      .get(`/api/reflect/createdAt?createdAt=${dateStr}&processId=${processId}`)
-      .then((res) => {
-        const reflectDate = new Date(res.data.createdAt).toISOString().slice(0, 10);
-        if (reflectDate === dateStr) {
-          setReflect(res.data);
-        } else {
-          setReflect(null); 
-        }
-      })
-      .catch(() => setReflect(null));
+      axios
+        .get(`/api/reflect/createdAt?createdAt=${dateStr}&processId=${processId}/`)
+        .then((res) => {
+          const reflectDate = new Date(res.data.createdAt).toISOString().slice(0, 10);
+          if (reflectDate === dateStr) {
+            setReflect(res.data);
+          } else {
+            setReflect(null);
+          }
+        })
+        .catch(() => setReflect(null));
 
       // ReflectTag
       axios
@@ -104,7 +111,7 @@ const Process = () => {
   // Fetch reflect name when reflect is present
   useEffect(() => {
     if (reflect) {
-       
+
       axios
         .get(`/api/reflect/${reflect.reflectTagId}`)
         .then((res) => setReflectName(res.data.reflectName))
@@ -135,10 +142,10 @@ const Process = () => {
     setCurrentDate(newDate);
   };
 
-const handleEdit = () => {
-  if (!report || !report.reportId) return;
-  navigate(`/reportEdit/${report.reportId}`);
-};
+  const handleEdit = () => {
+    if (!report || !report.reportId) return;
+    navigate(`/reportEdit/${report.reportId}`);
+  };
   const handleReport = () => {
     navigate(`/report/project/${projectId}/process/${processId}`);
   };
@@ -189,9 +196,9 @@ const handleEdit = () => {
             marginBottom: 20,
           }}
         >
-          <button onClick={handleReport} >日報</button>
-          <button onClick={handleReflect} >反省</button>
-          <button onClick={handleConfirm} >工程を完了</button>
+          {authority >= 2 && <button onClick={handleReport}>日報</button>}
+          {authority >= 2 && <button onClick={handleReflect}>反省</button>}
+          {authority >= 2 && <button onClick={handleConfirm}>工程を完了</button>}
         </div>
       </div>
 
@@ -263,12 +270,10 @@ const handleEdit = () => {
           <p>登録された日報がありません</p>
         )}
 
-        <button onClick={handleEdit} >
-          編集
-        </button>
+        {authority >= 2 && report && <button onClick={handleEdit}>編集</button>}
       </div>
     </div>
- 
+
 
   );
 };
