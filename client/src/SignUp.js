@@ -103,7 +103,7 @@ export default class SignUp extends React.Component{
                     <div className="inputBox">
                         <input type="password" name="check" onChange={this.onInput} value={check}/><br />
                     </div>
-                    <button type="submit" className="Button">登録</button>
+                    <button type="submit" className="signUpButton">登録</button>
                 </form>
             </div>
         )

@@ -177,9 +177,14 @@ const Process = () => {
       {/* ボタン群を配置するためのコンテナ */}
       <div className="action-buttons-container">
         <div className="action-buttons">
-          {authority >= 1 && <button onClick={handleReport}>日報</button>}
-          {authority >= 1 && <button onClick={handleReflect}>反省</button>}
-          {authority >= 1 && <button onClick={handleConfirm}>工程を完了</button>}
+         {/*工程が完了していない場合のみ、日報・反省・完了ボタンを表示*/}
+         {authority >= 1 && (
+          <> 
+          <button onClick={handleReport} disabled={process.complete}>日報</button>
+          <button onClick={handleReflect} disabled={process.complete}>反省</button>
+          <button onClick={handleConfirm} disabled={process.complete}>工程を完了</button>
+          </>
+         )} 
           <button onClick={handleGoBack} className="back-button">戻る</button>
         </div>
       </div>
