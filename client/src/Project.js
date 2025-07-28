@@ -171,6 +171,7 @@ export default class Project extends React.Component {
         axios.post(`/api/addProcess/${projectId}/`, data)
             .then(json => {
                 this.toggleAddProcessModal();
+                this.setState({ addName: "" });
                 this.componentDidMount();
 
             })
