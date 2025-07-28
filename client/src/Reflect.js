@@ -54,7 +54,6 @@ class Reflect extends React.Component {
 
     axios.post("/api/reflect", form)
       .then(() => {
-        alert("登録しました！");
         this.setState({
           form: {
             createdAt: "",

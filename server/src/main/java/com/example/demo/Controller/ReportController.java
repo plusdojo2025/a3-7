@@ -96,7 +96,7 @@ public class ReportController {
     }
 
     // ReflectTag登録
-    @PostMapping("/reflectTag")
+    @PostMapping("/addReflectTag")
     public ReflectTag saveReflectTag(@RequestBody ReflectTag reflectTag) {
         return reflectTagRepository.save(reflectTag);
     }
@@ -154,14 +154,20 @@ public class ReportController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    
     @GetMapping("/reflect/createdAt")
     public ResponseEntity<?> getWeeklyReflect(
-            @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
-            @RequestParam("processId") Integer processId) {
+        @RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
+        @RequestParam("processId") Integer processId
+    ) {
+        List<Reflect> reflects = reflectRepository.findAllByProcessIdAndCreatedAt(processId, createdAt);
 
-        return reflectRepository.findByProcessIdAndCreatedAt(processId, createdAt)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        if (reflects.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(reflects);
+        }
     }
+
 
 }
