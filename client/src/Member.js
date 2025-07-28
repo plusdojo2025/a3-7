@@ -304,7 +304,7 @@ export default class Member extends React.Component {
         </div>
         <div style={{ marginTop: "20px" }}>
           <button
-            className="back-button"
+            className="mempage-back-button"
             onClick={() => window.location.href = `/project?id=${this.projectId}`}
           >
             戻る

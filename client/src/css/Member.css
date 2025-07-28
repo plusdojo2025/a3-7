@@ -260,25 +260,53 @@
 }
 
 
-.update-authority-button{
-  color: black !important;
-  background-color: #A3CCBE;
-  border: 2px solid #A3CCBE;
-  padding: 8px 16px;
-  font-size: 1.2em;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s, color 0.3s;
-  text-align: right;
-  margin: 20px;
+.update-authority-button {
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
 }
-.update-authority-button:hover {
-    background: linear-gradient(135deg, #8bb8a8, #7aa396);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
-    text-decoration: none !important;
-    color: white !important;
+
+
+.update-authority-button:hover  {
+  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
+
+
+.mempage-back-button {
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+  color: white  !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3) !important;
+}
+
+ .mempage-back-button:hover {
+  background: linear-gradient(135deg, #5a6268, #495057) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4) !important;
+}
+
+
 
 .delete-check {
   display: flex;
