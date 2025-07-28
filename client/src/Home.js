@@ -106,7 +106,7 @@ export default class Home extends React.Component{
                 )}
                 
                 <div className="home-button-container">
-                    <button onClick={this.toggleModal}>プロジェクト新規作成</button>
+                    <button className="home-pj-regist" onClick={this.toggleModal}>プロジェクト新規作成</button>
                 </div>
 
                 {/* モーダルウィンドウ(編集) */}
@@ -130,8 +130,8 @@ export default class Home extends React.Component{
                                 プロジェクト名：<input type="text" name="addName" value={this.state.addName} onChange={this.onInput} /><br />
                             </div>
                             <div className="buttonContainer">
-                                <button onClick={this.toggleModal}>戻る</button>
-                                <button onClick={() => this.saveProject()}>登録</button>
+                                <button className="home-modal-backbtn" onClick={this.toggleModal}>戻る</button>
+                                <button className="home-modal-submitbtn" onClick={() => this.saveProject()}>登録</button>
                             </div>
                         </div>
                     </div>

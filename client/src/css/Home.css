@@ -46,13 +46,13 @@
     margin-bottom: 10px;
 }
 
-/* ボタンスタイル */
+/* ボタンスタイル
 button {
     padding: 10px 20px;
     border-radius: 5px;
     background-color: #c0c0c0;
     border: 2px solid #c0c0c0;
-}
+} */
 
 /* ボタンを画面中央に配置 */
 .home-button-container {
@@ -60,6 +60,29 @@ button {
     justify-content: center;  /* ボタンを中央に配置 */
     margin-top: 20px;  /* ボタンとコンテンツの間隔 */
 }
+
+.home-pj-regist{
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
+}
+
+.home-pj-regist:hover {
+  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
 
 /* スクロールバーのデザイン */
 .project-container::-webkit-scrollbar {
@@ -75,3 +98,49 @@ button {
     background-color: #555;
 }
 
+
+.home-modal-submitbtn{
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);    
+}
+
+
+.home-modal-submitbtn:hover {
+  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
+
+.home-modal-backbtn{
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+  color: white  !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3) !important;
+}
+
+.home-modal-backbtn:hover {
+  background: linear-gradient(135deg, #5a6268, #495057) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4) !important;
+}
