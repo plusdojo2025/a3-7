@@ -13,48 +13,49 @@ export default class Mail extends React.Component {
   }
 
   componentDidMount() {
-    axios.get("http://localhost:8080/checkLogin/", { withCredentials: true })
-      .then(() => {
-        return axios.get("http://localhost:8080/users/", { withCredentials: true });
+    // セッションからログインユーザーを取得
+    axios.get("http://localhost:8080/getCurrentUser", { withCredentials: true })
+      .then(res => {
+        if (res.data) {
+          console.log("✅ ログインユーザー:", res.data);
+          this.setState({ userId: res.data.userId });
+
+          // 招待情報取得
+          return axios.get(
+            `http://localhost:8080/api/members/pending?userId=${res.data.userId}`,
+            { withCredentials: true }
+          );
+        } else {
+          throw new Error("ログインユーザーなし");
+        }
       })
       .then(res => {
-        const currentUser = res.data[res.data.length - 1];
-        this.setState({ userId: currentUser.userId });
-        // userId を状態にセットしてから次の呼び出し
-        return axios.get(
-          `http://localhost:8080/api/members/pending?userId=${currentUser.userId}`,
-          { withCredentials: true }
-        );
+        console.log("📩 招待取得成功:", res.data);
+        this.setState({ pendingInvites: res.data });
       })
-      .then(res => {
-        console.log("🛰 API レスポンス", res.data);
-        this.setState({ pendingInvites: res.data }, () => {
-          console.log("this.state.pendingInvites:", this.state.pendingInvites);
-        });
-      })
-      .catch(err => {
-        console.error("招待取得エラー", err);
+      .catch(error => {
+        console.error("❌ ユーザーまたは招待情報取得失敗:", error);
       });
   }
 
   handleApprove = (member) => {
-  console.log("✅ 承認対象メンバー情報:", member);
-  console.log("✅ ログインユーザーID:", this.state.userId);
+    console.log("✅ 承認対象メンバー情報:", member);
+    console.log("✅ ログインユーザーID:", this.state.userId);
 
-  axios.post("http://localhost:8080/api/members/approve", {
-    userId: this.state.userId,
-    projectId: member.projectId
-  }, { withCredentials: true })
-  .then(res => {
-    console.log("✔️ 承認成功:", res.data);
-    this.setState(prev => ({
-      pendingInvites: prev.pendingInvites.filter(m => m.memberId !== member.memberId)
-    }));
-  })
-  .catch(err => {
-    console.error("❌ 承認エラー", err);
-  });
-};
+    axios.post("http://localhost:8080/api/members/approve", {
+      userId: this.state.userId,
+      projectId: member.projectId
+    }, { withCredentials: true })
+      .then(res => {
+        console.log("✔️ 承認成功:", res.data);
+        this.setState(prev => ({
+          pendingInvites: prev.pendingInvites.filter(m => m.memberId !== member.memberId)
+        }));
+      })
+      .catch(err => {
+        console.error("❌ 承認エラー", err);
+      });
+  };
 
 
   handleCancel = (member) => {

@@ -258,6 +258,7 @@ public class ProjectController {
 
         // 新規招待を登録
         member.setAttend(0); // 招待中（承認待ち）
+        member.setAuthority(0);     // デフォルト: 閲覧権限
         membersRepository.save(member);
         return ResponseEntity.ok("メンバーを招待しました");
     }
