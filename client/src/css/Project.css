@@ -55,6 +55,7 @@
 }
 
 .Progress{
+    max-height: 300px;
     text-align: center;
     background-color: #fff;
     padding: 10px 10px;
@@ -63,6 +64,7 @@
 }
 
 .Closed{
+    max-height: 300px;
     text-align: center;
     background-color: #fff;
     padding: 10px 10px;
@@ -83,6 +85,11 @@
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
   border-color: #8fb3a7;
+}
+
+td.process_name {
+    padding: 10px 16px;
+    margin:  20px, 0px;
 }
 
 .ProgeressProcess{
@@ -248,6 +255,7 @@ display: inline-block;   /* 横並び */
     padding: 10px;
     border: 1px solid #ccc;
     text-align: center;
+    margin: 0px, 10px;
 }
 
 /* プロジェクトの状態 */
@@ -330,6 +338,12 @@ display: inline-block;   /* 横並び */
 .reject-button:hover,
 .accept-button:hover {
     opacity: 0.85;
+}
+
+.scroll {
+    max-height: 220px; /* 高さは必要に応じて調整してください */
+    overflow-y: auto;
+    padding-right: 5px; /* スクロールバーが被らないように調整 */
 }
 
 @media screen and (max-width: 480px) {
