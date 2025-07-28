@@ -32,7 +32,8 @@
 }
 
 .closeButton:hover{
-  background: linear-gradient(135deg, #e67373, #e67373);
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  color: red !important;
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
