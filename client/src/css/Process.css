@@ -1,0 +1,141 @@
+/* Process.css */
+
+/* コンポーネント全体のコンテナ */
+.process-container {
+  padding: 20px;
+}
+
+/* 工程名とボタンを配置するヘッダー部分 */
+.process-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.process-header h2 {
+  flex-grow: 1;
+  margin: 0;
+}
+
+/* 戻るボタンの個別スタイル */
+.action-buttons .back-button {
+  background: linear-gradient(135deg, #6c757d, #5a6268); 
+  color: white;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3);
+}
+
+.action-buttons .back-button:hover {
+  background: linear-gradient(135deg, #5a6268, #495057); 
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4);
+}
+
+/* カレンダーのナビゲーションとボタンの全体コンテナ */
+.calendar-nav-and-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* カレンダーのナビゲーション部分 */
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-grow: 1;
+  padding: 10px;
+}
+
+.calendar-nav button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.calendar-nav span {
+  color: #000;
+  font-weight: bold;
+}
+
+/* カレンダーのボタン群 */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.action-buttons button {
+  height: 60px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
+  font-size: 18px;
+}
+
+.action-buttons button:hover {
+  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
+/* 週カレンダーの表示部分 */
+.week-calendar {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+  justify-content: space-between;
+  margin-bottom: 80px;
+}
+
+.day-cell {
+  width: 13%;
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 15px 8px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+  font-size: 18px;
+}
+
+.day-cell:hover {
+  background-color: #f0f0f0;
+}
+
+.day-cell.selected {
+  background-color: #e0f0ff;
+  border-color: #007bff;
+  font-weight: bold;
+}
+
+.day-cell.sunday {
+  color: red;
+}
+
+.day-cell.saturday {
+  color: blue;
+}
+
+/* 詳細エリア */
+.detail-area {
+  border: 2px solid #0c3a4d;
+  border-radius: 15px;
+  padding: 20px;
+  background: #f5f5f5;
+  margin-top: 20px;
+  height: 300px;
+  overflow-y: auto;
+}
