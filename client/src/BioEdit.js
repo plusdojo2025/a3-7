@@ -52,7 +52,7 @@ export default function BioEdit() {
     //     `/api/biology/${equipmentId}`,
     //   ]};
 
-    // 修正されたAPIエンドポイントを使用
+    // APIエンドポイントを使用
     const fetchBiologyData = async () => {
       try {
         console.log(`/api/biology/edit/equip/${equipmentId} にリクエスト送信`);
