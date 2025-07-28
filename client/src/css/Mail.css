@@ -182,7 +182,7 @@
 
 .mail-page-container .mail-approve-btn:hover {
   background: linear-gradient(135deg, #8bb8a8, #7aa396);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
 
@@ -222,9 +222,16 @@
   color: white;
   border: none;
   cursor: pointer;
+  transition: all 0.3s ease;
   font-weight: 600;
   box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3);
   padding: 12px 32px;
+}
+
+.mail-page-container .mail-back-btn:hover {
+  background: linear-gradient(135deg, #5a6268, #495057);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4);
 }
 
 /* レスポンシブデザイン */
