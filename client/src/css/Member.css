@@ -240,3 +240,19 @@
   padding: 10px 20px;
 }
 
+.custom-radio input[type="radio"]:disabled ~ .check {
+  border-color: #ccc;
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.custom-radio input[type="radio"]:disabled ~ .check::before {
+  background-color: #ccc;
+}
+
+.member-delete-button:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+  color: #666 !important;
+}
