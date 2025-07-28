@@ -57,7 +57,6 @@ export default function ReportEdit() {
     e.preventDefault();
     try {
       await axios.put(`/api/report/${reportId}`, form);
-      alert('更新成功！');
       navigate(`/process?id=${processId}`); // 前のページに戻る
     } catch (err) {
       console.error('更新エラー', err.response || err);
