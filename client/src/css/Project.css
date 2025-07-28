@@ -39,6 +39,29 @@
   box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
 }
 
+/*.button {
+    margin: 10px;
+    background-color: #c0c0c0;
+    border: 2px solid #c0c0c0;
+    width: 70%;
+    padding: 10px 10px;
+    border-radius: 15px;
+}
+
+.button:hover{
+  background: linear-gradient(135deg, #a3a3a3, #8f8f8f);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+  border-color: #8f8f8f;
+}
+
+.pj-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}*/
 
 .button-pj-medit {
   flex: 1;
