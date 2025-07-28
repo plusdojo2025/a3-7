@@ -3,15 +3,6 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './css/EquipmentRegist.css';
 
-/*const unitMap = {
-  '個': 1,
-  '箱': 2,
-  'kg': 3,
-  'g': 4,
-  'mg': 5,
-  'L': 6,
-  'ml': 7
-};*/
 
 
 
@@ -73,6 +64,12 @@ export default function EquipmentRegist() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
+     if (!form.kind ||!form.name || !form.gender || !form.age || !form.projectProcess) {
+      setError('入力されていない項目があります');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('equipName', form.equipName);
@@ -152,10 +149,11 @@ export default function EquipmentRegist() {
       </label><br />
       <label>備考: <input name="remarks" value={form.remarks} onChange={handleChange} /></label><br />
       
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-        <div className="button-group">
-          <button type="button" onClick={() => navigate(`/equipment?projectId=${projectIdForRegistration}`)}>戻る</button>
-          <button type="submit">登録</button>
+      {error && <p style={{ color: 'red' }} className="error-message">{error}</p>}
+
+        <div className="eqregist-button-group">
+          <button type="button" className="eqregist-back" onClick={() => navigate(`/equipment?projectId=${projectIdForRegistration}`)}>戻る</button>
+          <button type="submit" className="eqregist-submit" >登録</button>
         </div>
     </form>
   );

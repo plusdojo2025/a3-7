@@ -42,52 +42,67 @@ input[type="file"] {
   border: none;
 }
 
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px;
-}
 
-.button-group button {
-    padding: 12px 25px;
-    font-size: 15px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
-    color: white !important;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none !important;
-    font-weight: 600;
-    box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
-    min-width: 140px;
-    justify-content: center;
-}
-
-/* ボタン内のテキストも強制的に白色指定 */
-.button-group button {
-    color: rgb(242, 242, 242) !important;
-}
-
-/* ボタンホバー時の色変更 */
-.button-group button:hover {
-    background: linear-gradient(135deg, #8bb8a8, #7aa396);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
-    text-decoration: none !important;
-    color: white !important;
-}
-
-/* ホバー時のボタン内テキストも白色維持 */
-.button-group:hover button {
-    color: white !important;
-}
-p {
+.error-message {
   color: red;
   text-align: center;
-  margin-top: 5px;
+  margin-top: 10px;
   font-size: 16px;
+}
+
+
+.eqregist-button-group{
+    display: flex;
+  justify-content: space-between;
+  margin: 20px auto 0;
+  max-width: 800px;
+  gap: 10px;
+  padding: 0 20px;
+}
+
+
+.eqregist-submit {
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #A3CCBE, #8bb8a8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(163, 204, 190, 0.3);
+}
+
+.eqregist-submit:hover {
+  background: linear-gradient(135deg, #8bb8a8, #7aa396);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
+
+
+.eqregist-back{
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+  color: white  !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(108, 117, 125, 0.3) !important;
+}
+
+.eqregist-back:hover {
+  background: linear-gradient(135deg, #5a6268, #495057) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(108, 117, 125, 0.4) !important;
 }
