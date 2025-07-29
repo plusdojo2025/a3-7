@@ -5,6 +5,8 @@ ALTER TABLE biology_details MODIFY COLUMN picture LONGBLOB;
 --ユーザーリスト
 INSERT INTO users (email, password, name) VALUES ('yazawa@hisao.com', 'ninnkikoushi', '矢沢　久雄');
 INSERT INTO users (email, password, name) VALUES ('ex@exam.com', 'pass1234', '山田 太郎');
+INSERT INTO users (email, password, name, company_code) VALUES ('ple@exam.com', 'pass5678', '鈴木　花子', '1');
+INSERT INTO users (email, password, name, company_code) VALUES ('sam@sample.com', 'insector123', '鬼瓦 権左衛門', '1');
 
 --タグリスト
 INSERT INTO project_tags (project_tag_name) VALUES ('昆虫学');
@@ -44,6 +46,8 @@ INSERT INTO members (project_id, user_id, authority, attend) VALUES(7, 2, 2, 1);
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(8, 2, 2, 1);
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(9, 2, 2, 1);
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(10, 2, 2, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(2, 3, 0, 1);
+INSERT INTO members (project_id, user_id, authority, attend) VALUES(2, 4, 1, 1);
 
 --備品種類
 INSERT INTO equip_kinds (equip_kind_name) VALUES ('備品'); --1
