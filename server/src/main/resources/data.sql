@@ -30,10 +30,10 @@ INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('個体老�
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('ゲノム編集による植物耐乾燥性の向上', 0, 2);
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('疾患モデルマウスを用いた中枢神経の構造解析', 0, 2);
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('タンパク質フォールディング異常と疾患発症の相関研究', 0, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('幹細胞分化におけるエピゲノム制御因子の機能解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id, complete) VALUES ('幹細胞分化におけるエピゲノム制御因子の機能解析', 0, 2, 1);
 INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('光合成効率を高める葉緑体遺伝子の機能解析', 0, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('遺伝子発現プロファイルによるがん予後予測モデルの構築', 0, 2);
-INSERT INTO project (project_name, privacy, project_tag_id) VALUES ('神経伝達物質の動態に関するマルチスケール解析', 0, 2);
+INSERT INTO project (project_name, privacy, project_tag_id, complete) VALUES ('遺伝子発現プロファイルによるがん予後予測モデルの構築', 0, 2, 1);
+INSERT INTO project (project_name, privacy, project_tag_id, complete) VALUES ('神経伝達物質の動態に関するマルチスケール解析', 0, 2, 1);
 
 --メンバーリスト
 INSERT INTO members (project_id, user_id, authority, attend) VALUES(1, 1, 2, 1);
@@ -83,10 +83,21 @@ INSERT INTO processes (process_name, project_id, complete) VALUES ('DNAバーコ
 INSERT INTO processes (process_name, project_id, complete) VALUES ('土壌や植物組織からの病原体培養', 2, 1);
 --日報
 INSERT INTO reports (process_id, project_id, created_at, comment) VALUE (1, 1, '2025-04-25', 'つかれた。');
+INSERT INTO reports (process_id, project_id, created_at, comment) VALUE (4, 2, '2025-07-28', '感染処理を施したバナナ苗（試験区 1〜6）の発病度スコア評価（3回目）を実施。
+
+スコア基準に基づき、葉・茎・根部の症状（黄化・萎凋・黒化等）を観察。
+
+症状スコア（0〜5）を目視および記録表に記入後、エクセルシートに入力。
+
+合計スコアと平均値を計算して、各系統の耐性傾向を初期分析。
+
+');
 
 --反省
 INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 1, '2025-04-25', 1, '寝坊した。');
-INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2025-04-25', 1, '寝坊した。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (4, 2, '2025-07-23', 4, 'スコアの桁数がメンバー間で異なっていた。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (4, 2, '2025-07-25', 3, '計測桁数が前回と異なっていた。');
+INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (4, 2, '2025-07-28', 4, '個体Cのスコアが2回加算された。');
 INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2025-04-26', 2, 'よくわからなかった。');
 INSERT INTO reflects (process_id, project_id, created_at, reflect_tag_id, comment) VALUE (1, 2, '2025-04-27', 1, '寝坊した。');
 --反省タグ
