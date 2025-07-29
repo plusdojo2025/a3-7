@@ -71,9 +71,12 @@ INSERT INTO units (unit) VALUES ('本'),('個'),('箱'),('kg'),('g'),('mg'),('L'
 --工程
 INSERT INTO processes (process_name, project_id, complete) VALUES ('調査地選定と許可申請', 1, 1); 
 INSERT INTO processes (process_name, project_id, complete) VALUES ('ハナアブ捕獲と識別', 1, 0);
-INSERT INTO processes (process_name, project_id, complete) VALUES ('ウイルスAを用いた実験', 2, 1);
-INSERT INTO processes (process_name, project_id, complete) VALUES ('ウイルスBを用いた実験', 2, 0);
-
+INSERT INTO processes (process_name, project_id, complete) VALUES ('フィールド調査とサンプル採取', 2, 1);
+INSERT INTO processes (process_name, project_id, complete) VALUES ('感染後の発病スコアリング', 2, 0);
+INSERT INTO processes (process_name, project_id, complete) VALUES ('感染力試験', 2, 0);
+INSERT INTO processes (process_name, project_id, complete) VALUES ('実地での耐病性・収量・品質試験', 2, 0);
+INSERT INTO processes (process_name, project_id, complete) VALUES ('DNAバーコーディングと系統解析', 2, 1);
+INSERT INTO processes (process_name, project_id, complete) VALUES ('土壌や植物組織からの病原体培養', 2, 1);
 --日報
 INSERT INTO reports (process_id, project_id, created_at, comment) VALUE (1, 1, '2025-04-25', 'つかれた。');
 
