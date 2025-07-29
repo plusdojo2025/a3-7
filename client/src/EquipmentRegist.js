@@ -66,7 +66,7 @@ export default function EquipmentRegist() {
     e.preventDefault();
 
 
-     if (!form.kind ||!form.name || !form.gender || !form.age || !form.projectProcess) {
+     if (!form.equipName ||!form.limited || !form.remaining || !form.unit || !form.storage || !form.judge || !form.remarks) {
       setError('入力されていない項目があります');
       return;
     }

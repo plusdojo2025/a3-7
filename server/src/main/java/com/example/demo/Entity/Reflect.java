@@ -30,5 +30,6 @@ public class Reflect {
 	@Column(name = "reflect_tag_id")
 	private Integer reflectTagId;
 	private LocalDate createdAt;
+	@Column(name = "comment", length = 300)
     private String comment;
 }
