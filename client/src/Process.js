@@ -231,7 +231,7 @@ const Process = () => {
               reflectWithName.map((r, i) => (
                 <div key={i} className="reflect-card-item">
                   <div className="reflect-card-content">
-                    <p className="reflect-tag">タグ[{r.reflectName}]</p>
+                    <p className="reflect-tag">[{r.reflectName}]</p>
                     <p className="reflect-comment">{r.comment}</p>
                   </div>
                 </div>
