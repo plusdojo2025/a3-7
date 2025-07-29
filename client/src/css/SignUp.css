@@ -1,84 +1,267 @@
+/* ロゴのスタイル */
 .logo {
-  width: 250px;
-  height: 80px;
-  text-align: center;
+    width: 280px;
+    height: 90px;
+    text-align: center;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    margin-bottom: 30px;
 }
 
+/* ロゴのホバー効果 */
+.logo:hover {
+    transform: scale(1.05);
+}
+
+/* サインアップページ全体のレイアウト */
 .SignUpPage {
-  display: flex;
-  justify-content: center;   /* 横方向に中央 */
-  background-color: #f0f0f0; /* 任意の背景色 */
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
+/* サインアップフォームのタイトル */
 .SignUpForm h2 {
-  margin-top: 10px;     /* 上の余白をなくす */
-  margin-bottom: 10px; /* 必要に応じて調整 */
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* サインアップフォームのラベル */
 .SignUpForm p {
-  margin-top: 10px;     /* 上の余白をなくす */
-  margin-bottom: 10px; /* 必要に応じて調整 */
+    margin-top: 15px;
+    margin-bottom: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
 }
 
+/* エラーメッセージ用のスタイル（エラーがある場合のみ表示） */
+.SignUpForm p:first-of-type {
+    color: #ff6b6b;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 10px 0 20px 0;
+    font-size: 14px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+    transition: all 0.3s ease;
+}
 
+/* エラーメッセージが空の場合は非表示 */
+.SignUpForm p:first-of-type:empty {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* サインアップフォーム全体 */
 .SignUpForm {
-  background-color: #A3CCBE;
-  border-radius: 20px;
-  padding: 10px 80px;
-  width: 200px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;       /* ← 入力欄も中央寄せ */
-  text-align: left;          /* ラベルやプレースホルダ用に必要なら left に */
+    background: linear-gradient(135deg, #A3CCBE 0%, #8bb8a8 100%);
+    border-radius: 24px;
+    padding: 40px 50px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
 }
 
-.SignUpForm p{
-  margin: 0;
+/* フォームの装飾効果 */
+.SignUpForm::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
 }
 
+/* 汎用ボタンスタイル（未使用だが保持） */
 .Button {
-  background-color: red;
-  border-radius: 8px;          /* 丸角の長方形にするなら8px前後が自然 */
-  padding: 8px 20px;           /* 上下8px、左右20px */
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
+    background-color: red;
+    border-radius: 8px;
+    padding: 8px 20px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
 }
 
+.Button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+/* 入力ボックスのコンテナ */
 .inputBox {
-  width: 100%;            /* 親要素の幅に合わせる */
-  max-width: 400px;       /* 必要に応じて最大幅を制限 */
-  box-sizing: border-box; /* paddingを含めてサイズ計算 */
-  margin: auto;           /* 中央寄せ（必要に応じて） */
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 5px;
+    position: relative;
 }
 
+/* 入力フィールドのスタイル */
 .inputBox input {
-  width: 100%;            /* ボックスの幅にフィットさせる */
-  box-sizing: border-box; /* padding込みで幅を維持 */
-  border: 1px solid #ccc;
-  border-radius: 5px;
+    width: 100%;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.95);
+    transition: all 0.3s ease;
+    outline: none;
 }
 
+/* 入力フィールドのフォーカス効果 */
+.inputBox input:focus {
+    border-color: white;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* 入力フィールドのホバー効果 */
+.inputBox input:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: white;
+}
+
+/* プレースホルダーのスタイル */
+.inputBox input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* サインアップボタンのスタイル（元のデザインを保持） */
 .signUpButton {
-  color: white !important;
-  background-color: red;
-  border-radius: 8px;          /* 丸角の長方形にするなら8px前後が自然 */
-  border: 2px solid red;
-  padding: 8px 20px;           /* 上下8px、左右20px */
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
+    color: white !important;
+    background-color: red;
+    border-radius: 8px;
+    border: 2px solid red;
+    padding: 12px 32px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 0 15px 0;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 200px;
 }
 
+/* サインアップボタンのホバー効果（元のデザインを保持） */
 .signUpButton:hover {
-  background: linear-gradient(135deg, #ffffff, #ffffff);
-  color: red !important;
-  border: 2px solid red;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+    background: linear-gradient(135deg, #ffffff, #ffffff);
+    color: red !important;
+    border: 2px solid red;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(163, 204, 190, 0.4);
+}
+
+/* レスポンシブデザイン - タブレット */
+@media (max-width: 768px) {
+    .SignUpPage {
+        padding: 15px;
+    }
+    
+    .logo {
+        width: 240px;
+        height: 75px;
+        margin-bottom: 25px;
+    }
+    
+    .SignUpForm {
+        padding: 35px 40px;
+        max-width: 380px;
+    }
+    
+    .SignUpForm h2 {
+        font-size: 24px;
+        margin-bottom: 18px;
+    }
+    
+    .SignUpForm p {
+        font-size: 15px;
+        margin-top: 12px;
+        margin-bottom: 6px;
+    }
+    
+    .inputBox input {
+        padding: 12px 14px;
+        font-size: 15px;
+    }
+    
+    .signUpButton {
+        padding: 11px 28px;
+        font-size: 15px;
+    }
+}
+
+/* レスポンシブデザイン - モバイル */
+@media (max-width: 480px) {
+    .SignUpPage {
+        padding: 10px;
+        min-height: 100vh;
+        justify-content: flex-start;
+        padding-top: 40px;
+    }
+    
+    .logo {
+        width: 200px;
+        height: 65px;
+        margin-bottom: 20px;
+    }
+    
+    .SignUpForm {
+        padding: 30px 25px;
+        max-width: 100%;
+        width: 100%;
+        border-radius: 20px;
+    }
+    
+    .SignUpForm h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+    
+    .SignUpForm p {
+        font-size: 14px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+    
+    .inputBox {
+        margin-bottom: 3px;
+    }
+    
+    .inputBox input {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    .signUpButton {
+        padding: 12px 24px;
+        font-size: 14px;
+        margin: 18px 0 12px 0;
+    }
 }

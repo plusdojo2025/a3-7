@@ -55,12 +55,14 @@ export default class Login extends React.Component{
             window.location.href = "/home";
             } else { 
             console.log("ログイン失敗");
-            alert("メールアドレスかパスワードが間違っています");
+            // alert("メールアドレスかパスワードが間違っています");
+            this.setState({ error: "メールアドレスかパスワードが間違っています" });
+            return;
             }
         })
         .catch(error => {
             console.error("通信エラー:", error.response?.data || error.message);
-            alert("通信に失敗しました");
+            // alert("通信に失敗しました");
         });
     };
 
@@ -90,12 +92,15 @@ export default class Login extends React.Component{
                     </div>
                     <p>パスワード</p>
                     <div className="inputBox">
-                        <input type="password" name="password" onChange={this.onInput} value={password} /><br />
+                        <input type="password" name="password" onChange={this.onInput} value={password} />
                     </div>
-                    <button type="submit" className="loginButton">ログイン</button><br />                    新規登録は<Link to="/signup">こちら</Link>
+                    <button type="submit" className="loginButton">ログイン</button>
+                    <div className="signup-link-container">
+                        新規登録は<Link to="/signup">こちら</Link>
+                    </div>
                 </form>
                 
             </div>
         )
     };
-} 
+}
