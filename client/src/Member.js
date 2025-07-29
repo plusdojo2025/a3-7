@@ -203,7 +203,7 @@ export default class Member extends React.Component {
                   name="mail"
                   value={this.state.email}
                   onChange={this.handleChange}
-                  placeholder="招待したい方のメールアドレスを入力してください"
+                  placeholder="✉Mailaddress"
                 />
                 <input
                   type="submit"   // ← "button" ではなく "submit" か "input[type='submit']" に合わせる
@@ -253,9 +253,9 @@ export default class Member extends React.Component {
             <tbody>
               {this.state.approvedMembers.map((member, index) => (
                 <tr key={index}>
-                  <td>{member.userName || `ユーザーID: ${member.userId}`}</td>
+                  <td data-label="メンバー名">{member.userName || `ユーザーID: ${member.userId}`}</td>
                   {[0, 1, 2].map((auth) => (
-                    <td key={auth}>
+                    <td data-label={["閲覧", "編集", "管理"][auth]} key={auth}>
                       <label className="custom-radio">
                         <input
                           type="radio"
@@ -268,7 +268,7 @@ export default class Member extends React.Component {
                       </label>
                     </td>
                   ))}
-                  <td>
+                  <td data-label="削除">
                     <button
                       onClick={() => this.openDeleteModal(member.userId)}
                       disabled={this.state.currentUserAuthority !== 2 || member.authority === 2}
@@ -278,6 +278,7 @@ export default class Member extends React.Component {
                     </button>
                   </td>
                 </tr>
+
               ))}
             </tbody>
           </table>
