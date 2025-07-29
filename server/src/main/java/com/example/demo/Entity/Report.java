@@ -30,5 +30,6 @@ public class Report {
 	@Column(name = "process_id")
 	private Integer processId;
 	private LocalDate createdAt;
+	@Column(name = "comment", length = 300)
 	private String comment;
 }

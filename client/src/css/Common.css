@@ -93,7 +93,7 @@ header {
     width: 80%;
 }
 
-/* ログアウトボタンのスタイル（元のデザインを保持） */
+/* ログアウトボタンのスタイル */
 .logoutButton {
     color: white !important;
     background-color: red;
@@ -107,7 +107,7 @@ header {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* ログアウトボタンのホバー効果（元のデザインを保持） */
+/* ログアウトボタンのホバー効果 */
 .logoutButton:hover {
     background: linear-gradient(135deg, #ffffff, #ffffff);
     color: red !important;
