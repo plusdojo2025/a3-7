@@ -19,7 +19,7 @@
     padding: 20px;
 }
 
-.project-box {
+.progressBox {
     background-color: #f0f0f0;
     border-color: #000;
     border-radius: 10px;
@@ -34,6 +34,23 @@
     overflow: hidden;  /* 内容がボックスからはみ出さないようにする */
     text-align: center; /* ボックス内のテキストを中央に配置 */
 }
+
+.completedBox {
+  background-color: #999999;
+  border-color: #000;   
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  height: 150px;  
+  overflow: hidden;  /* 内容がボックスからはみ出さないようにする */
+  text-align: center; /* ボックス内のテキストを中央に配置 */
+}
+
 
 /* ホバー */
 .project-box:hover {

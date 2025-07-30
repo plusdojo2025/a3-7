@@ -95,7 +95,7 @@ export default class Home extends React.Component{
                 ) : (
                     <div className="project-container">
                         {projects.map((project, index) => (
-                            <div key={index} className="project-box">
+                            <div key={index} className={`project-box ${project.complete === 0 ? "progressBox" : "completedBox"}`} >
                                 <div className="project-info" onClick={() => this.lookProject(project.projectId)}>
                                     <h3>{project.projectName}</h3>
                                     <p>{project.complete === 0 ? "進行中" : "完了済"}</p>
